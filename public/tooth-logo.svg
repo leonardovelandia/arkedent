@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 108">
+  <!-- Contorno exterior del diente (borde grueso) -->
+  <path fill="white" d="
+    M 46 17
+    C 40 9 26 6 17 13
+    C 8 20 6 34 8 47
+    C 10 59 17 72 25 80
+    C 28 84 32 86 35 83
+    C 38 80 39 72 43 71
+    C 45 70 46 70 48 71
+    C 52 72 53 80 56 83
+    C 59 86 63 83 66 77
+    C 70 68 72 57 70 47
+    C 75 43 78 35 75 25
+    C 72 16 64 11 56 12
+    C 53 12 49 15 46 17 Z
+  "/>
+
+  <!-- Interior del diente (sombra interior) — ligeramente transparente -->
+  <path fill="white" fill-opacity="0.55" d="
+    M 46 22
+    C 41 16 30 14 22 19
+    C 14 24 13 36 15 47
+    C 17 57 23 69 30 76
+    C 32 78 34 78 36 76
+    C 38 73 39 67 43 66
+    C 45 65 46 65 48 66
+    C 52 67 53 73 55 76
+    C 57 78 60 77 62 74
+    C 66 67 68 57 67 47
+    C 71 43 73 37 71 29
+    C 69 21 62 17 55 17
+    C 52 17 49 19 46 22 Z
+  "/>
+
+  <!-- Reflejo / highlight interior izquierdo -->
+  <path fill="none" stroke="white" stroke-opacity="0.4" stroke-width="2.5" stroke-linecap="round"
+    d="M 20 35 C 16 42 17 54 22 63"/>
+
+  <!-- Implante: cuerpo cilíndrico -->
+  <rect fill="white" x="54" y="71" width="19" height="32" rx="5"/>
+
+  <!-- Implante: roscas (triángulos laterales) -->
+  <polygon fill="white" points="73,74 80,77 73,80"/>
+  <polygon fill="white" points="73,81 80,84 73,87"/>
+  <polygon fill="white" points="73,88 80,91 73,94"/>
+  <polygon fill="white" points="73,95 80,98 73,101"/>
+
+  <!-- Implante: líneas de rosca internas -->
+  <line x1="54" y1="78" x2="73" y2="78" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+  <line x1="54" y1="85" x2="73" y2="85" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+  <line x1="54" y1="92" x2="73" y2="92" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+  <line x1="54" y1="99" x2="73" y2="99" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+</svg>
