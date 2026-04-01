@@ -53,6 +53,35 @@ class OrdenLaboratorio extends Model
                 $model->numero_orden = 'LAB-' . str_pad($numero, 4, '0', STR_PAD_LEFT);
             }
         });
+
+        static::updated(function ($orden) {
+            if ($orden->isDirty('estado') && $orden->estado === 'recibido' && $orden->precio_laboratorio > 0) {
+                $nombreLab = $orden->laboratorio->nombre ?? '';
+                $numFormateado = $orden->numero_formateado;
+                $fechaMov = $orden->fecha_recepcion
+                    ? $orden->fecha_recepcion->toDateString()
+                    : now()->toDateString();
+                \App\Models\LibroContable::registrarMovimiento(
+                    tipo:            'egreso',
+                    origen:          'gasto_laboratorio',
+                    origenId:        $orden->id,
+                    origenTipo:      'App\Models\OrdenLaboratorio',
+                    concepto:        "Laboratorio {$numFormateado} — {$nombreLab} — {$orden->tipo_trabajo}",
+                    valor:           (float) $orden->precio_laboratorio,
+                    fechaMovimiento: $fechaMov,
+                    referencia:      $numFormateado,
+                    categoria:       'Gastos de laboratorio',
+                );
+            }
+            if ($orden->isDirty('estado') && $orden->estado === 'cancelado') {
+                \App\Models\LibroContable::where('origen', 'gasto_laboratorio')
+                    ->where('origen_id', $orden->id)
+                    ->update([
+                        'excluido'         => true,
+                        'motivo_exclusion' => 'Orden de laboratorio cancelada',
+                    ]);
+            }
+        });
     }
 
     // ── Relaciones ────────────────────────────────────────────────────────

@@ -93,8 +93,11 @@
             </div>
             <div class="col-md-4">
                 <label class="lbl">Hora</label>
-                <input type="time" name="hora" class="ctrl"
-                       value="{{ old('hora', $evolucion->hora ? \Carbon\Carbon::parse($evolucion->hora)->format('H:i') : '') }}">
+                <div class="timepicker-wrap">
+                    <i class="bi bi-clock timepicker-icon"></i>
+                    <input type="text" name="hora" placeholder="HH:MM"
+                           class="ctrl timepicker" value="{{ old('hora', $evolucion->hora ? \Carbon\Carbon::parse($evolucion->hora)->format('H:i') : '') }}" autocomplete="off" readonly>
+                </div>
             </div>
         </div>
     </div>

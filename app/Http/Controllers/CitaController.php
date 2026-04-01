@@ -105,19 +105,31 @@ class CitaController extends Controller
     // ── Detectar cruces de citas ──────────────────────────────
     private function detectarCruces(string $fecha, string $horaInicio, string $horaFin = null, int $excludeId = null): \Illuminate\Support\Collection
     {
-        $horaFinCalc = $horaFin ?? date('H:i', strtotime($horaInicio . ' +30 minutes'));
-
         $query = Cita::with('paciente')
             ->whereDate('fecha', $fecha)
             ->where('activo', true)
-            ->whereNotIn('estado', ['cancelada', 'no_asistio'])
-            ->where(function ($q) use ($horaInicio, $horaFinCalc) {
-                $q->where('hora_inicio', '<', $horaFinCalc)
+            ->whereNotIn('estado', ['cancelada', 'no_asistio']);
+
+        if ($horaFin) {
+            // Con hora_fin: overlap clásico — el rango nuevo se cruza con alguna cita existente
+            $query->where(function ($q) use ($horaInicio, $horaFin) {
+                $q->where('hora_inicio', '<', $horaFin)
                   ->where(function ($inner) use ($horaInicio) {
-                      $inner->whereRaw('TIME(DATE_ADD(STR_TO_DATE(hora_inicio, "%H:%i"), INTERVAL 30 MINUTE)) > ?', [$horaInicio])
-                            ->orWhereRaw('hora_fin > ?', [$horaInicio]);
+                      $inner->whereRaw('hora_fin > ?', [$horaInicio])
+                            ->orWhereRaw('(hora_fin IS NULL AND hora_inicio >= ?)', [$horaInicio]);
                   });
             });
+        } else {
+            // Sin hora_fin: solo verificar si hora_inicio coincide exactamente con otra cita
+            // o cae DENTRO del rango explícito de una cita existente
+            $query->where(function ($q) use ($horaInicio) {
+                $q->where('hora_inicio', '=', $horaInicio)
+                  ->orWhere(function ($inner) use ($horaInicio) {
+                      $inner->where('hora_inicio', '<', $horaInicio)
+                            ->whereRaw('hora_fin > ?', [$horaInicio]);
+                  });
+            });
+        }
 
         if ($excludeId) {
             $query->where('id', '!=', $excludeId);
@@ -252,6 +264,17 @@ class CitaController extends Controller
 
         return redirect()->route('citas.show', $cita)
                          ->with('exito', 'Cita actualizada correctamente.');
+    }
+
+    // ── Cambiar estado (AJAX) ─────────────────────────────────
+    public function cambiarEstado(Request $request, string $id)
+    {
+        $request->validate([
+            'estado' => 'required|in:pendiente,confirmada,en_proceso,atendida,cancelada,no_asistio',
+        ]);
+        $cita = Cita::findOrFail($id);
+        $cita->update(['estado' => $request->estado]);
+        return response()->json(['ok' => true, 'estado' => $cita->estado]);
     }
 
     // ── Confirmar ─────────────────────────────────────────────

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\AuditoriaService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -26,7 +28,23 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        // Verificar cuenta bloqueada
+        if ($request->user() && $request->user()->locked_at) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => 'Esta cuenta ha sido bloqueada por seguridad. Contacte al administrador.',
+            ]);
+        }
+
         $request->session()->regenerate();
+
+        // Registrar último acceso
+        $request->user()->update([
+            'last_login_at' => now(),
+            'last_login_ip' => $request->ip(),
+        ]);
+
+        AuditoriaService::login();
 
         $user = Auth::user();
         $rol  = $user->getRoleNames()->first();
@@ -46,6 +64,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        AuditoriaService::logout();
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

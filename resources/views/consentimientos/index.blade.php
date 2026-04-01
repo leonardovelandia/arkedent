@@ -62,9 +62,16 @@
         <h4 style="font-family:var(--fuente-titulos);font-weight:700;color:#1c2b22;margin:0;">Consentimientos Informados</h4>
         <p style="font-size:.82rem;color:#9ca3af;margin:0;">Gestión de consentimientos y firmas</p>
     </div>
-    <a href="{{ route('consentimientos.create') }}" class="btn-morado">
-        <i class="bi bi-file-earmark-plus"></i> Nuevo Consentimiento
-    </a>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <a href="{{ route('plantillas-consentimiento.index') }}"
+           style="background:#fff;color:var(--color-principal);border:1.5px solid var(--color-principal);border-radius:8px;padding:.5rem 1.1rem;font-size:.875rem;font-weight:500;display:inline-flex;align-items:center;gap:.4rem;transition:background .15s,color .15s;text-decoration:none;"
+           onmouseover="this.style.background='var(--color-muy-claro)'" onmouseout="this.style.background='#fff'">
+            <i class="bi bi-collection"></i> Plantillas
+        </a>
+        <a href="{{ route('consentimientos.create') }}" class="btn-morado">
+            <i class="bi bi-file-earmark-plus"></i> Nuevo Consentimiento
+        </a>
+    </div>
 </div>
 
 {{-- Filtros --}}

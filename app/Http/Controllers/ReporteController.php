@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\CategoriaEgreso;
+use App\Models\Egreso;
 use App\Models\Paciente;
 use App\Models\Cita;
 use App\Models\Pago;
@@ -43,28 +45,38 @@ class ReporteController extends Controller
         // Saldo pendiente
         $saldoPendienteTotal = Tratamiento::where('estado', 'activo')->where('saldo_pendiente', '>', 0)->sum('saldo_pendiente');
 
-        // Ingresos por mes para grafico (ultimos 12 meses)
+        // Ingresos por mes para grafico (ultimos 12 meses) — 1 query con GROUP BY
+        $inicio12Meses = $hoy->copy()->subMonths(11)->startOfMonth();
+        $ingresosPorMesRaw = Pago::where('anulado', false)
+            ->whereBetween('fecha_pago', [$inicio12Meses, $finMes])
+            ->selectRaw("DATE_FORMAT(fecha_pago, '%Y-%m') as periodo, SUM(valor) as valor")
+            ->groupBy('periodo')
+            ->pluck('valor', 'periodo');
+
         $ingresosPorMes = collect();
         for ($i = 11; $i >= 0; $i--) {
-            $mes = $hoy->copy()->subMonths($i);
+            $mes    = $hoy->copy()->subMonths($i);
+            $periodo = $mes->format('Y-m');
             $ingresosPorMes->push([
                 'mes'   => $mes->locale('es')->isoFormat('MMM YYYY'),
-                'valor' => Pago::whereYear('fecha_pago', $mes->year)
-                               ->whereMonth('fecha_pago', $mes->month)
-                               ->where('anulado', false)
-                               ->sum('valor'),
+                'valor' => $ingresosPorMesRaw[$periodo] ?? 0,
             ]);
         }
 
-        // Pacientes nuevos por mes (ultimos 6 meses)
+        // Pacientes nuevos por mes (ultimos 6 meses) — 1 query con GROUP BY
+        $inicio6Meses = $hoy->copy()->subMonths(5)->startOfMonth();
+        $pacientesPorMesRaw = Paciente::whereBetween('created_at', [$inicio6Meses, $finMes])
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as periodo, COUNT(*) as total")
+            ->groupBy('periodo')
+            ->pluck('total', 'periodo');
+
         $pacientesPorMes = collect();
         for ($i = 5; $i >= 0; $i--) {
-            $mes = $hoy->copy()->subMonths($i);
+            $mes     = $hoy->copy()->subMonths($i);
+            $periodo = $mes->format('Y-m');
             $pacientesPorMes->push([
                 'mes'   => $mes->locale('es')->isoFormat('MMM'),
-                'total' => Paciente::whereYear('created_at', $mes->year)
-                                   ->whereMonth('created_at', $mes->month)
-                                   ->count(),
+                'total' => $pacientesPorMesRaw[$periodo] ?? 0,
             ]);
         }
 
@@ -90,13 +102,28 @@ class ReporteController extends Controller
             ->groupBy('estado')
             ->get();
 
+        // Egresos del mes
+        $egresosMes = Egreso::whereBetween('fecha_egreso', [$inicioMes, $finMes])
+            ->where('anulado', false)
+            ->sum('valor');
+
+        $egresosPorCategoria = CategoriaEgreso::withSum(
+            ['egresos' => function ($q) use ($inicioMes, $finMes) {
+                $q->whereBetween('fecha_egreso', [$inicioMes, $finMes])
+                  ->where('anulado', false);
+            }], 'valor'
+        )->having('egresos_sum_valor', '>', 0)->get();
+
+        $utilidadNeta = $ingresosMes - $egresosMes;
+
         return view('reportes.index', compact(
             'totalPacientes', 'pacientesNuevosMes', 'pacientesNuevosMesAnterior',
             'ingresosMes', 'ingresosMesAnterior', 'ingresosAno',
             'citasMes', 'citasAtendidas', 'citasCanceladas', 'citasNoAsistio',
             'evolucionesMes', 'saldoPendienteTotal',
             'ingresosPorMes', 'pacientesPorMes',
-            'topProcedimientos', 'topMetodosPago', 'citasPorEstado'
+            'topProcedimientos', 'topMetodosPago', 'citasPorEstado',
+            'egresosMes', 'egresosPorCategoria', 'utilidadNeta'
         ));
     }
 
@@ -164,12 +191,22 @@ class ReporteController extends Controller
             ->orderByDesc('total')
             ->limit(10)->get();
 
+        // Rango de edades — 1 query con CASE WHEN (antes 5 queries)
+        $edadesRaw = Paciente::where('activo', true)
+            ->selectRaw("
+                SUM(CASE WHEN TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) BETWEEN 0  AND 18 THEN 1 ELSE 0 END) as r0_18,
+                SUM(CASE WHEN TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) BETWEEN 19 AND 30 THEN 1 ELSE 0 END) as r19_30,
+                SUM(CASE WHEN TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) BETWEEN 31 AND 45 THEN 1 ELSE 0 END) as r31_45,
+                SUM(CASE WHEN TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) BETWEEN 46 AND 60 THEN 1 ELSE 0 END) as r46_60,
+                SUM(CASE WHEN TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) > 60             THEN 1 ELSE 0 END) as r60plus
+            ")
+            ->first();
         $rangoEdades = [
-            '0-18'  => Paciente::where('activo', true)->whereRaw('TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) BETWEEN 0 AND 18')->count(),
-            '19-30' => Paciente::where('activo', true)->whereRaw('TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) BETWEEN 19 AND 30')->count(),
-            '31-45' => Paciente::where('activo', true)->whereRaw('TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) BETWEEN 31 AND 45')->count(),
-            '46-60' => Paciente::where('activo', true)->whereRaw('TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) BETWEEN 46 AND 60')->count(),
-            '60+'   => Paciente::where('activo', true)->whereRaw('TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) > 60')->count(),
+            '0-18'  => (int) ($edadesRaw->r0_18   ?? 0),
+            '19-30' => (int) ($edadesRaw->r19_30  ?? 0),
+            '31-45' => (int) ($edadesRaw->r31_45  ?? 0),
+            '46-60' => (int) ($edadesRaw->r46_60  ?? 0),
+            '60+'   => (int) ($edadesRaw->r60plus ?? 0),
         ];
 
         return view('reportes.pacientes', compact(
@@ -288,5 +325,105 @@ class ReporteController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    public function egresos(Request $request)
+    {
+        $desde = $request->desde ? Carbon::parse($request->desde) : Carbon::now()->startOfMonth();
+        $hasta = $request->hasta ? Carbon::parse($request->hasta) : Carbon::now()->endOfMonth();
+        $categoriaId = $request->categoria_id;
+
+        $query = Egreso::with('categoria', 'registradoPor')
+            ->whereBetween('fecha_egreso', [$desde->copy()->startOfDay(), $hasta->copy()->endOfDay()])
+            ->where('anulado', false);
+
+        if ($categoriaId) {
+            $query->where('categoria_id', $categoriaId);
+        }
+
+        $egresos = $query->orderBy('fecha_egreso', 'desc')->paginate(20)->withQueryString();
+
+        $totalFiltrado = Egreso::whereBetween('fecha_egreso', [$desde->copy()->startOfDay(), $hasta->copy()->endOfDay()])
+            ->where('anulado', false)
+            ->when($categoriaId, fn($q) => $q->where('categoria_id', $categoriaId))
+            ->sum('valor');
+
+        $conteoFiltrado = Egreso::whereBetween('fecha_egreso', [$desde->copy()->startOfDay(), $hasta->copy()->endOfDay()])
+            ->where('anulado', false)
+            ->when($categoriaId, fn($q) => $q->where('categoria_id', $categoriaId))
+            ->count();
+
+        $porCategoria = CategoriaEgreso::withSum(
+            ['egresos' => fn($q) => $q->whereBetween('fecha_egreso', [$desde, $hasta])->where('anulado', false)],
+            'valor'
+        )->having('egresos_sum_valor', '>', 0)->orderByDesc('egresos_sum_valor')->get();
+
+        $categorias = CategoriaEgreso::orderBy('nombre')->get();
+
+        return view('reportes.egresos', compact(
+            'egresos', 'desde', 'hasta', 'categoriaId',
+            'totalFiltrado', 'conteoFiltrado', 'porCategoria', 'categorias'
+        ));
+    }
+
+    public function datosGraficas(Request $request)
+    {
+        $periodo = $request->periodo ?? 'mes';
+        $hoy = Carbon::today();
+
+        if ($periodo === 'dia') {
+            $inicio = $hoy->copy()->subDays(29);
+            $ingresosRaw = Pago::where('anulado', false)
+                ->whereBetween('fecha_pago', [$inicio, $hoy->copy()->endOfDay()])
+                ->selectRaw("DATE(fecha_pago) as periodo, SUM(valor) as valor")
+                ->groupBy('periodo')->pluck('valor', 'periodo');
+            $egresosRaw = Egreso::where('anulado', false)
+                ->whereBetween('fecha_egreso', [$inicio, $hoy->copy()->endOfDay()])
+                ->selectRaw("DATE(fecha_egreso) as periodo, SUM(valor) as valor")
+                ->groupBy('periodo')->pluck('valor', 'periodo');
+            $ingresos = collect(); $egresos = collect();
+            for ($i = 29; $i >= 0; $i--) {
+                $d = $hoy->copy()->subDays($i);
+                $k = $d->format('Y-m-d');
+                $ingresos->push(['label' => $d->format('d/m'), 'valor' => (float)($ingresosRaw[$k] ?? 0)]);
+                $egresos->push(['label'  => $d->format('d/m'), 'valor' => (float)($egresosRaw[$k]  ?? 0)]);
+            }
+        } elseif ($periodo === 'ano') {
+            $anoActual = (int)$hoy->format('Y');
+            $ingresosRaw = Pago::where('anulado', false)
+                ->whereBetween('fecha_pago', [Carbon::create($anoActual - 4, 1, 1), $hoy->copy()->endOfYear()])
+                ->selectRaw("YEAR(fecha_pago) as periodo, SUM(valor) as valor")
+                ->groupBy('periodo')->pluck('valor', 'periodo');
+            $egresosRaw = Egreso::where('anulado', false)
+                ->whereBetween('fecha_egreso', [Carbon::create($anoActual - 4, 1, 1), $hoy->copy()->endOfYear()])
+                ->selectRaw("YEAR(fecha_egreso) as periodo, SUM(valor) as valor")
+                ->groupBy('periodo')->pluck('valor', 'periodo');
+            $ingresos = collect(); $egresos = collect();
+            for ($i = 4; $i >= 0; $i--) {
+                $ano = $anoActual - $i;
+                $ingresos->push(['label' => (string)$ano, 'valor' => (float)($ingresosRaw[$ano] ?? 0)]);
+                $egresos->push(['label'  => (string)$ano, 'valor' => (float)($egresosRaw[$ano]  ?? 0)]);
+            }
+        } else {
+            $inicio12 = $hoy->copy()->subMonths(11)->startOfMonth();
+            $finMes   = $hoy->copy()->endOfMonth();
+            $ingresosRaw = Pago::where('anulado', false)
+                ->whereBetween('fecha_pago', [$inicio12, $finMes])
+                ->selectRaw("DATE_FORMAT(fecha_pago, '%Y-%m') as periodo, SUM(valor) as valor")
+                ->groupBy('periodo')->pluck('valor', 'periodo');
+            $egresosRaw = Egreso::where('anulado', false)
+                ->whereBetween('fecha_egreso', [$inicio12, $finMes])
+                ->selectRaw("DATE_FORMAT(fecha_egreso, '%Y-%m') as periodo, SUM(valor) as valor")
+                ->groupBy('periodo')->pluck('valor', 'periodo');
+            $ingresos = collect(); $egresos = collect();
+            for ($i = 11; $i >= 0; $i--) {
+                $m = $hoy->copy()->subMonths($i);
+                $k = $m->format('Y-m');
+                $ingresos->push(['label' => $m->locale('es')->isoFormat('MMM YY'), 'valor' => (float)($ingresosRaw[$k] ?? 0)]);
+                $egresos->push(['label'  => $m->locale('es')->isoFormat('MMM YY'), 'valor' => (float)($egresosRaw[$k]  ?? 0)]);
+            }
+        }
+
+        return response()->json(compact('ingresos', 'egresos'));
     }
 }

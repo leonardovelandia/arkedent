@@ -49,15 +49,25 @@ class HistoriaClinica extends Model
         'firma_data',
         'fecha_firma',
         'ip_firma',
+        // Trazabilidad
+        'firma_user_agent',
+        'firma_timestamp',
+        'firma_timezone',
+        'firma_hash',
+        'documento_hash',
+        'firma_dispositivo',
+        'firma_navegador',
+        'firma_verificacion_token',
     ];
 
     protected $casts = [
-        'fecha_apertura' => 'date',
-        'odontograma'    => 'array',
-        'hallazgos'      => 'array',
-        'activo'         => 'boolean',
-        'firmado'        => 'boolean',
-        'fecha_firma'    => 'datetime',
+        'fecha_apertura'  => 'date',
+        'odontograma'     => 'array',
+        'hallazgos'       => 'array',
+        'activo'          => 'boolean',
+        'firmado'         => 'boolean',
+        'fecha_firma'     => 'datetime',
+        'firma_timestamp' => 'datetime',
     ];
 
     // ── Accessors ─────────────────────────────────────────────

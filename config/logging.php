@@ -127,6 +127,22 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'firmas' => [
+            'driver'     => 'daily',
+            'path'       => storage_path('logs/firmas.log'),
+            'level'      => 'info',
+            'days'       => 1825,
+            'permission' => 0664,
+        ],
+
+        'auditoria' => [
+            'driver'     => 'daily',
+            'path'       => storage_path('logs/auditoria.log'),
+            'level'      => 'info',
+            'days'       => 1825,
+            'permission' => 0664,
+        ],
+
     ],
 
 ];

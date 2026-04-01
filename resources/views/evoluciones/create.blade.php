@@ -75,6 +75,7 @@
     <div class="sec-body">
         @if($paciente)
             {{-- Paciente ya seleccionado --}}
+            <input type="hidden" name="paciente_id" value="{{ $paciente->id }}">
             <div class="pac-info-box">
                 <div class="pac-avatar-sm">
                     {{ strtoupper(substr($paciente->nombre,0,1)) }}{{ strtoupper(substr($paciente->apellido,0,1)) }}
@@ -113,7 +114,11 @@
             </div>
             <div class="col-md-4">
                 <label class="lbl">Hora</label>
-                <input type="time" name="hora" class="ctrl" value="{{ old('hora', date('H:i')) }}">
+                <div class="timepicker-wrap">
+                    <i class="bi bi-clock timepicker-icon"></i>
+                    <input type="text" name="hora" placeholder="HH:MM"
+                           class="ctrl timepicker" value="{{ old('hora', date('H:i')) }}" autocomplete="off" readonly>
+                </div>
             </div>
         </div>
     </div>

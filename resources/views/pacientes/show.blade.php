@@ -168,6 +168,17 @@
             @else
                 <span class="badge-inactivo-header"><i class="bi bi-circle-fill" style="font-size:0.45rem;"></i> Inactivo</span>
             @endif
+            @if($paciente->tieneAutorizacion())
+                <a href="{{ route('autorizacion.show', $paciente->autorizacionDatos->id) }}"
+                   style="background:rgba(74,222,128,.2);color:#86efac;border:1px solid rgba(74,222,128,.3);border-radius:20px;padding:.22rem .85rem;font-size:.72rem;font-weight:600;text-decoration:none;">
+                    <i class="bi bi-shield-check"></i> Autorización firmada
+                </a>
+            @else
+                <a href="{{ route('autorizacion.create', ['paciente_id' => $paciente->id]) }}"
+                   style="background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.3);border-radius:20px;padding:.22rem .85rem;font-size:.72rem;font-weight:600;text-decoration:none;">
+                    <i class="bi bi-shield-exclamation"></i> Firmar autorización
+                </a>
+            @endif
         </div>
         <div class="pac-meta">
             <span class="pac-meta-item"><i class="bi bi-journal-medical"></i> {{ $paciente->numero_historia }}</span>
@@ -241,6 +252,21 @@
     <button class="pac-tab" onclick="cambiarTab('laboratorio')">
         <i class="bi bi-flask"></i> Laboratorio
     </button>
+    @modulo('ortodoncia')
+    <button class="pac-tab" onclick="cambiarTab('ortodoncia')">
+        <i class="bi bi-braces"></i> Ortodoncia
+    </button>
+    @endmodulo
+    @modulo('recetas')
+    <button class="pac-tab" onclick="cambiarTab('recetas')">
+        <i class="bi bi-file-medical"></i> Recetas
+    </button>
+    @endmodulo
+    @modulo('periodoncia')
+    <button class="pac-tab" onclick="cambiarTab('periodoncia')">
+        <i class="bi bi-heart-pulse"></i> Periodoncia
+    </button>
+    @endmodulo
 </div>
 
 {{-- Tab: Datos personales --}}
@@ -999,6 +1025,264 @@
         @endif
     </div>
 </div>
+
+@modulo('ortodoncia')
+{{-- Tab: Ortodoncia --}}
+<div id="tab-ortodoncia" class="tab-panel">
+    <div class="card-sistema">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+            <h6 style="margin:0;font-size:.85rem;font-weight:700;text-transform:uppercase;color:var(--color-hover);letter-spacing:.04em;">
+                <i class="bi bi-braces me-1"></i> Ortodoncia
+            </h6>
+            <a href="{{ route('ortodoncia.create', ['paciente_id' => $paciente->id]) }}"
+               class="btn-morado" style="font-size:.8rem;padding:.32rem .75rem;">
+                <i class="bi bi-plus-lg"></i> Nueva Ficha
+            </a>
+        </div>
+
+        @if($paciente->fichaOrtodonciaActiva)
+        <div style="background:var(--color-muy-claro);border:1px solid var(--color-claro);border-radius:10px;padding:.85rem 1.25rem;margin-bottom:1rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+                <div>
+                    <span style="font-size:.7rem;font-weight:700;color:var(--color-principal);text-transform:uppercase;letter-spacing:.06em;">
+                        <i class="bi bi-braces me-1"></i> Tratamiento activo
+                    </span>
+                    <div style="font-size:.88rem;color:var(--texto-principal);margin-top:.2rem;font-weight:600;">
+                        {{ $paciente->fichaOrtodonciaActiva->numero_ficha }} —
+                        {{ $paciente->fichaOrtodonciaActiva->tipo_ortodoncia_label }}
+                    </div>
+                    <div style="font-size:.75rem;color:var(--texto-secundario);margin-top:.1rem;">
+                        Inicio: {{ $paciente->fichaOrtodonciaActiva->fecha_inicio->format('d/m/Y') }}
+                        &nbsp;·&nbsp; Progreso: {{ $paciente->fichaOrtodonciaActiva->progreso }}%
+                    </div>
+                </div>
+                <a href="{{ route('ortodoncia.show', $paciente->fichaOrtodonciaActiva) }}"
+                   style="background:var(--color-principal);color:white;text-decoration:none;padding:.4rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;">
+                    Ver ficha
+                </a>
+            </div>
+        </div>
+        @endif
+
+        @php $fichasOrtodoncia = $paciente->fichasOrtodoncia()->with('ultimoControl')->get(); @endphp
+        @if($fichasOrtodoncia->isEmpty())
+            <p style="color:#9ca3af;font-size:.83rem;text-align:center;padding:1.5rem 0;margin:0;">
+                <i class="bi bi-braces" style="font-size:1.5rem;display:block;margin-bottom:.5rem;"></i>
+                No hay fichas ortodónticas registradas
+            </p>
+        @else
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:.83rem;">
+            <thead>
+                <tr style="border-bottom:2px solid var(--fondo-borde);">
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">N° Ficha</th>
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Tipo</th>
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Inicio</th>
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Progreso</th>
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Estado</th>
+                    <th style="padding:.4rem .9rem;text-align:center;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Ver</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($fichasOrtodoncia as $fo)
+            @php
+                $badges = ['diagnostico'=>['#dbeafe','#1e40af'],'activo'=>['#d1fae5','#065f46'],'retencion'=>['#fef3c7','#92400e'],'finalizado'=>['#f3f4f6','#374151'],'cancelado'=>['#fee2e2','#7f1d1d']];
+                $bc = $badges[$fo->estado] ?? ['#f3f4f6','#374151'];
+            @endphp
+            <tr style="border-bottom:1px solid var(--fondo-borde);">
+                <td style="padding:.5rem .9rem;font-family:monospace;font-weight:700;color:var(--color-principal);font-size:.78rem;">{{ $fo->numero_ficha }}</td>
+                <td style="padding:.5rem .9rem;font-size:.8rem;">{{ $fo->tipo_ortodoncia_label }}</td>
+                <td style="padding:.5rem .9rem;color:#4b5563;">{{ $fo->fecha_inicio->format('d/m/Y') }}</td>
+                <td style="padding:.5rem .9rem;">
+                    <div style="display:flex;align-items:center;gap:.4rem;">
+                        <div style="width:60px;background:var(--fondo-borde);border-radius:20px;height:6px;">
+                            <div style="width:{{ $fo->progreso }}%;background:var(--color-principal);border-radius:20px;height:6px;"></div>
+                        </div>
+                        <span style="font-size:.72rem;font-weight:700;color:var(--color-principal);">{{ $fo->progreso }}%</span>
+                    </div>
+                </td>
+                <td style="padding:.5rem .9rem;">
+                    <span style="background:{{ $bc[0] }};color:{{ $bc[1] }};border-radius:20px;padding:.1rem .5rem;font-size:.7rem;font-weight:700;">{{ $fo->estado_label }}</span>
+                </td>
+                <td style="padding:.5rem .9rem;text-align:center;">
+                    <a href="{{ route('ortodoncia.show', $fo) }}" style="color:var(--color-principal);font-size:.82rem;">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                </td>
+            </tr>
+            @endforeach
+            </tbody>
+        </table>
+        </div>
+        @endif
+    </div>
+</div>
+@endmodulo
+
+@modulo('recetas')
+{{-- Tab: Recetas Médicas --}}
+<div id="tab-recetas" class="tab-panel">
+    <div class="card-sistema">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+            <h6 style="margin:0;font-size:.85rem;font-weight:700;text-transform:uppercase;color:var(--color-hover);letter-spacing:.04em;">
+                <i class="bi bi-file-medical me-1"></i> Recetas Médicas
+            </h6>
+            <a href="{{ route('recetas.create', ['paciente_id' => $paciente->id]) }}"
+               class="btn-morado" style="font-size:.8rem;padding:.32rem .75rem;">
+                <i class="bi bi-plus-lg"></i> Nueva Receta
+            </a>
+        </div>
+
+        @php $recetasPaciente = $paciente->recetasMedicas()->where('activo', true)->with('doctor')->get(); @endphp
+
+        @if($recetasPaciente->isEmpty())
+        <div style="text-align:center;padding:2rem;color:var(--texto-secundario);font-size:.84rem;">
+            <i class="bi bi-file-medical" style="font-size:2rem;display:block;margin-bottom:.5rem;opacity:.4;"></i>
+            No hay recetas médicas registradas
+        </div>
+        @else
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:.82rem;">
+            <thead>
+                <tr style="background:var(--fondo-card-alt);">
+                    <th style="padding:.5rem .9rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-secundario);">N° Receta</th>
+                    <th style="padding:.5rem .9rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-secundario);">Fecha</th>
+                    <th style="padding:.5rem .9rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-secundario);">Doctor</th>
+                    <th style="padding:.5rem .9rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-secundario);">Diagnóstico</th>
+                    <th style="padding:.5rem .9rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-secundario);">Items</th>
+                    <th style="padding:.5rem .9rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-secundario);">Estado</th>
+                    <th style="padding:.5rem .9rem;text-align:center;font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--texto-secundario);">Acc.</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($recetasPaciente as $receta)
+            <tr style="border-bottom:1px solid var(--fondo-borde);">
+                <td style="padding:.5rem .9rem;font-family:monospace;font-weight:700;color:var(--color-principal);font-size:.78rem;">{{ $receta->numero_receta }}</td>
+                <td style="padding:.5rem .9rem;color:#4b5563;">{{ $receta->fecha->format('d/m/Y') }}</td>
+                <td style="padding:.5rem .9rem;font-size:.8rem;">{{ $receta->doctor->name }}</td>
+                <td style="padding:.5rem .9rem;font-size:.8rem;color:var(--texto-secundario);">{{ Str::limit($receta->diagnostico, 35) ?: '—' }}</td>
+                <td style="padding:.5rem .9rem;">
+                    <span style="background:var(--color-muy-claro);color:var(--color-principal);font-size:.7rem;font-weight:600;padding:.15rem .5rem;border-radius:20px;">
+                        {{ $receta->total_medicamentos }}
+                    </span>
+                </td>
+                <td style="padding:.5rem .9rem;">
+                    @if($receta->firmado)
+                    <span style="background:#dcfce7;color:#166534;border-radius:20px;padding:.1rem .5rem;font-size:.7rem;font-weight:700;">Firmada</span>
+                    @else
+                    <span style="background:#fef3c7;color:#92400e;border-radius:20px;padding:.1rem .5rem;font-size:.7rem;font-weight:700;">Pendiente</span>
+                    @endif
+                </td>
+                <td style="padding:.5rem .9rem;text-align:center;">
+                    <div style="display:flex;gap:.3rem;justify-content:center;">
+                        <a href="{{ route('recetas.show', $receta) }}" style="color:var(--color-principal);font-size:.82rem;" title="Ver"><i class="bi bi-eye"></i></a>
+                        <a href="{{ route('recetas.pdf', $receta) }}" target="_blank" style="color:#16a34a;font-size:.82rem;" title="PDF"><i class="bi bi-file-pdf"></i></a>
+                    </div>
+                </td>
+            </tr>
+            @endforeach
+            </tbody>
+        </table>
+        </div>
+        @endif
+    </div>
+</div>
+@endmodulo
+
+@modulo('periodoncia')
+{{-- Tab: Periodoncia --}}
+<div id="tab-periodoncia" class="tab-panel">
+    <div class="card-sistema">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+            <h6 style="margin:0;font-size:.85rem;font-weight:700;text-transform:uppercase;color:var(--color-hover);letter-spacing:.04em;">
+                <i class="bi bi-heart-pulse me-1"></i> Periodoncia
+            </h6>
+            <a href="{{ route('periodoncia.create', ['paciente_id' => $paciente->id]) }}"
+               class="btn-morado" style="font-size:.8rem;padding:.32rem .75rem;">
+                <i class="bi bi-plus-lg"></i> Nueva Ficha
+            </a>
+        </div>
+
+        @php $fichasPeriodoncia = App\Models\FichaPeriodontal::where('paciente_id', $paciente->id)->where('activo', true)->with('ultimoControl')->orderBy('created_at','desc')->get(); @endphp
+
+        @php $fichaActiva = $fichasPeriodoncia->whereIn('estado', ['activa','en_tratamiento'])->first(); @endphp
+        @if($fichaActiva)
+        <div style="background:var(--color-muy-claro);border:1px solid var(--color-claro);border-radius:10px;padding:.85rem 1.25rem;margin-bottom:1rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+                <div>
+                    <span style="font-size:.7rem;font-weight:700;color:var(--color-principal);text-transform:uppercase;letter-spacing:.06em;">
+                        <i class="bi bi-heart-pulse me-1"></i> Tratamiento activo
+                    </span>
+                    <div style="font-size:.88rem;color:var(--texto-principal);margin-top:.2rem;font-weight:600;">
+                        {{ $fichaActiva->numero_ficha }} — {{ $fichaActiva->clasificacion_label }}
+                    </div>
+                    <div style="font-size:.75rem;color:var(--texto-secundario);margin-top:.1rem;">
+                        Inicio: {{ $fichaActiva->fecha_inicio->format('d/m/Y') }}
+                        &nbsp;·&nbsp; Estado: {{ $fichaActiva->estado_label }}
+                        &nbsp;·&nbsp; {{ $fichaActiva->controles()->count() }} controles
+                    </div>
+                </div>
+                <a href="{{ route('periodoncia.show', $fichaActiva) }}"
+                   style="background:var(--color-principal);color:white;text-decoration:none;padding:.4rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;">
+                    Ver ficha
+                </a>
+            </div>
+        </div>
+        @endif
+
+        @if($fichasPeriodoncia->isEmpty())
+            <p style="color:#9ca3af;font-size:.83rem;text-align:center;padding:1.5rem 0;margin:0;">
+                <i class="bi bi-heart-pulse" style="font-size:1.5rem;display:block;margin-bottom:.5rem;"></i>
+                No hay fichas periodontales registradas
+            </p>
+        @else
+        <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:.83rem;">
+            <thead>
+                <tr style="border-bottom:2px solid var(--fondo-borde);">
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">N° Ficha</th>
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Clasificación</th>
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Inicio</th>
+                    <th style="padding:.4rem .9rem;text-align:center;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Placa</th>
+                    <th style="padding:.4rem .9rem;text-align:center;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Sesiones</th>
+                    <th style="padding:.4rem .9rem;text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Estado</th>
+                    <th style="padding:.4rem .9rem;text-align:center;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#9ca3af;">Ver</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($fichasPeriodoncia as $fp)
+            @php
+                $badgesPer = ['activa'=>['#d1fae5','#065f46'],'en_tratamiento'=>['#dbeafe','#1e40af'],'mantenimiento'=>['#fef3c7','#92400e'],'finalizada'=>['#f3f4f6','#374151'],'abandonada'=>['#fee2e2','#7f1d1d']];
+                $bcp = $badgesPer[$fp->estado] ?? ['#f3f4f6','#374151'];
+                $pp = $fp->indice_placa_porcentaje;
+            @endphp
+            <tr style="border-bottom:1px solid var(--fondo-borde);">
+                <td style="padding:.5rem .9rem;font-family:monospace;font-weight:700;color:var(--color-principal);font-size:.78rem;">{{ $fp->numero_ficha }}</td>
+                <td style="padding:.5rem .9rem;font-size:.8rem;">{{ Str::limit($fp->clasificacion_label, 30) ?: '—' }}</td>
+                <td style="padding:.5rem .9rem;color:#4b5563;">{{ $fp->fecha_inicio->format('d/m/Y') }}</td>
+                <td style="padding:.5rem .9rem;text-align:center;font-weight:700;font-size:.78rem;">
+                    @if($pp !== null)
+                    <span style="color:{{ $pp < 20 ? '#16a34a' : ($pp < 40 ? '#d97706' : '#dc2626') }};">{{ number_format($pp,1) }}%</span>
+                    @else <span style="color:#9ca3af;">—</span> @endif
+                </td>
+                <td style="padding:.5rem .9rem;text-align:center;font-weight:700;color:var(--color-principal);">{{ $fp->controles()->count() }}</td>
+                <td style="padding:.5rem .9rem;">
+                    <span style="background:{{ $bcp[0] }};color:{{ $bcp[1] }};border-radius:20px;padding:.1rem .5rem;font-size:.7rem;font-weight:700;">{{ $fp->estado_label }}</span>
+                </td>
+                <td style="padding:.5rem .9rem;text-align:center;">
+                    <a href="{{ route('periodoncia.show', $fp) }}" style="color:var(--color-principal);font-size:.82rem;">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                </td>
+            </tr>
+            @endforeach
+            </tbody>
+        </table>
+        </div>
+        @endif
+    </div>
+</div>
+@endmodulo
 
 @push('scripts')
 <script>

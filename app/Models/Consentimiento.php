@@ -40,11 +40,21 @@ class Consentimiento extends Model
         'ip_firma',
         'observaciones',
         'activo',
+        // Trazabilidad
+        'firma_user_agent',
+        'firma_timestamp',
+        'firma_timezone',
+        'firma_hash',
+        'documento_hash',
+        'firma_dispositivo',
+        'firma_navegador',
+        'firma_verificacion_token',
     ];
 
     protected $casts = [
         'fecha_generacion' => 'date',
         'fecha_firma'      => 'datetime',
+        'firma_timestamp'  => 'datetime',
         'firmado'          => 'boolean',
         'activo'           => 'boolean',
     ];

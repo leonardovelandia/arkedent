@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cita;
+use App\Models\Egreso;
 use App\Models\Material;
 use App\Models\OrdenLaboratorio;
 use App\Models\Paciente;
 use App\Models\Pago;
+use App\Models\Recordatorio;
 use App\Models\Tratamiento;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -29,8 +31,14 @@ class DashboardController extends Controller
                 'pacientesConSaldo'         => Tratamiento::where('estado', 'activo')->where('saldo_pendiente', '>', 0)->distinct('paciente_id')->count('paciente_id'),
                 'materialesStockBajo'       => Material::where('activo', true)->whereColumn('stock_actual', '<=', 'stock_minimo')->count(),
                 'ordenesLaboratorioVencidas'=> OrdenLaboratorio::where('activo', true)->whereNotIn('estado', ['recibido', 'instalado', 'cancelado'])->whereDate('fecha_entrega_estimada', '<', $hoy)->count(),
+                'egresosMes'               => Egreso::whereMonth('fecha_egreso', $hoy->month)->whereYear('fecha_egreso', $hoy->year)->where('anulado', false)->sum('valor'),
+                'pacientesSinAutorizacion' => Paciente::where('activo', true)->where('autorizacion_datos', false)->count(),
+                'recordatoriosFallidos'    => Recordatorio::where('estado', 'fallido')->whereDate('created_at', $hoy)->count(),
             ];
         });
+
+        $pacientesSinAutorizacion = $stats['pacientesSinAutorizacion'];
+        $recordatoriosFallidos    = $stats['recordatoriosFallidos'];
 
         // Citas de hoy: sin caché (cambian durante el día)
         $citasDeHoy         = Cita::with('paciente')->whereDate('fecha', $hoy)->where('activo', true)->orderBy('hora_inicio')->get();
@@ -42,6 +50,9 @@ class DashboardController extends Controller
         $variacionIngresos   = $ingresosMesAnterior > 0
             ? (($ingresosDelMes - $ingresosMesAnterior) / $ingresosMesAnterior) * 100
             : 0;
+
+        $egresosMes   = $stats['egresosMes'];
+        $utilidadNeta = $ingresosDelMes - $egresosMes;
 
         return view('dashboard', [
             'totalPacientes'             => $stats['totalPacientes'],
@@ -55,7 +66,11 @@ class DashboardController extends Controller
             'saldoPendiente'             => $stats['saldoPendiente'],
             'pacientesConSaldo'          => $stats['pacientesConSaldo'],
             'materialesStockBajo'        => $stats['materialesStockBajo'],
-            'ordenesLaboratorioVencidas' => $stats['ordenesLaboratorioVencidas'],
+            'ordenesLaboratorioVencidas'   => $stats['ordenesLaboratorioVencidas'],
+            'pacientesSinAutorizacion'     => $pacientesSinAutorizacion,
+            'recordatoriosFallidos'        => $recordatoriosFallidos,
+            'egresosMes'                   => $egresosMes,
+            'utilidadNeta'                 => $utilidadNeta,
         ]);
     }
 }

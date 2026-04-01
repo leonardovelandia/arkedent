@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             InventarioSeeder::class,
             LaboratoriosSeeder::class,
             ProveedoresSeeder::class,
+            CategoriasEgresoSeeder::class,
         ]);
     }
 }

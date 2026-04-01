@@ -41,6 +41,14 @@
 
     .empty-state { text-align:center; padding:3rem 1rem; color:#9ca3af; }
     .empty-state i { font-size:2.5rem; color:var(--color-acento-activo); display:block; margin-bottom:.75rem; }
+
+    .estado-wrap { position:relative; display:inline-block; }
+    .btn-estado { border:none; cursor:pointer; padding:.22rem .65rem; border-radius:20px; font-size:.73rem; font-weight:700; white-space:nowrap; display:inline-flex; align-items:center; gap:.3rem; }
+    .btn-estado:hover { filter:brightness(.93); }
+    .estado-menu { position:absolute; top:calc(100% + 5px); left:0; background:#fff; border:1.5px solid var(--color-muy-claro); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.18); z-index:200; min-width:140px; overflow:hidden; display:none; }
+    .estado-menu button { display:block; width:100%; text-align:left; padding:.42rem .85rem; font-size:.8rem; border:none; background:none; cursor:pointer; color:#374151; }
+    .estado-menu button:hover { background:var(--color-muy-claro); }
+    .estado-menu button.em-activo { font-weight:700; color:var(--color-principal); }
 </style>
 @endpush
 
@@ -160,9 +168,23 @@
                 </span>
             </td>
             <td>
-                <span class="badge-estado" style="background:{{ $color['bg'] }};color:{{ $color['texto'] }};">
-                    {{ ucfirst(str_replace('_',' ',$cita->estado)) }}
-                </span>
+                <div class="estado-wrap">
+                    <button type="button" class="btn-estado"
+                            style="background:{{ $color['bg'] }};color:{{ $color['texto'] }};"
+                            onclick="toggleEstadoMenu(event, {{ $cita->id }})">
+                        <span class="estado-lbl">{{ ucfirst(str_replace('_',' ',$cita->estado)) }}</span>
+                        <i class="bi bi-chevron-down" style="font-size:.55rem;"></i>
+                    </button>
+                    <div class="estado-menu" id="em-{{ $cita->id }}">
+                        @foreach(['pendiente'=>'Pendiente','confirmada'=>'Confirmada','en_proceso'=>'En proceso','atendida'=>'Atendida','cancelada'=>'Cancelada','no_asistio'=>'No asistió'] as $val => $lbl)
+                        <button type="button"
+                                class="{{ $cita->estado === $val ? 'em-activo' : '' }}"
+                                onclick="cambiarEstadoCita({{ $cita->id }}, '{{ $val }}')">
+                            {{ $lbl }}
+                        </button>
+                        @endforeach
+                    </div>
+                </div>
             </td>
             <td style="font-size:.82rem;color:#6b7280;">{{ $cita->doctor ? $cita->doctor->name : '—' }}</td>
             <td style="text-align:center;">
@@ -325,5 +347,65 @@ function cerrarModalCancelar() {
 }
 document.addEventListener('keydown', function(e) { if(e.key === 'Escape') cerrarModalCancelar(); });
 document.getElementById('modal-cancelar').addEventListener('click', function(e) { if(e.target === this) cerrarModalCancelar(); });
+
+// ── Cambio inline de estado ───────────────────────────────────────────
+var _emAbierto = null;
+var _estadoColores = {
+    pendiente:  { bg:'#FFF3CD', texto:'#856404' },
+    confirmada: { bg:'var(--color-badge-bg)', texto:'var(--color-badge-texto)' },
+    en_proceso: { bg:'#CCE5FF', texto:'#004085' },
+    atendida:   { bg:'#D4EDDA', texto:'#155724' },
+    cancelada:  { bg:'#F8D7DA', texto:'#721C24' },
+    no_asistio: { bg:'#E2E3E5', texto:'#383D41' },
+};
+var _estadoLabels = {
+    pendiente:'Pendiente', confirmada:'Confirmada', en_proceso:'En proceso',
+    atendida:'Atendida', cancelada:'Cancelada', no_asistio:'No asistió'
+};
+
+function toggleEstadoMenu(e, id) {
+    e.stopPropagation();
+    var menu = document.getElementById('em-' + id);
+    if (!menu) return;
+    if (_emAbierto && _emAbierto !== menu) { _emAbierto.style.display = 'none'; }
+    var abierto = menu.style.display === 'block';
+    menu.style.display = abierto ? 'none' : 'block';
+    _emAbierto = abierto ? null : menu;
+}
+
+document.addEventListener('click', function() {
+    if (_emAbierto) { _emAbierto.style.display = 'none'; _emAbierto = null; }
+});
+
+function cambiarEstadoCita(id, estado) {
+    if (_emAbierto) { _emAbierto.style.display = 'none'; _emAbierto = null; }
+    fetch('/citas/' + id + '/estado', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ estado: estado }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (!data.ok) return;
+        var menu = document.getElementById('em-' + id);
+        var btn  = menu ? menu.previousElementSibling : null;
+        if (btn) {
+            var col = _estadoColores[estado] || { bg:'#f3f4f6', texto:'#374151' };
+            btn.style.background = col.bg;
+            btn.style.color      = col.texto;
+            btn.querySelector('.estado-lbl').textContent = _estadoLabels[estado] || estado;
+        }
+        if (menu) {
+            menu.querySelectorAll('button').forEach(function(b) {
+                b.classList.toggle('em-activo', b.getAttribute('onclick').includes("'" + estado + "'"));
+            });
+        }
+    })
+    .catch(function(e) { console.error('cambiarEstado error', e); });
+}
 </script>
 @endpush

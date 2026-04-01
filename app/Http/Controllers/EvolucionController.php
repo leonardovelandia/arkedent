@@ -7,6 +7,7 @@ use App\Models\CorreccionEvolucion;
 use App\Models\Paciente;
 use App\Models\HistoriaClinica;
 use App\Traits\FormateaCampos;
+use App\Traits\TrazabilidadFirma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -222,13 +223,43 @@ class EvolucionController extends Controller
     public function firmar(Request $request, $id)
     {
         $request->validate(['firma_data' => 'required|string']);
-        $evolucion = Evolucion::findOrFail($id);
-        $evolucion->update([
-            'firmado'     => true,
-            'firma_data'  => $request->firma_data,
-            'fecha_firma' => now(),
-            'ip_firma'    => $request->ip(),
+
+        $evolucion    = Evolucion::findOrFail($id);
+        $firmaData    = $request->firma_data;
+        $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
+            $request,
+            $firmaData,
+            [
+                'id'            => (string) $evolucion->id,
+                'numero'        => $evolucion->numero_evolucion ?? '',
+                'paciente'      => $evolucion->paciente->nombre_completo ?? '',
+                'doc'           => $evolucion->paciente->numero_documento ?? '',
+                'procedimiento' => $evolucion->procedimiento ?? '',
+                'fecha'         => $evolucion->fecha instanceof \Carbon\Carbon ? $evolucion->fecha->toDateString() : (string) $evolucion->fecha,
+                'doctor'        => auth()->user()->name ?? '',
+            ]
+        );
+
+        $evolucion->update(array_merge(
+            [
+                'firmado'     => true,
+                'firma_data'  => $firmaData,
+                'fecha_firma' => now(),
+                'ip_firma'    => $request->ip(),
+            ],
+            $trazabilidad
+        ));
+
+        \Log::channel('firmas')->info('Evolución firmada', [
+            'modelo'   => 'Evolucion',
+            'id'       => $evolucion->id,
+            'numero'   => $evolucion->numero_evolucion,
+            'paciente' => $evolucion->paciente->nombre_completo ?? '',
+            'ip'       => $request->ip(),
+            'hash'     => $trazabilidad['documento_hash'],
+            'token'    => $trazabilidad['firma_verificacion_token'],
         ]);
+
         return response()->json(['success' => true, 'message' => 'Evolución firmada correctamente']);
     }
 
@@ -298,12 +329,29 @@ class EvolucionController extends Controller
             return response()->json(['error' => 'Ya está firmada'], 400);
         }
 
-        $correccion->update([
-            'firmado'     => true,
-            'firma_data'  => $request->firma_data,
-            'fecha_firma' => now(),
-            'ip_firma'    => $request->ip(),
-        ]);
+        $firmaData    = $request->firma_data;
+        $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
+            $request,
+            $firmaData,
+            [
+                'id'       => (string) $correccion->id,
+                'tipo'     => 'correccion_evolucion',
+                'campo'    => $correccion->campo_corregido ?? '',
+                'paciente' => $correccion->evolucion->paciente->nombre_completo ?? '',
+                'doc'      => $correccion->evolucion->paciente->numero_documento ?? '',
+                'fecha'    => now()->toDateString(),
+            ]
+        );
+
+        $correccion->update(array_merge(
+            [
+                'firmado'     => true,
+                'firma_data'  => $firmaData,
+                'fecha_firma' => now(),
+                'ip_firma'    => $request->ip(),
+            ],
+            $trazabilidad
+        ));
 
         return response()->json([
             'success' => true,

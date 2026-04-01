@@ -134,6 +134,21 @@
 </div>
 @endif
 
+{{-- Trazabilidad legal --}}
+@if($consentimiento->firmado && $consentimiento->documento_hash)
+<div class="info-card">
+    <div class="info-card-titulo"><i class="bi bi-shield-check" style="color:#15803d;"></i> Trazabilidad Legal — Ley 527/1999</div>
+    {!! \App\Traits\TrazabilidadFirma::generarConstanciaFirmaHTML([
+        'firma_timestamp'          => $consentimiento->firma_timestamp,
+        'firma_ip'                 => $consentimiento->ip_firma,
+        'firma_dispositivo'        => $consentimiento->firma_dispositivo,
+        'firma_navegador'          => $consentimiento->firma_navegador,
+        'documento_hash'           => $consentimiento->documento_hash,
+        'firma_verificacion_token' => $consentimiento->firma_verificacion_token,
+    ]) !!}
+</div>
+@endif
+
 @if($consentimiento->observaciones)
 <div class="info-card">
     <div class="info-card-titulo"><i class="bi bi-sticky"></i> Observaciones</div>

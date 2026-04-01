@@ -10,7 +10,7 @@
         --morado-muy-claro: var(--color-muy-claro);
     }
 
-    .btn-morado {
+    .btn-morado { 
         background: linear-gradient(135deg, var(--color-principal), var(--color-claro));
         color: #fff; border: none; border-radius: 8px;
         padding: 0.55rem 1.4rem; font-size: 0.875rem; font-weight: 500;
@@ -176,7 +176,7 @@
                     @error('nombre') <p class="error-msg">{{ $message }}</p> @enderror
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label-pac">Apellido <span style="color:#dc2626;">*</span></label>
+                    <label class="form-label-pac">Apellidos <span style="color:#dc2626;">*</span></label>
                     <input type="text" name="apellido" class="form-control-pac @error('apellido') is-invalid @enderror"
                            value="{{ old('apellido') }}" placeholder="Apellido del paciente">
                     @error('apellido') <p class="error-msg">{{ $message }}</p> @enderror
@@ -288,6 +288,22 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    {{-- Autorización de datos --}}
+    <div style="background:#F3E8FF; border:1px solid var(--color-principal); border-radius:10px; padding:1rem 1.25rem; margin-top:1rem;">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            <input type="checkbox" name="crear_autorizacion" value="1" id="crear-autorizacion"
+                   style="width:18px; height:18px; accent-color:var(--color-principal);">
+            <label for="crear-autorizacion" style="font-size:0.85rem; color:var(--color-principal); font-weight:500; cursor:pointer;">
+                <i class="bi bi-shield-check me-1"></i>
+                Generar y firmar la Autorización de Datos Personales al crear el paciente
+            </label>
+        </div>
+        <p style="font-size:0.75rem; color:#5c6b62; margin-top:0.4rem; margin-left:1.75rem; margin-bottom:0;">
+            Recomendado. Cumple con la Ley 1581 de 2012 (Habeas Data Colombia).
+            Si no lo haces ahora, podrás hacerlo desde la ficha del paciente.
+        </p>
     </div>
 
     {{-- Botones de acción --}}

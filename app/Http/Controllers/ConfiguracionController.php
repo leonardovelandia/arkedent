@@ -29,9 +29,10 @@ class ConfiguracionController extends Controller
             'ciudad'                          => 'nullable|string|max:100',
             'pais'                            => 'nullable|string|max:80',
             'duracion_cita_minutos'           => 'required|integer|min:10|max:240',
-            'hora_apertura'                   => 'required',
-            'hora_cierre'                     => 'required',
-            'dias_laborales'                  => 'nullable|array',
+            'formato_hora'                    => 'nullable|in:12,24',
+            'horario'                         => 'nullable|array',
+            'horario.*.apertura'              => 'nullable|date_format:H:i',
+            'horario.*.cierre'                => 'nullable|date_format:H:i',
             'moneda'                          => 'nullable|string|max:10',
             'simbolo_moneda'                  => 'nullable|string|max:5',
             'recordatorios_activos'           => 'boolean',
@@ -39,6 +40,11 @@ class ConfiguracionController extends Controller
             'tema'                            => 'nullable|in:morado-elegante,rosa-profesional,verde-esmeralda,azul-marino,carbon-moderno,verde-premium',
             'fuente_principal'                => 'nullable|string|max:50',
             'fuente_titulos'                  => 'nullable|string|max:50',
+            'firma_nombre_doctor'             => 'nullable|string|max:120',
+            'firma_cargo'                     => 'nullable|string|max:80',
+            'firma_registro'                  => 'nullable|string|max:60',
+            'firma_imagen'                    => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'firma_canvas'                    => 'nullable|string',
         ]);
 
         $config = Configuracion::obtener();
@@ -46,15 +52,55 @@ class ConfiguracionController extends Controller
         $data = $request->only([
             'nombre_consultorio', 'slogan', 'nit', 'registro_medico',
             'telefono', 'telefono_whatsapp', 'email', 'direccion', 'ciudad', 'pais',
-            'duracion_cita_minutos', 'hora_apertura', 'hora_cierre',
+            'duracion_cita_minutos', 'formato_hora',
             'moneda', 'simbolo_moneda', 'horas_anticipacion_recordatorio',
+            'firma_nombre_doctor', 'firma_cargo', 'firma_registro',
         ]);
 
-        $data['dias_laborales']         = $request->input('dias_laborales', []);
+        // Construir horario por día
+        $horarioInput = $request->input('horario', []);
+        $diasSemana   = [1, 2, 3, 4, 5, 6, 7];
+        $diasLaborales = [];
+        foreach ($diasSemana as $num) {
+            $diaData = $horarioInput[$num] ?? [];
+            $diasLaborales[$num] = [
+                'activo'   => isset($diaData['activo']),
+                'apertura' => $diaData['apertura'] ?? '08:00',
+                'cierre'   => $diaData['cierre']   ?? '18:00',
+            ];
+        }
+        $data['dias_laborales'] = $diasLaborales;
+
+        // Mantener hora_apertura y hora_cierre con el primer día activo (compatibilidad)
+        $primerActivo = collect($diasLaborales)->first(fn($d) => $d['activo']);
+        $data['hora_apertura'] = ($primerActivo['apertura'] ?? '08:00') . ':00';
+        $data['hora_cierre']   = ($primerActivo['cierre']   ?? '18:00') . ':00';
+
         $data['recordatorios_activos']  = $request->boolean('recordatorios_activos');
         $data['tema']                   = $request->input('tema', 'morado-elegante');
         $data['fuente_principal']       = $request->input('fuente_principal', 'DM Sans');
         $data['fuente_titulos']         = $request->input('fuente_titulos', 'Playfair Display');
+
+        // Firma: imagen subida
+        if ($request->hasFile('firma_imagen')) {
+            if ($config->firma_path) {
+                Storage::disk('public')->delete($config->firma_path);
+            }
+            $data['firma_path'] = $request->file('firma_imagen')->store('firmas', 'public');
+        }
+        // Firma: dibujada en canvas
+        elseif ($request->filled('firma_canvas')) {
+            $base64 = $request->input('firma_canvas');
+            if (str_starts_with($base64, 'data:image/png;base64,')) {
+                $imageData = base64_decode(explode(',', $base64)[1]);
+                $filename  = 'firmas/firma_' . time() . '.png';
+                if ($config->firma_path) {
+                    Storage::disk('public')->delete($config->firma_path);
+                }
+                Storage::disk('public')->put($filename, $imageData);
+                $data['firma_path'] = $filename;
+            }
+        }
 
         $config->update($data);
         Cache::forget('configuracion_consultorio');

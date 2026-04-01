@@ -113,6 +113,12 @@
             <a href="{{ route('evoluciones.pdf', $evolucion) }}" target="_blank" style="background:var(--color-principal);color:#fff;border:none;border-radius:8px;padding:.45rem 1rem;font-size:.875rem;font-weight:600;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;">
                 <i class="bi bi-file-earmark-pdf"></i> Ver PDF
             </a>
+            @modulo('recetas')
+            <a href="{{ route('recetas.create', ['paciente_id' => $evolucion->paciente_id, 'evolucion_id' => $evolucion->id]) }}"
+               style="background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:8px;padding:.45rem 1rem;font-size:.875rem;font-weight:600;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;">
+                <i class="bi bi-file-medical"></i> Nueva Receta
+            </a>
+            @endmodulo
         </div>
     </div>
 </div>

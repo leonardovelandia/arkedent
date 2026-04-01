@@ -6,6 +6,7 @@ use App\Models\HistoriaClinica;
 use App\Models\CorreccionHistoria;
 use App\Models\Paciente;
 use App\Traits\FormateaCampos;
+use App\Traits\TrazabilidadFirma;
 use Illuminate\Http\Request;
 
 class HistoriaClinicaController extends Controller
@@ -176,13 +177,41 @@ class HistoriaClinicaController extends Controller
     public function firmar(Request $request, $id)
     {
         $request->validate(['firma_data' => 'required|string']);
-        $historia = HistoriaClinica::findOrFail($id);
-        $historia->update([
-            'firmado'     => true,
-            'firma_data'  => $request->firma_data,
-            'fecha_firma' => now(),
-            'ip_firma'    => $request->ip(),
+        $historia  = HistoriaClinica::with('paciente')->findOrFail($id);
+        $firmaData = $request->firma_data;
+
+        $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
+            $request,
+            $firmaData,
+            [
+                'id'       => (string) $historia->id,
+                'numero'   => $historia->numero_historia ?? '',
+                'paciente' => $historia->paciente->nombre_completo ?? '',
+                'doc'      => $historia->paciente->numero_documento ?? '',
+                'fecha'    => $historia->fecha_apertura?->toDateString() ?? now()->toDateString(),
+            ]
+        );
+
+        $historia->update(array_merge(
+            [
+                'firmado'     => true,
+                'firma_data'  => $firmaData,
+                'fecha_firma' => now(),
+                'ip_firma'    => $request->ip(),
+            ],
+            $trazabilidad
+        ));
+
+        \Log::channel('firmas')->info('Historia Clínica firmada', [
+            'modelo'   => 'HistoriaClinica',
+            'id'       => $historia->id,
+            'numero'   => $historia->numero_historia,
+            'paciente' => $historia->paciente->nombre_completo ?? '',
+            'ip'       => $request->ip(),
+            'hash'     => $trazabilidad['documento_hash'],
+            'token'    => $trazabilidad['firma_verificacion_token'],
         ]);
+
         return response()->json(['success' => true, 'message' => 'Historia firmada correctamente']);
     }
 
@@ -252,18 +281,33 @@ class HistoriaClinicaController extends Controller
     {
         $request->validate(['firma_data' => 'required|string']);
 
-        $correccion = CorreccionHistoria::findOrFail($correccionId);
+        $correccion = CorreccionHistoria::with('historia.paciente')->findOrFail($correccionId);
 
         if ($correccion->firmado) {
             return response()->json(['error' => 'Ya está firmada'], 400);
         }
 
-        $correccion->update([
-            'firmado'     => true,
-            'firma_data'  => $request->firma_data,
-            'fecha_firma' => now(),
-            'ip_firma'    => $request->ip(),
-        ]);
+        $firmaData    = $request->firma_data;
+        $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
+            $request,
+            $firmaData,
+            [
+                'id'     => (string) $correccion->id,
+                'numero' => $correccion->numero_correccion ?? '',
+                'campo'  => $correccion->campo_corregido ?? '',
+                'motivo' => $correccion->motivo ?? '',
+            ]
+        );
+
+        $correccion->update(array_merge(
+            [
+                'firmado'     => true,
+                'firma_data'  => $firmaData,
+                'fecha_firma' => now(),
+                'ip_firma'    => $request->ip(),
+            ],
+            $trazabilidad
+        ));
 
         return response()->json([
             'success' => true,

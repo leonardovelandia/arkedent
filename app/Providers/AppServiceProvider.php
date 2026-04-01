@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Listeners\LockAccountAfterFailedLogins;
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
@@ -24,10 +27,37 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // ─────────────────────────────────────────────────────────
+        // Listener: bloquear cuenta tras 5 intentos fallidos
+        // ─────────────────────────────────────────────────────────
+        Event::listen(Failed::class, LockAccountAfterFailedLogins::class);
+
+        // ─────────────────────────────────────────────────────────
+        // Helper de módulos disponible globalmente
+        // ─────────────────────────────────────────────────────────
+        require_once app_path('Helpers/ModulosHelper.php');
+
+        // ─────────────────────────────────────────────────────────
+        // Directivas Blade para verificar módulos en vistas
+        // Uso: @modulo('nombre') ... @endmodulo
+        // ─────────────────────────────────────────────────────────
+        \Illuminate\Support\Facades\Blade::directive('modulo', function ($expression) {
+            return "<?php if(\App\Helpers\ModulosHelper::activo({$expression})): ?>";
+        });
+
+        \Illuminate\Support\Facades\Blade::directive('endmodulo', function () {
+            return '<?php endif; ?>';
+        });
+
+        // ─────────────────────────────────────────────────────────
         // View Composer Global
         // Inyecta $config y $nombreConsultorio en TODAS las vistas.
         // ─────────────────────────────────────────────────────────
         View::composer('*', ConfiguracionComposer::class);
+
+        // Comparte módulos activos con todas las vistas
+        View::composer('*', function ($view) {
+            $view->with('modulosActivos', \App\Helpers\ModulosHelper::modulosActivos());
+        });
 
         // ─────────────────────────────────────────────────────────
         // Nombre del remitente de correo dinámico

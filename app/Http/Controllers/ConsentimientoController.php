@@ -6,6 +6,7 @@ use App\Models\Consentimiento;
 use App\Models\Paciente;
 use App\Models\PlantillaConsentimiento;
 use App\Traits\FormateaCampos;
+use App\Traits\TrazabilidadFirma;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -144,11 +145,38 @@ class ConsentimientoController extends Controller
             return response()->json(['error' => 'Ya está firmado.'], 422);
         }
 
-        $consentimiento->update([
-            'firmado'     => true,
-            'firma_data'  => $request->input('firma_data'),
-            'fecha_firma' => now(),
-            'ip_firma'    => $request->ip(),
+        $firmaData    = $request->input('firma_data');
+        $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
+            $request,
+            $firmaData,
+            [
+                'id'       => (string) $consentimiento->id,
+                'numero'   => $consentimiento->numero_consentimiento ?? '',
+                'paciente' => $consentimiento->paciente->nombre_completo ?? '',
+                'doc'      => $consentimiento->paciente->numero_documento ?? '',
+                'tipo'     => $consentimiento->tipo ?? '',
+                'fecha'    => $consentimiento->fecha_generacion?->toDateString() ?? now()->toDateString(),
+            ]
+        );
+
+        $consentimiento->update(array_merge(
+            [
+                'firmado'     => true,
+                'firma_data'  => $firmaData,
+                'fecha_firma' => now(),
+                'ip_firma'    => $request->ip(),
+            ],
+            $trazabilidad
+        ));
+
+        \Log::channel('firmas')->info('Consentimiento firmado', [
+            'modelo'   => 'Consentimiento',
+            'id'       => $consentimiento->id,
+            'numero'   => $consentimiento->numero_consentimiento,
+            'paciente' => $consentimiento->paciente->nombre_completo ?? '',
+            'ip'       => $trazabilidad['firma_ip'] ?? $request->ip(),
+            'hash'     => $trazabilidad['documento_hash'],
+            'token'    => $trazabilidad['firma_verificacion_token'],
         ]);
 
         return response()->json(['ok' => true, 'mensaje' => 'Firma registrada correctamente.']);

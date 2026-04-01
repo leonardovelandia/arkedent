@@ -1,6 +1,6 @@
 {{-- ============================================================
      VISTA: Dashboard Principal
-     Sistema: Tatiana Velandia Odontología
+     Sistema: Arkevix Dental ERP
      Layout: layouts.app
      ============================================================ --}}
 @extends('layouts.app')
@@ -17,8 +17,48 @@ const estadoClases = {
     cancelada:   { bg: '#f8d7da', color: '#721c24' },
     no_asistio:  { bg: '#e2e3e5', color: '#383d41' },
 };
+const estadoLabels = {
+    pendiente:'Pendiente', confirmada:'Confirmada', en_proceso:'En proceso',
+    atendida:'Atendida', cancelada:'Cancelada', no_asistio:'No asistió'
+};
+
+var _dcCitaId = null;
+
+function cambiarEstadoDash(nuevoEstado) {
+    if (!nuevoEstado || !_dcCitaId) return;
+    document.getElementById('dc-select-estado').value = '';
+    fetch('/citas/' + _dcCitaId + '/estado', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({ estado: nuevoEstado }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (!data.ok) return;
+        const ec = estadoClases[nuevoEstado] || { bg: '#f3f4f6', color: '#374151' };
+        const lbl = estadoLabels[nuevoEstado] || nuevoEstado;
+        document.getElementById('dc-estado').innerHTML =
+            `<span style="background:${ec.bg};color:${ec.color};font-size:.75rem;font-weight:600;padding:.2rem .7rem;border-radius:50px;">${lbl}</span>`;
+        // Actualizar badge en la lista de citas del dashboard
+        var citaItem = document.querySelector('.cita-item[data-cita-id="' + _dcCitaId + '"]');
+        if (citaItem) {
+            var badge = citaItem.querySelector('.cita-estado');
+            if (badge) {
+                badge.textContent = lbl;
+                badge.className = 'cita-estado estado-' + nuevoEstado;
+            }
+        }
+    })
+    .catch(function(e) { console.error('cambiarEstado error', e); });
+}
 
 function abrirDetalleCita(data) {
+    _dcCitaId = data.id;
+    document.getElementById('dc-select-estado').value = '';
     document.getElementById('dc-paciente').textContent = data.paciente;
     document.getElementById('dc-fecha').textContent = data.fecha;
     document.getElementById('dc-hora').textContent = data.hora_inicio + (data.hora_fin ? ' – ' + data.hora_fin : '');
@@ -153,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /* ── Cards de métricas ── */
     .metricas-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
         margin-bottom: 1.5rem;
     }
@@ -376,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /* ── Responsive ── */
     @media (max-width: 1100px) {
-        .metricas-grid { grid-template-columns: repeat(2, 1fr); }
+        .metricas-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     @media (max-width: 750px) {
@@ -397,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="bienvenida-banner">
     <div class="bienvenida-texto">
         <h2>Buenas {{ now()->hour < 12 ? 'noches' : (now()->hour < 18 ? 'tardes' : 'noches') }},
-            {{ explode(' ', auth()->user()->name ?? 'Dr.')[0] }} 👋</h2>
+            {{ explode(' ', auth()->user()->name ?? 'Dr.')[0] }} </h2>
         <p>Tienes {{ $citasHoy ?? 0 }} citas agendadas para hoy · {{ now()->locale('es')->isoFormat('dddd') }}</p>
     </div>
     <div class="bienvenida-fecha">
@@ -418,6 +458,23 @@ document.addEventListener('DOMContentLoaded', function() {
     <a href="{{ route('laboratorio.index', ['estado' => 'enviado']) }}"
        style="font-size:.8rem; color:#721C24; text-decoration:none; border:1px solid #f5c6cb; border-radius:6px; padding:.25rem .6rem; white-space:nowrap;">
         Ver órdenes →
+    </a>
+</div>
+@endif
+
+{{-- Alerta pacientes sin autorización --}}
+@if(($pacientesSinAutorizacion ?? 0) > 0)
+<div style="background:#FFF7ED; border:1px solid #FB923C; border-radius:10px; padding:.875rem 1.25rem; margin-bottom:1rem; display:flex; align-items:center; justify-content:space-between; gap:.75rem;">
+    <div style="display:flex; align-items:center; gap:.5rem;">
+        <i class="bi bi-shield-exclamation" style="color:#C2410C; font-size:1.1rem;"></i>
+        <span style="color:#C2410C; font-size:.85rem;">
+            <strong>{{ $pacientesSinAutorizacion }} paciente(s) sin autorización de datos firmada</strong>
+            — Requerido por la Ley 1581 de 2012
+        </span>
+    </div>
+    <a href="{{ route('pacientes.index') }}"
+       style="font-size:.8rem; color:#C2410C; text-decoration:none; border:1px solid #FDBA74; border-radius:6px; padding:.25rem .6rem; white-space:nowrap;">
+        Ver pacientes →
     </a>
 </div>
 @endif
@@ -477,6 +534,38 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 
+    <div class="metrica-card">
+        <div class="metrica-header">
+            <span class="metrica-label">Egresos del Mes</span>
+            <div class="metrica-icono" style="background:#fde8e8;color:#DC3545;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;">
+                <i class="bi bi-arrow-down-circle"></i>
+            </div>
+        </div>
+        <div class="metrica-numero" style="color:#DC3545;">
+            ${{ number_format($egresosMes ?? 0, 0, ',', '.') }}
+        </div>
+        <div class="metrica-cambio cambio-neutro">
+            <i class="bi bi-dot"></i>
+            <span>Gastos del mes</span>
+        </div>
+    </div>
+
+    <div class="metrica-card">
+        <div class="metrica-header">
+            <span class="metrica-label">Utilidad Neta</span>
+            <div class="metrica-icono" style="background:{{ ($utilidadNeta ?? 0) >= 0 ? '#dcfce7' : '#fde8e8' }};color:{{ ($utilidadNeta ?? 0) >= 0 ? '#166534' : '#DC3545' }};width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;">
+                <i class="bi bi-{{ ($utilidadNeta ?? 0) >= 0 ? 'graph-up-arrow' : 'graph-down-arrow' }}"></i>
+            </div>
+        </div>
+        <div class="metrica-numero" style="color:{{ ($utilidadNeta ?? 0) >= 0 ? '#166534' : '#DC3545' }};">
+            ${{ number_format(abs($utilidadNeta ?? 0), 0, ',', '.') }}
+        </div>
+        <div class="metrica-cambio {{ ($utilidadNeta ?? 0) >= 0 ? 'cambio-positivo' : 'cambio-negativo' }}">
+            <i class="bi bi-arrow-{{ ($utilidadNeta ?? 0) >= 0 ? 'up' : 'down' }}-short"></i>
+            <span>Ingresos − Egresos</span>
+        </div>
+    </div>
+
 </div>{{-- /metricas-grid --}}
 
 {{-- Panel inferior --}}
@@ -496,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         @if(isset($citasDeHoy) && $citasDeHoy->count() > 0)
             @foreach($citasDeHoy as $cita)
-            <div class="cita-item" style="cursor:pointer;"
+            <div class="cita-item" style="cursor:pointer;" data-cita-id="{{ $cita->id }}"
                 onclick="abrirDetalleCita({
                     id: {{ $cita->id }},
                     paciente: '{{ addslashes($cita->paciente->nombre_completo ?? 'Paciente') }}',
@@ -540,36 +629,56 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
         <div class="acceso-grid">
+            @modulo('pacientes')
             <a href="{{ route('pacientes.create') }}" class="acceso-btn">
                 <i class="bi bi-person-plus"></i>
                 <span>Nuevo Paciente</span>
             </a>
+            @endmodulo
+
+            @modulo('citas')
             <a href="{{ route('citas.create') }}" class="acceso-btn">
                 <i class="bi bi-calendar-plus"></i>
                 <span>Nueva Cita</span>
             </a>
+            @endmodulo
+
+            @modulo('pagos')
             <a href="{{ route('pagos.create') }}" class="acceso-btn">
                 <i class="bi bi-cash-coin"></i>
                 <span>Registrar Pago</span>
             </a>
+            @endmodulo
+
+            @modulo('evoluciones')
             <a href="{{ route('evoluciones.create') }}" class="acceso-btn">
                 <i class="bi bi-clipboard2-plus"></i>
                 <span>Nueva Evolución</span>
             </a>
+            @endmodulo
+
+            @modulo('presupuestos')
             <a href="{{ route('presupuestos.create') }}" class="acceso-btn">
                 <i class="bi bi-file-earmark-plus"></i>
                 <span>Presupuesto</span>
             </a>
+            @endmodulo
+
+            @modulo('valoraciones')
             <a href="{{ route('valoraciones.create') }}" class="acceso-btn">
                 <i class="bi bi-clipboard2-pulse"></i>
                 <span>Nueva Valoración</span>
             </a>
+            @endmodulo
+
+            @modulo('reportes')
             @if(!auth()->user()->hasRole('asistente'))
             <a href="{{ route('reportes.index') }}" class="acceso-btn">
                 <i class="bi bi-graph-up"></i>
                 <span>Reportes</span>
             </a>
             @endif
+            @endmodulo
         </div>
     </div>
 
@@ -605,9 +714,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-hover);padding-top:.15rem;">Procedimiento</span>
                 <span id="dc-procedimiento" style="font-size:.92rem;color:#1c2b22;font-weight:500;"></span>
             </div>
-            <div style="display:grid;grid-template-columns:130px 1fr;gap:.35rem;align-items:start;">
-                <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-hover);padding-top:.15rem;">Estado</span>
-                <span id="dc-estado"></span>
+            <div style="display:grid;grid-template-columns:130px 1fr;gap:.35rem;align-items:center;">
+                <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-hover);">Estado</span>
+                <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                    <span id="dc-estado"></span>
+                    <select id="dc-select-estado"
+                        onchange="cambiarEstadoDash(this.value)"
+                        style="border:1px solid var(--color-muy-claro);border-radius:8px;padding:.25rem .5rem;font-size:.78rem;color:#374151;background:#fff;cursor:pointer;outline:none;">
+                        <option value="">Cambiar…</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="confirmada">Confirmada</option>
+                        <option value="en_proceso">En proceso</option>
+                        <option value="atendida">Atendida</option>
+                        <option value="cancelada">Cancelada</option>
+                        <option value="no_asistio">No asistió</option>
+                    </select>
+                </div>
             </div>
             <div id="dc-notas-row" style="display:grid;grid-template-columns:130px 1fr;gap:.35rem;align-items:start;">
                 <span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-hover);padding-top:.15rem;">Notas</span>

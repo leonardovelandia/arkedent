@@ -68,14 +68,22 @@
     <div class="form-row">
         <div class="campo-wrap">
             <label class="campo-lbl">Hora inicio <span style="color:#dc2626;">*</span></label>
-            <input type="time" id="hora_inicio" name="hora_inicio" class="campo-ctrl {{ $errors->has('hora_inicio') ? 'is-invalid' : '' }}"
-                   value="{{ old('hora_inicio') }}">
+            <div class="timepicker-wrap">
+                <i class="bi bi-clock timepicker-icon"></i>
+                <input type="text" id="hora_inicio" name="hora_inicio" placeholder="HH:MM"
+                       class="campo-ctrl timepicker {{ $errors->has('hora_inicio') ? 'is-invalid' : '' }}"
+                       value="{{ old('hora_inicio') }}" autocomplete="off" readonly>
+            </div>
             @error('hora_inicio')<span class="campo-error">{{ $message }}</span>@enderror
         </div>
         <div class="campo-wrap">
             <label class="campo-lbl">Hora fin <span style="color:#9ca3af;font-size:.7rem;font-weight:400;">(opcional)</span></label>
-            <input type="time" id="hora_fin" name="hora_fin" class="campo-ctrl {{ $errors->has('hora_fin') ? 'is-invalid' : '' }}"
-                   value="{{ old('hora_fin') }}">
+            <div class="timepicker-wrap">
+                <i class="bi bi-clock timepicker-icon"></i>
+                <input type="text" id="hora_fin" name="hora_fin" placeholder="HH:MM"
+                       class="campo-ctrl timepicker {{ $errors->has('hora_fin') ? 'is-invalid' : '' }}"
+                       value="{{ old('hora_fin') }}" autocomplete="off" readonly>
+            </div>
             @error('hora_fin')<span class="campo-error">{{ $message }}</span>@enderror
         </div>
     </div>
@@ -132,7 +140,7 @@
 @push('scripts')
 <script>
 (function() {
-    function verificarDisponibilidad() {
+    function verificarDisponibilidad(incluirHoraFin) {
         var fecha      = document.getElementById('fecha') ? document.getElementById('fecha').value : '';
         var horaInicio = document.getElementById('hora_inicio') ? document.getElementById('hora_inicio').value : '';
         var horaFin    = document.getElementById('hora_fin') ? document.getElementById('hora_fin').value : '';
@@ -143,7 +151,7 @@
         }
 
         var url = '/api/citas/disponibilidad?fecha=' + encodeURIComponent(fecha) + '&hora_inicio=' + encodeURIComponent(horaInicio);
-        if (horaFin) url += '&hora_fin=' + encodeURIComponent(horaFin);
+        if (incluirHoraFin && horaFin) url += '&hora_fin=' + encodeURIComponent(horaFin);
 
         fetch(url, {
             headers: {
@@ -180,9 +188,9 @@
     var campoHoraInicio = document.getElementById('hora_inicio');
     var campoHoraFin    = document.getElementById('hora_fin');
 
-    if (campoFecha)      campoFecha.addEventListener('change', verificarDisponibilidad);
-    if (campoHoraInicio) campoHoraInicio.addEventListener('change', verificarDisponibilidad);
-    if (campoHoraFin)    campoHoraFin.addEventListener('change', verificarDisponibilidad);
+    if (campoFecha)      campoFecha.addEventListener('change', function() { verificarDisponibilidad(false); });
+    if (campoHoraInicio) campoHoraInicio.addEventListener('change', function() { verificarDisponibilidad(false); });
+    if (campoHoraFin)    campoHoraFin.addEventListener('change', function() { verificarDisponibilidad(true); });
 })();
 </script>
 @endpush

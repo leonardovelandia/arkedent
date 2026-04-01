@@ -34,12 +34,22 @@ class Presupuesto extends Model
         'ip_firma',
         'tratamiento_id',
         'activo',
+        // Trazabilidad
+        'firma_user_agent',
+        'firma_timestamp',
+        'firma_timezone',
+        'firma_hash',
+        'documento_hash',
+        'firma_dispositivo',
+        'firma_navegador',
+        'firma_verificacion_token',
     ];
 
     protected $casts = [
         'fecha_generacion'  => 'date',
         'fecha_vencimiento' => 'date',
         'fecha_aprobacion'  => 'datetime',
+        'firma_timestamp'   => 'datetime',
         'firmado'           => 'boolean',
         'activo'            => 'boolean',
         'subtotal'          => 'decimal:2',

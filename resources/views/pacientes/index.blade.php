@@ -308,6 +308,7 @@
                         <th>Edad</th>
                         <th>Historia N°</th>
                         <th>Estado</th>
+                        <th>Autorización</th>
                         <th style="text-align:center;">Acciones</th>
                     </tr>
                 </thead>
@@ -346,6 +347,22 @@
                                 <span class="badge-activo"><i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Activo</span>
                             @else
                                 <span class="badge-inactivo"><i class="bi bi-circle-fill" style="font-size:0.5rem;"></i> Inactivo</span>
+                            @endif
+                        </td>
+                        <td>
+                            @php $aut = $p->autorizacionDatos; @endphp
+                            @if($aut && $aut->firmado)
+                                <span style="display:inline-flex;align-items:center;gap:.3rem;background:#d1fae5;color:#065f46;font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:20px;white-space:nowrap;">
+                                    <i class="bi bi-patch-check-fill"></i> Firmada
+                                </span>
+                            @elseif($aut && !$aut->firmado)
+                                <span style="display:inline-flex;align-items:center;gap:.3rem;background:#fef3c7;color:#92400e;font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:20px;white-space:nowrap;">
+                                    <i class="bi bi-pen"></i> Falta firmar
+                                </span>
+                            @else
+                                <span style="display:inline-flex;align-items:center;gap:.3rem;background:#f3f4f6;color:#6b7280;font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:20px;white-space:nowrap;">
+                                    <i class="bi bi-file-earmark-x"></i> Sin autorización
+                                </span>
                             @endif
                         </td>
                         <td>

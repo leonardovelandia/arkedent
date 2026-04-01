@@ -18,6 +18,10 @@ class User extends Authenticatable
         'password',
         'rol',
         'activo',
+        'locked_at',
+        'last_login_at',
+        'last_login_ip',
+        'password_changed_at',
     ];
 
     protected $hidden = [
@@ -28,9 +32,12 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-            'activo'            => 'boolean',
+            'email_verified_at'  => 'datetime',
+            'password'           => 'hashed',
+            'activo'             => 'boolean',
+            'locked_at'          => 'datetime',
+            'last_login_at'      => 'datetime',
+            'password_changed_at'=> 'datetime',
         ];
     }
 

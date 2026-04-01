@@ -42,12 +42,7 @@ CUIDADOS POSTOPERATORIOS:
 • Ante sangrado abundante, fiebre o dolor intenso, comunicarse inmediatamente
 
 Habiendo sido informado(a) completamente sobre el procedimiento, sus riesgos y alternativas, de forma libre, espontánea y voluntaria CONSIENTO en la realización del procedimiento de extracción dental.
-
-Fecha: {{fecha}}
-
-_________________________          _________________________
-Firma del paciente                  Firma del profesional
-{{nombre_paciente}} {{apellido_paciente}}    Dr./Dra. {{doctor}}',
+',
             ],
 
             [
@@ -85,12 +80,7 @@ CUIDADOS POSTOPERATORIOS:
 • Consultar inmediatamente ante dolor severo, inflamación o fiebre
 
 Habiendo sido informado(a) de todo lo anterior, de forma libre y voluntaria CONSIENTO en la realización del tratamiento endodóntico.
-
-Fecha: {{fecha}}
-
-_________________________          _________________________
-Firma del paciente                  Firma del profesional
-{{nombre_paciente}} {{apellido_paciente}}    Dr./Dra. {{doctor}}',
+',
             ],
 
             [
@@ -131,12 +121,7 @@ COMPROMISOS DEL PACIENTE:
 • Usar los retenedores indefinidamente al finalizar el tratamiento activo
 
 Habiendo sido informado(a) completamente, de forma libre y voluntaria CONSIENTO en la realización del tratamiento de ortodoncia.
-
-Fecha: {{fecha}}
-
-_________________________          _________________________
-Firma del paciente                  Firma del profesional
-{{nombre_paciente}} {{apellido_paciente}}    Dr./Dra. {{doctor}}',
+',
             ],
 
             [
@@ -185,12 +170,7 @@ CUIDADOS POSTOPERATORIOS:
 • Controles periódicos obligatorios
 
 Habiendo sido informado(a) de todo lo anterior, de forma libre y voluntaria CONSIENTO en la realización del procedimiento de implantología dental.
-
-Fecha: {{fecha}}
-
-_________________________          _________________________
-Firma del paciente                  Firma del profesional
-{{nombre_paciente}} {{apellido_paciente}}    Dr./Dra. {{doctor}}',
+',
             ],
 
             [
@@ -231,12 +211,7 @@ INSTRUCCIONES POST-TRATAMIENTO:
 • Mantener una higiene oral óptima para prolongar los resultados
 
 Habiendo sido informado(a) completamente, de forma libre y voluntaria CONSIENTO en la realización del blanqueamiento dental.
-
-Fecha: {{fecha}}
-
-_________________________          _________________________
-Firma del paciente                  Firma del profesional
-{{nombre_paciente}} {{apellido_paciente}}    Dr./Dra. {{doctor}}',
+',
             ],
 
             [
@@ -279,17 +254,12 @@ CUIDADOS POSTOPERATORIOS:
 • Mantener el programa de mantenimiento periodontal de por vida
 
 Habiendo sido informado(a) de todo lo anterior, de forma libre y voluntaria CONSIENTO en la realización de la cirugía periodontal.
-
-Fecha: {{fecha}}
-
-_________________________          _________________________
-Firma del paciente                  Firma del profesional
-{{nombre_paciente}} {{apellido_paciente}}    Dr./Dra. {{doctor}}',
+',
             ],
         ];
 
         foreach ($plantillas as $datos) {
-            PlantillaConsentimiento::firstOrCreate(
+            PlantillaConsentimiento::updateOrCreate(
                 ['nombre' => $datos['nombre'], 'tipo' => $datos['tipo']],
                 ['contenido' => $datos['contenido'], 'activo' => true]
             );

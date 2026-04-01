@@ -245,7 +245,15 @@ class ImagenClinicaController extends Controller
 
         $porTipo = $imagenes->groupBy('tipo');
 
-        return view('imagenes.galeria', compact('paciente', 'imagenes', 'porTipo'));
+        $imagenesJs = $imagenes->map(fn($i) => [
+            'id'    => $i->id,
+            'url'   => asset('storage/' . $i->archivo_path),
+            'title' => $i->titulo,
+            'tipo'  => $i->tipo_label ?? $i->tipo,
+            'desc'  => $i->descripcion ?? '',
+        ])->values();
+
+        return view('imagenes.galeria', compact('paciente', 'imagenes', 'porTipo', 'imagenesJs'));
     }
 
     public function comparativo($pacienteId)
@@ -260,7 +268,43 @@ class ImagenClinicaController extends Controller
 
         $grupos = $comparativas->groupBy('grupo_comparativo');
 
-        return view('imagenes.comparativo', compact('paciente', 'grupos'));
+        $todasLasImagenes = ImagenClinica::activas()
+            ->where('paciente_id', $pacienteId)
+            ->orderBy('fecha_toma', 'desc')
+            ->get();
+
+        return view('imagenes.comparativo', compact('paciente', 'grupos', 'todasLasImagenes'));
+    }
+
+    public function asignarComparativo(Request $request)
+    {
+        $request->validate([
+            'imagen_id'   => 'required|exists:imagenes_clinicas,id',
+            'grupo'       => 'nullable|string',
+            'orden'       => 'required|in:antes,despues',
+            'paciente_id' => 'required|exists:pacientes,id',
+        ]);
+
+        $grupo = $request->grupo ?: null;
+
+        // Quitar ese orden a cualquier imagen que ya lo tenga en el grupo
+        $q = ImagenClinica::where('paciente_id', $request->paciente_id)
+            ->where('orden_comparativo', $request->orden);
+        if ($grupo) {
+            $q->where('grupo_comparativo', $grupo);
+        } else {
+            $q->whereNull('grupo_comparativo');
+        }
+        $q->update(['orden_comparativo' => null]);
+
+        // Asignar la nueva imagen al grupo y orden
+        ImagenClinica::where('id', $request->imagen_id)->update([
+            'es_comparativo'    => true,
+            'grupo_comparativo' => $grupo,
+            'orden_comparativo' => $request->orden,
+        ]);
+
+        return response()->json(['ok' => true]);
     }
 
     public function capturar(Request $request)

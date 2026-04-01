@@ -6,6 +6,7 @@ use App\Models\Presupuesto;
 use App\Models\ItemPresupuesto;
 use App\Models\Paciente;
 use App\Traits\FormateaCampos;
+use App\Traits\TrazabilidadFirma;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -295,13 +296,40 @@ class PresupuestoController extends Controller
             'firma_data' => 'required|string',
         ]);
 
-        $presupuesto->update([
-            'firmado'    => true,
-            'firma_data' => $request->firma_data,
-            'ip_firma'   => $request->ip(),
-        ]);
+        $firmaData    = $request->firma_data;
+        $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
+            $request,
+            $firmaData,
+            [
+                'id'       => (string) $presupuesto->id,
+                'numero'   => $presupuesto->numero_presupuesto ?? '',
+                'paciente' => $presupuesto->paciente->nombre_completo ?? '',
+                'doc'      => $presupuesto->paciente->numero_documento ?? '',
+                'total'    => (string) $presupuesto->total,
+                'fecha'    => now()->toDateString(),
+            ]
+        );
+
+        $presupuesto->update(array_merge(
+            [
+                'firmado'    => true,
+                'firma_data' => $firmaData,
+                'ip_firma'   => $request->ip(),
+            ],
+            $trazabilidad
+        ));
 
         $presupuesto->aprobar();
+
+        \Log::channel('firmas')->info('Presupuesto firmado', [
+            'modelo'   => 'Presupuesto',
+            'id'       => $presupuesto->id,
+            'numero'   => $presupuesto->numero_presupuesto,
+            'paciente' => $presupuesto->paciente->nombre_completo ?? '',
+            'ip'       => $request->ip(),
+            'hash'     => $trazabilidad['documento_hash'],
+            'token'    => $trazabilidad['firma_verificacion_token'],
+        ]);
 
         return response()->json(['success' => true]);
     }

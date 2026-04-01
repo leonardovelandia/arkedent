@@ -234,5 +234,25 @@ tr:nth-child(even) td { background: #f9fafb; }
     </div>
 </div>
 
+    {{-- ── CONSTANCIA DE FIRMA ELECTRÓNICA ── --}}
+    @if($evolucion->firmado && $evolucion->documento_hash)
+        @php
+            echo \App\Traits\TrazabilidadFirma::generarConstanciaFirmaPDF(
+                [
+                    'firma_timestamp'          => $evolucion->firma_timestamp,
+                    'firma_ip'                 => $evolucion->ip_firma,
+                    'firma_dispositivo'        => $evolucion->firma_dispositivo,
+                    'firma_navegador'          => $evolucion->firma_navegador,
+                    'documento_hash'           => $evolucion->documento_hash,
+                    'firma_verificacion_token' => $evolucion->firma_verificacion_token,
+                ],
+                $evolucion->paciente->nombre_completo,
+                $evolucion->paciente->tipo_documento,
+                $evolucion->paciente->numero_documento,
+                $C
+            );
+        @endphp
+    @endif
+
 </body>
 </html>

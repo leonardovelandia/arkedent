@@ -25,11 +25,15 @@ class Paciente extends Model
         'foto_path',
         'activo',
         'observaciones',
+        'autorizacion_datos',
+        'fecha_autorizacion_datos',
     ];
 
     protected $casts = [
-        'fecha_nacimiento' => 'date',
-        'activo'           => 'boolean',
+        'fecha_nacimiento'         => 'date',
+        'activo'                   => 'boolean',
+        'autorizacion_datos'       => 'boolean',
+        'fecha_autorizacion_datos' => 'datetime',
     ];
 
     // ── Auto-generar numero_historia al crear ──────────────────
@@ -160,5 +164,53 @@ class Paciente extends Model
     {
         return $this->hasMany(OrdenLaboratorio::class)
             ->orderBy('created_at', 'desc');
+    }
+
+    public function autorizacionDatos()
+    {
+        return $this->hasOne(AutorizacionDatos::class)
+            ->orderBy('created_at', 'desc');
+    }
+
+    public function tieneAutorizacion(): bool
+    {
+        return $this->autorizacion_datos && $this->autorizacionDatos?->firmado;
+    }
+
+    // ── Recetas Médicas ───────────────────────────────────────
+
+    public function recetasMedicas()
+    {
+        return $this->hasMany(RecetaMedica::class)->orderBy('fecha', 'desc');
+    }
+
+    // ── Ortodoncia ────────────────────────────────────────────
+
+    public function fichasOrtodoncia()
+    {
+        return $this->hasMany(FichaOrtodoncia::class)
+            ->orderBy('fecha_inicio', 'desc');
+    }
+
+    public function fichaOrtodonciaActiva()
+    {
+        return $this->hasOne(FichaOrtodoncia::class)
+            ->whereIn('estado', ['diagnostico', 'activo', 'retencion']);
+    }
+
+    // ── Periodoncia ───────────────────────────────────────────
+
+    public function fichasPeriodoncia()
+    {
+        return $this->hasMany(FichaPeriodontal::class)
+            ->where('activo', true)
+            ->orderBy('fecha_inicio', 'desc');
+    }
+
+    public function fichaPeriodontalActiva()
+    {
+        return $this->hasOne(FichaPeriodontal::class)
+            ->where('activo', true)
+            ->whereIn('estado', ['activa', 'en_tratamiento', 'mantenimiento']);
     }
 }

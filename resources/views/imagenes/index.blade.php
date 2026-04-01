@@ -10,6 +10,7 @@
 .ts-dropdown .active { background:var(--color-muy-claro); color:var(--color-principal); }
     .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer; }
     .btn-morado:hover { filter:brightness(1.12); color:#fff; }
+    .btn-desactivado { opacity:.45; pointer-events:none; cursor:not-allowed; filter:grayscale(.4); }
     .btn-out { background:transparent; color:var(--color-principal); border:1px solid var(--color-principal); border-radius:8px; padding:.45rem 1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.35rem; transition:background .15s; text-decoration:none; }
     .btn-out:hover { background:var(--color-muy-claro); color:var(--color-hover); }
     .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; border-radius:8px; padding:.45rem 1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.35rem; transition:background .15s; text-decoration:none; }
@@ -48,9 +49,26 @@
         </h1>
         <p style="font-size:.85rem;color:#9ca3af;margin:.2rem 0 0;">Registro fotográfico y radiológico de pacientes</p>
     </div>
-    <a href="{{ route('imagenes.create') }}" class="btn-morado">
-        <i class="bi bi-cloud-upload"></i> Subir Imágenes
-    </a>
+    <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+        {{-- Botón Ver Galería --}}
+        <a id="btn-galeria"
+           href="{{ $pacienteId ? route('imagenes.galeria', $pacienteId) : '#' }}"
+           class="{{ $pacienteId ? 'btn-morado' : 'btn-morado btn-desactivado' }}"
+           title="{{ $pacienteId ? '' : 'Selecciona un paciente primero' }}">
+            <i class="bi bi-grid-3x3-gap"></i> Ver Galería
+        </a>
+        {{-- Botón Ver Comparativo --}}
+        <a id="btn-comparativo"
+           href="{{ $pacienteId ? route('imagenes.comparativo', $pacienteId) : '#' }}"
+           class="{{ $pacienteId ? 'btn-morado' : 'btn-morado btn-desactivado' }}"
+           title="{{ $pacienteId ? '' : 'Selecciona un paciente primero' }}">
+            <i class="bi bi-layout-split"></i> Ver Comparativo
+        </a>
+        {{-- Subir Imágenes --}}
+        <a href="{{ route('imagenes.create') }}" class="btn-morado">
+            <i class="bi bi-cloud-upload"></i> Subir Imágenes
+        </a>
+    </div>
 </div>
 
 {{-- Filtros --}}
@@ -150,6 +168,7 @@
         if (window._tsPaciente) window._tsPaciente.clear();
         form.querySelectorAll('select').forEach(function(s) { s.value = ''; });
         form.querySelectorAll('input[type="date"]').forEach(function(d) { d.value = ''; });
+        actualizarBotonesPaciente('');
         cargarGrid(baseUrl);
     });
 
@@ -174,11 +193,36 @@ function cargarGrid2(url) {
         });
 }
 
+function actualizarBotonesPaciente(pacienteId) {
+    var btnGaleria     = document.getElementById('btn-galeria');
+    var btnComparativo = document.getElementById('btn-comparativo');
+    var baseGaleria    = '{{ url('imagenes/galeria') }}/';
+    var baseCompar     = '{{ url('imagenes/comparativo') }}/';
+
+    if (pacienteId) {
+        btnGaleria.href     = baseGaleria + pacienteId;
+        btnGaleria.title    = '';
+        btnComparativo.href  = baseCompar + pacienteId;
+        btnComparativo.title = '';
+        btnGaleria.classList.remove('btn-desactivado');
+        btnComparativo.classList.remove('btn-desactivado');
+    } else {
+        btnGaleria.href     = '#';
+        btnGaleria.title    = 'Selecciona un paciente primero';
+        btnComparativo.href  = '#';
+        btnComparativo.title = 'Selecciona un paciente primero';
+        btnGaleria.classList.add('btn-desactivado');
+        btnComparativo.classList.add('btn-desactivado');
+    }
+}
+
 window._tsPaciente = new TomSelect('#filtro-paciente', {
     placeholder: 'Buscar paciente...',
     searchField: ['text'],
     maxOptions: 200,
-    onChange: function() {
+    plugins: { clear_button: { title: 'Quitar paciente' } },
+    onChange: function(value) {
+        actualizarBotonesPaciente(value);
         cargarGrid2(baseUrl2 + '?' + new URLSearchParams(new FormData(form2)).toString());
     }
 });

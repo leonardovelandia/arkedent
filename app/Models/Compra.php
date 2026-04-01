@@ -49,6 +49,33 @@ class Compra extends Model
                 $model->numero_compra = static::generarNumero('COM', 'numero_compra');
             }
         });
+
+        static::updated(function ($compra) {
+            if ($compra->isDirty('estado') && $compra->estado === 'pagada') {
+                $nombreProveedor = $compra->proveedor->nombre ?? '';
+                $numeroFormateado = $compra->numero_formateado ?? $compra->numero_compra;
+                \App\Models\LibroContable::registrarMovimiento(
+                    tipo:            'egreso',
+                    origen:          'compra_proveedor',
+                    origenId:        $compra->id,
+                    origenTipo:      'App\Models\Compra',
+                    concepto:        "Compra {$numeroFormateado} — {$nombreProveedor}",
+                    valor:           (float) $compra->total,
+                    fechaMovimiento: $compra->fecha_compra,
+                    metodoPago:      $compra->metodo_pago,
+                    referencia:      $compra->numero_factura ?? $numeroFormateado,
+                    categoria:       'Compras a proveedores',
+                );
+            }
+            if ($compra->isDirty('estado') && $compra->estado === 'cancelada') {
+                \App\Models\LibroContable::where('origen', 'compra_proveedor')
+                    ->where('origen_id', $compra->id)
+                    ->update([
+                        'excluido'         => true,
+                        'motivo_exclusion' => 'Compra cancelada',
+                    ]);
+            }
+        });
     }
 
     // ── Relaciones ─────────────────────────────────────────────

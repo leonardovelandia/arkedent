@@ -27,7 +27,7 @@ class PacienteController extends Controller
             $query->where('activo', $request->input('estado') === 'activo');
         }
 
-        $pacientes = $query->paginate(15)->withQueryString();
+        $pacientes = $query->with('autorizacionDatos')->paginate(15)->withQueryString();
 
         return view('pacientes.index', compact('pacientes'));
     }
@@ -72,6 +72,11 @@ class PacienteController extends Controller
         }
 
         $paciente = Paciente::create($datos);
+
+        if ($request->boolean('crear_autorizacion')) {
+            return redirect()->route('autorizacion.create', ['paciente_id' => $paciente->id])
+                ->with('exito', 'Paciente creado. Completa la autorización de datos personales.');
+        }
 
         return redirect()->route('pacientes.show', $paciente)
                          ->with('exito', 'Paciente registrado correctamente.');

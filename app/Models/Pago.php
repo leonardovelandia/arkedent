@@ -37,12 +37,35 @@ class Pago extends Model
             if ($pago->tratamiento_id) {
                 $pago->tratamiento?->recalcularSaldo();
             }
+            // Registrar en libro contable
+            $nombrePaciente = $pago->paciente->nombre_completo ?? '';
+            \App\Models\LibroContable::registrarMovimiento(
+                tipo:            'ingreso',
+                origen:          'pago_paciente',
+                origenId:        $pago->id,
+                origenTipo:      'App\Models\Pago',
+                concepto:        "Pago paciente — {$nombrePaciente} — {$pago->concepto}",
+                valor:           (float) $pago->valor,
+                fechaMovimiento: $pago->fecha_pago,
+                metodoPago:      $pago->metodo_pago,
+                referencia:      $pago->numero_recibo,
+                categoria:       'Ingresos por servicios',
+            );
         });
 
         // Actualizar saldo del tratamiento al actualizar pago (ej. anular)
         static::updated(function ($pago) {
             if ($pago->tratamiento_id) {
                 $pago->tratamiento?->recalcularSaldo();
+            }
+            // Excluir del libro si el pago se anula
+            if ($pago->isDirty('anulado') && $pago->anulado) {
+                \App\Models\LibroContable::where('origen', 'pago_paciente')
+                    ->where('origen_id', $pago->id)
+                    ->update([
+                        'excluido'         => true,
+                        'motivo_exclusion' => 'Pago anulado',
+                    ]);
             }
         });
     }

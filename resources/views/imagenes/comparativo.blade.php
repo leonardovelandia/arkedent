@@ -30,6 +30,25 @@
     .grupo-selector { background:#fff; border:1px solid var(--color-muy-claro); border-radius:12px; padding:1rem 1.25rem; margin-bottom:1.25rem; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     .form-ctrl { border:1px solid #d1d5db; border-radius:8px; padding:.45rem .75rem; font-size:.875rem; color:#374151; }
     .form-ctrl:focus { outline:none; border-color:var(--color-principal); }
+
+    .btn-cambiar-img { position:absolute; bottom:.65rem; z-index:13; background:rgba(0,0,0,.55); color:#fff; border:none; border-radius:20px; padding:.28rem .75rem; font-size:.7rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:.35rem; transition:background .15s; backdrop-filter:blur(4px); }
+    .btn-cambiar-img:hover { background:rgba(0,0,0,.8); }
+    .btn-cambiar-img-antes  { left:.65rem; }
+    .btn-cambiar-img-despues{ right:.65rem; }
+
+    /* Modal picker */
+    #picker-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:9999; align-items:center; justify-content:center; }
+    #picker-overlay.activo { display:flex; }
+    #picker-box { background:#fff; border-radius:14px; padding:1.5rem; max-width:560px; width:94%; max-height:80vh; overflow-y:auto; box-shadow:0 16px 48px rgba(0,0,0,.3); }
+    #picker-titulo { font-size:1rem; font-weight:700; color:#1c2b22; margin-bottom:1rem; }
+    .picker-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; }
+    .picker-item { border:2px solid #e5e7eb; border-radius:10px; overflow:hidden; cursor:pointer; transition:border-color .15s,transform .15s; }
+    .picker-item:hover { border-color:var(--color-principal); transform:translateY(-2px); }
+    .picker-item.seleccionado { border-color:var(--color-principal); box-shadow:0 0 0 3px rgba(107,33,168,.18); }
+    .picker-item img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; }
+    .picker-item-label { font-size:.7rem; font-weight:600; text-align:center; padding:.3rem; color:#4b5563; }
+    #picker-cerrar { margin-top:1rem; background:#f3f4f6; border:none; border-radius:8px; padding:.45rem 1.2rem; font-size:.85rem; font-weight:600; color:#374151; cursor:pointer; }
+    #picker-cerrar:hover { background:#e5e7eb; }
 </style>
 @endpush
 
@@ -79,17 +98,33 @@ $despues = $imgs->firstWhere('orden_comparativo', 'despues');
 
     {{-- Slider comparativo si hay antes y después --}}
     @if($antes && $despues)
+    @php
+        $imgsJson = $todasLasImagenes->map(fn($i) => ['id'=>$i->id,'url'=>$i->url,'titulo'=>$i->titulo,'orden'=>$i->orden_comparativo])->values()->toJson();
+    @endphp
     <div style="margin-bottom:1.25rem;">
         <div style="font-size:.78rem;font-weight:700;text-transform:uppercase;color:#9ca3af;letter-spacing:.04em;margin-bottom:.5rem;">Comparador interactivo</div>
-        <div class="slider-container" id="slider-{{ $loop->index }}">
-            <div class="slider-despues"><img src="{{ $despues->url }}" alt="Después"></div>
+        <div class="slider-container" id="slider-{{ $loop->index }}"
+             data-imagenes="{{ $imgsJson }}"
+             data-grupo="{{ $grupoId }}"
+             data-paciente="{{ $paciente->id }}"
+             data-antes="{{ $antes->url }}"
+             data-despues="{{ $despues->url }}">
+            <div class="slider-despues"><img id="img-despues-{{ $loop->index }}" src="{{ $despues->url }}" alt="Después"></div>
             <div class="slider-antes" id="antes-{{ $loop->index }}">
-                <img src="{{ $antes->url }}" alt="Antes">
+                <img id="img-antes-{{ $loop->index }}" src="{{ $antes->url }}" alt="Antes">
             </div>
             <div class="slider-line" id="line-{{ $loop->index }}"></div>
             <div class="slider-handle" id="handle-{{ $loop->index }}"><i class="bi bi-arrows-expand-vertical"></i></div>
             <span class="slider-label slider-label-antes">ANTES</span>
             <span class="slider-label slider-label-despues">DESPUÉS</span>
+            <button type="button" class="btn-cambiar-img btn-cambiar-img-antes"
+                    onclick="abrirPicker({{ $loop->index }}, 'antes')">
+                <i class="bi bi-arrow-repeat"></i> Cambiar imagen
+            </button>
+            <button type="button" class="btn-cambiar-img btn-cambiar-img-despues"
+                    onclick="abrirPicker({{ $loop->index }}, 'despues')">
+                <i class="bi bi-arrow-repeat"></i> Cambiar imagen
+            </button>
         </div>
     </div>
     @endif
@@ -132,6 +167,17 @@ $despues = $imgs->firstWhere('orden_comparativo', 'despues');
 
 @endif
 
+{{-- Modal picker de imagen --}}
+<div id="picker-overlay">
+    <div id="picker-box">
+        <div id="picker-titulo">Seleccionar imagen</div>
+        <div id="picker-grid" class="picker-grid"></div>
+        <div style="text-align:right;margin-top:1rem;">
+            <button id="picker-cerrar" onclick="cerrarPicker()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 (function() {
@@ -144,7 +190,6 @@ $despues = $imgs->firstWhere('orden_comparativo', 'despues');
         var handleEl  = document.getElementById('handle-' + idx);
         var arrastrando = false;
 
-        // Sincronizar ancho de la imagen "antes" con el contenedor completo
         function syncImgWidth() {
             if (antesImg) antesImg.style.width = container.offsetWidth + 'px';
         }
@@ -182,6 +227,92 @@ $despues = $imgs->firstWhere('orden_comparativo', 'despues');
         });
     });
 })();
+
+// ── Picker de imagen ──────────────────────────────────────────────────────────
+var _pickerIdx  = null;
+var _pickerLado = null;
+var _pickerImgId = null;
+var _asignarUrl = '{{ route('imagenes.comparativo.asignar') }}';
+var _csrf       = '{{ csrf_token() }}';
+
+function abrirPicker(idx, lado) {
+    _pickerIdx  = idx;
+    _pickerLado = lado;
+    _pickerImgId = null;
+
+    var container = document.getElementById('slider-' + idx);
+    var imagenes  = JSON.parse(container.dataset.imagenes);
+    var imgElActual = lado === 'antes'
+        ? document.getElementById('img-antes-' + idx)
+        : document.getElementById('img-despues-' + idx);
+    var srcActual = imgElActual ? imgElActual.getAttribute('src') : '';
+
+    var titulo = lado === 'antes' ? 'Cambiar imagen — ANTES' : 'Cambiar imagen — DESPUÉS';
+    document.getElementById('picker-titulo').textContent = titulo;
+
+    var grid = document.getElementById('picker-grid');
+    grid.innerHTML = '';
+
+    imagenes.forEach(function(img) {
+        var item = document.createElement('div');
+        item.className = 'picker-item' + (img.url === srcActual ? ' seleccionado' : '');
+        item.innerHTML =
+            '<img src="' + img.url + '" alt="' + (img.titulo || '') + '">' +
+            '<div class="picker-item-label">' + (img.titulo || 'Sin título') + '</div>';
+        item.addEventListener('click', function() {
+            seleccionarImagen(img.id, img.url);
+        });
+        grid.appendChild(item);
+    });
+
+    document.getElementById('picker-overlay').classList.add('activo');
+}
+
+function seleccionarImagen(imgId, url) {
+    var idx  = _pickerIdx;
+    var lado = _pickerLado;
+    var container = document.getElementById('slider-' + idx);
+
+    // Actualizar DOM
+    if (lado === 'antes') {
+        var imgEl = document.getElementById('img-antes-' + idx);
+        imgEl.src = url;
+        imgEl.style.width = container.offsetWidth + 'px';
+    } else {
+        document.getElementById('img-despues-' + idx).src = url;
+    }
+
+    // Guardar en base de datos
+    var payload = new FormData();
+    payload.append('_token',      _csrf);
+    payload.append('imagen_id',   imgId);
+    payload.append('grupo',       container.dataset.grupo || '');
+    payload.append('orden',       lado);
+    payload.append('paciente_id', container.dataset.paciente);
+
+    fetch(_asignarUrl, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: payload,
+    })
+    .then(function(r) {
+        if (!r.ok) r.text().then(function(t) { console.error('asignar error', r.status, t); });
+    })
+    .catch(function(e) { console.error('asignar fetch error', e); });
+
+    cerrarPicker();
+}
+
+function cerrarPicker() {
+    document.getElementById('picker-overlay').classList.remove('activo');
+    _pickerIdx  = null;
+    _pickerLado = null;
+}
+
+// Cerrar al hacer clic fuera del cuadro
+document.getElementById('picker-overlay').addEventListener('click', function(e) {
+    if (e.target === this) cerrarPicker();
+});
 </script>
 @endpush
 

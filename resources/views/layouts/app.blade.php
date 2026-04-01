@@ -1,6 +1,6 @@
 {{-- ============================================================
      LAYOUT: app.blade.php
-     Sistema: Tatiana Velandia Odontología
+     Sistema: Arkevix Dental ERP
      Descripción: Layout base para todas las vistas autenticadas
      Usa: @extends('layouts.app') en cada vista del sistema
      ============================================================ --}}
@@ -15,12 +15,14 @@
     <title>@yield('titulo', 'Inicio') — {{ $config->nombre_consultorio ?? config('app.nombre_consultorio') }}</title>
 
     {{-- Favicon --}}
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon.png') }}?v=4">
-    <link rel="icon" type="image/png" sizes="96x96"   href="{{ asset('favicon.png') }}?v=4">
-    <link rel="icon" type="image/png" sizes="32x32"   href="{{ asset('favicon.png') }}?v=4">
-    <link rel="icon" type="image/png" sizes="16x16"   href="{{ asset('favicon.png') }}?v=4">
-    <link rel="apple-touch-icon" sizes="180x180"      href="{{ asset('favicon.png') }}?v=4">
-    <link rel="shortcut icon" type="image/png"        href="{{ asset('favicon.png') }}?v=4">
+    <link rel="icon" type="image/x-icon"  href="{{ asset('favicon.ico') }}?v=5">
+    <link rel="icon" type="image/png"     href="{{ asset('favicon.png') }}?v=5">
+    <link rel="apple-touch-icon"          href="{{ asset('favicon.png') }}?v=5">
+    <link rel="shortcut icon"             href="{{ asset('favicon.ico') }}?v=5">
+
+    {{-- Preconnect para CDN (reduce latencia DNS+TCP en primera carga) --}}
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 
     {{-- Bootstrap 5 --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -91,7 +93,7 @@
             --sidebar-activo:   rgba(255,255,255,0.13);
             --sidebar-texto:    rgba(255,255,255,0.72);
             --sidebar-texto-activo: #ffffff;
-            --sidebar-ancho:    270px;
+            --sidebar-ancho:    280px;
             --navbar-altura:    60px;
             --crema:            var(--fondo-app);
             --crema-borde:      var(--fondo-borde);
@@ -586,6 +588,26 @@
         }
     </style>
 
+    {{-- Flatpickr time picker --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Flatpickr — tema personalizado morado */
+        .flatpickr-calendar { font-family: var(--fuente-principal, 'Inter', sans-serif); border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,.18); border: 1px solid var(--fondo-borde, #e5e7eb); }
+        .flatpickr-time { border-top: none; }
+        .flatpickr-time input, .flatpickr-time .flatpickr-time-separator { font-size: 1.5rem; font-weight: 700; color: var(--color-hover, #1c2b22); }
+        .flatpickr-time input:hover, .flatpickr-time input:focus { background: var(--color-muy-claro, #f3eeff); }
+        .flatpickr-time .numInputWrapper span.arrowUp:after { border-bottom-color: var(--color-principal, #6d28d9); }
+        .flatpickr-time .numInputWrapper span.arrowDown:after { border-top-color: var(--color-principal, #6d28d9); }
+        .flatpickr-time .flatpickr-am-pm { color: var(--color-principal, #6d28d9); font-weight: 700; }
+        .flatpickr-time .flatpickr-am-pm:hover, .flatpickr-time .flatpickr-am-pm:focus { background: var(--color-muy-claro, #f3eeff); }
+        .timepicker-wrap { position: relative; display: flex; align-items: center; }
+        .timepicker-wrap .timepicker-icon { position: absolute; left: .65rem; color: var(--color-principal, #6d28d9); pointer-events: none; font-size: .95rem; }
+        .timepicker-wrap input.timepicker { padding-left: 2rem !important; cursor: pointer; }
+        .timepicker-wrap input.timepicker::placeholder { color: #b0b8c1; }
+        /* alt input generado por Flatpickr (altInput:true) — hereda estilos del original */
+        .timepicker-wrap input.flatpickr-alt-input { padding-left: 2rem !important; cursor: pointer; }
+    </style>
+
     {{-- Estilos específicos de cada vista --}}
     @stack('estilos')
 </head>
@@ -668,66 +690,125 @@
             Dashboard
         </a>
 
+        @modulo('pacientes')
         <a href="{{ route('pacientes.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('pacientes.*') ? 'activo' : '' }}">
             <i class="bi bi-people nav-item-icono"></i>
             Pacientes
         </a>
+        @endmodulo
 
+        @modulo('citas')
         <a href="{{ route('citas.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('citas.*') ? 'activo' : '' }}">
             <i class="bi bi-calendar3 nav-item-icono"></i>
             Agenda y Citas
         </a>
+        @endmodulo
 
-        {{-- SECCIÓN: Clínica --}}
+        @modulo('recordatorios')
+        <a href="{{ route('recordatorios.index') }}"
+           class="nav-item-sidebar {{ request()->routeIs('recordatorios.*') ? 'activo' : '' }}">
+            <i class="bi bi-bell nav-item-icono"></i>
+            Recordatorios
+            @php $recFallidos = \Illuminate\Support\Facades\Cache::remember('sidebar_rec_fallidos', 300, fn() => \App\Models\Recordatorio::where('estado','fallido')->where('activo',true)->count()); @endphp
+            @if($recFallidos > 0)
+                <span style="margin-left:auto;background:#ef4444;color:white;font-size:.65rem;font-weight:700;padding:1px 7px;border-radius:50px;">{{ $recFallidos }}</span>
+            @endif
+        </a>
+        @endmodulo
+
+        {{-- SECCIÓN: Clínica (solo si hay al menos un módulo activo) --}}
+        @if(\App\Helpers\ModulosHelper::activo('historia_clinica') || \App\Helpers\ModulosHelper::activo('evoluciones') || \App\Helpers\ModulosHelper::activo('valoraciones') || \App\Helpers\ModulosHelper::activo('imagenes') || \App\Helpers\ModulosHelper::activo('ortodoncia') || \App\Helpers\ModulosHelper::activo('recetas') || \App\Helpers\ModulosHelper::activo('periodoncia'))
         <p class="nav-seccion-titulo">Clínica</p>
+        @endif
 
+        @modulo('historia_clinica')
         <a href="{{ route('historias.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('historias.*') ? 'activo' : '' }}">
             <i class="bi bi-journal-medical nav-item-icono"></i>
             Historia Clínica
         </a>
+        @endmodulo
 
+        @modulo('evoluciones')
         <a href="{{ route('evoluciones.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('evoluciones.*') ? 'activo' : '' }}">
             <i class="bi bi-clipboard2-pulse nav-item-icono"></i>
             Evoluciones
         </a>
+        @endmodulo
 
+        @modulo('valoraciones')
         <a href="{{ route('valoraciones.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('valoraciones.*') ? 'activo' : '' }}">
             <i class="bi bi-search-heart nav-item-icono"></i>
             Valoraciones
         </a>
+        @endmodulo
 
+        @modulo('imagenes')
         <a href="{{ route('imagenes.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('imagenes.*') ? 'activo' : '' }}">
             <i class="bi bi-images nav-item-icono"></i>
             Imágenes Clínicas
         </a>
+        @endmodulo
 
-        {{-- SECCIÓN: Gestión --}}
+        @modulo('ortodoncia')
+        <a href="{{ route('ortodoncia.index') }}"
+           class="nav-item-sidebar {{ request()->routeIs('ortodoncia.*') || request()->routeIs('controles.*') || request()->routeIs('retencion.*') ? 'activo' : '' }}">
+            <i class="bi bi-symmetry-horizontal nav-item-icono"></i>
+            Ortodoncia
+        </a>
+        @endmodulo
+
+        @modulo('recetas')
+        <a href="{{ route('recetas.index') }}"
+           class="nav-item-sidebar {{ request()->routeIs('recetas.*') ? 'activo' : '' }}">
+            <i class="bi bi-file-medical nav-item-icono"></i>
+            Recetas Médicas
+        </a>
+        @endmodulo
+
+        @modulo('periodoncia')
+        <a href="{{ route('periodoncia.index') }}"
+           class="nav-item-sidebar {{ request()->routeIs('periodoncia.*') ? 'activo' : '' }}">
+            <i class="bi bi-heart-pulse nav-item-icono"></i>
+            Periodoncia
+        </a>
+        @endmodulo
+
+        {{-- SECCIÓN: Gestión (solo si hay al menos un módulo activo) --}}
+        @if(\App\Helpers\ModulosHelper::activo('presupuestos') || \App\Helpers\ModulosHelper::activo('pagos') || \App\Helpers\ModulosHelper::activo('consentimientos') || \App\Helpers\ModulosHelper::activo('laboratorio'))
         <p class="nav-seccion-titulo">Gestión</p>
+        @endif
 
+        @modulo('presupuestos')
         <a href="{{ route('presupuestos.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('presupuestos.*') ? 'activo' : '' }}">
             <i class="bi bi-file-earmark-text nav-item-icono"></i>
             Presupuestos
         </a>
+        @endmodulo
 
+        @modulo('pagos')
         <a href="{{ route('pagos.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('pagos.*') ? 'activo' : '' }}">
             <i class="bi bi-cash-coin nav-item-icono"></i>
             Abonos y Pagos
         </a>
+        @endmodulo
 
+        @modulo('consentimientos')
         <a href="{{ route('consentimientos.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('consentimientos.*') ? 'activo' : '' }}">
             <i class="bi bi-pen nav-item-icono"></i>
             Consentimientos
         </a>
+        @endmodulo
 
+        @modulo('laboratorio')
         <a href="{{ route('laboratorio.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('laboratorio.*') || request()->routeIs('gestion-laboratorios.*') ? 'activo' : '' }}">
             <i class="bi bi-eyedropper nav-item-icono"></i>
@@ -737,11 +818,15 @@
                 <span style="margin-left:auto; background:#DC3545; color:white; font-size:.65rem; font-weight:700; padding:.1rem .45rem; border-radius:50px; line-height:1.4;">{{ $labVencidas }}</span>
             @endif
         </a>
+        @endmodulo
 
         {{-- SECCIÓN: Administración (solo admin/doctora) --}}
         @role('administrador|doctora')
+        @if(\App\Helpers\ModulosHelper::activo('inventario') || \App\Helpers\ModulosHelper::activo('proveedores') || \App\Helpers\ModulosHelper::activo('egresos') || \App\Helpers\ModulosHelper::activo('libro_contable') || \App\Helpers\ModulosHelper::activo('reportes') || \App\Helpers\ModulosHelper::activo('usuarios') || \App\Helpers\ModulosHelper::activo('configuracion'))
         <p class="nav-seccion-titulo">Administración</p>
+        @endif
 
+        @modulo('inventario')
         <a href="{{ route('inventario.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('inventario.*') ? 'activo' : '' }}">
             <i class="bi bi-box-seam nav-item-icono"></i>
@@ -751,7 +836,9 @@
                 <span style="margin-left:auto; background:#DC3545; color:white; font-size:.65rem; font-weight:700; padding:.1rem .45rem; border-radius:50px; line-height:1.4;">{{ $stockBajo }}</span>
             @endif
         </a>
+        @endmodulo
 
+        @modulo('proveedores')
         <a href="{{ route('proveedores.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('proveedores.*') ? 'activo' : '' }}">
             <i class="bi bi-truck nav-item-icono"></i>
@@ -763,24 +850,58 @@
             <i class="bi bi-cart3 nav-item-icono"></i>
             Compras
         </a>
+        @endmodulo
 
+        @modulo('libro_contable')
+        <a href="{{ route('libro-contable.index') }}"
+           class="nav-item-sidebar {{ request()->routeIs('libro-contable.*') ? 'activo' : '' }}">
+            <i class="bi bi-journal-bookmark nav-item-icono"></i>
+            Libro Contable
+        </a>
+        @endmodulo
+
+        @modulo('egresos')
+        <a href="{{ route('egresos.index') }}"
+           class="nav-item-sidebar {{ request()->routeIs('egresos.*') ? 'activo' : '' }}">
+            <i class="bi bi-cash-stack nav-item-icono"></i>
+            Egresos
+        </a>
+        @endmodulo
+
+        @modulo('reportes')
         <a href="{{ route('reportes.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('reportes.*') ? 'activo' : '' }}">
             <i class="bi bi-bar-chart-line nav-item-icono"></i>
             Reportes
         </a>
+        @endmodulo
 
+        @modulo('usuarios')
         <a href="{{ route('usuarios.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('usuarios.*') ? 'activo' : '' }}">
             <i class="bi bi-person-gear nav-item-icono"></i>
             Usuarios y Roles
         </a>
+        @endmodulo
 
+        @modulo('configuracion')
         <a href="{{ route('configuracion.index') }}"
            class="nav-item-sidebar {{ request()->routeIs('configuracion.*') ? 'activo' : '' }}">
             <i class="bi bi-gear nav-item-icono"></i>
             Configuración
         </a>
+        @endmodulo
+
+        @role('administrador')
+        <a href="{{ route('auditoria.index') }}"
+           class="nav-item-sidebar {{ request()->routeIs('auditoria.*') ? 'activo' : '' }}">
+            <i class="bi bi-shield-lock nav-item-icono"></i>
+            Auditoría
+        </a>
+        @endrole
+
+        {{-- Importación de datos: solo accesible desde el panel dev (/dev/importacion) --}}
+
         @endrole
 
     </div>{{-- /sidebar-nav --}}
@@ -992,8 +1113,122 @@
 })();
 </script>
 
+{{-- ── Botones de retroceso inteligentes (history.back con fallback) ── --}}
+<script>
+(function () {
+    'use strict';
+
+    // Marca automáticamente como "back button" cualquier <a> que:
+    // 1. Contenga el ícono bi-arrow-left
+    // 2. NO esté dentro del sidebar ni de la nav principal
+    function marcarBotonesVolver() {
+        document.querySelectorAll('a').forEach(function (link) {
+            if (
+                link.querySelector('.bi-arrow-left') &&
+                !link.closest('#sidebar') &&
+                !link.closest('nav#sidebar') &&
+                !link.classList.contains('nav-item-sidebar') &&
+                !link.hasAttribute('data-back-skip')
+            ) {
+                link.setAttribute('data-back', '1');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', marcarBotonesVolver);
+
+    // Intercepta el click: usa history.back() solo si hay historial real
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('a[data-back="1"]');
+        if (!link) return;
+
+        // Solo retroceder si hay historial y hay referrer (no es página de entrada directa)
+        if (window.history.length > 1 && document.referrer !== '') {
+            e.preventDefault();
+            history.back();
+        }
+        // Sin historial → el href original funciona normalmente
+    });
+}());
+</script>
+
 {{-- Scripts específicos de cada vista --}}
 @stack('scripts')
+
+{{-- Flatpickr time picker --}}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+(function () {
+    // Formato guardado en configuración: '12' o '24'
+    var _fmt24 = '{{ $config->formato_hora ?? "12" }}' === '24';
+
+    function buildFpOptions() {
+        return {
+            enableTime    : true,
+            noCalendar    : true,
+            dateFormat    : 'H:i',               // valor real siempre en 24h (pasa validación)
+            altInput      : true,                // input visible separado del input de valor
+            altFormat     : _fmt24 ? 'H:i' : 'h:i K', // formato mostrado al usuario
+            altInputClass : '',                  // hereda estilo via CSS .flatpickr-alt-input
+            time_24hr     : _fmt24,
+            minuteIncrement: 5,
+            disableMobile : true,
+        };
+    }
+
+    function initTimepickers(root) {
+        (root || document).querySelectorAll('input.timepicker:not([data-fp-init])').forEach(function (el) {
+            el.setAttribute('data-fp-init', '1');
+            var fp = flatpickr(el, buildFpOptions());
+            // Copiar clases base del original al alt input para que herede los estilos
+            if (fp.altInput) {
+                var baseClass = el.className.replace(/\btimepicker\b/, '').trim();
+                fp.altInput.className = (baseClass + ' flatpickr-alt-input').trim();
+            }
+        });
+    }
+
+    // Re-inicializa todos destruyendo primero las instancias existentes
+    function reinitTimepickers(is24) {
+        _fmt24 = is24;
+        document.querySelectorAll('input.timepicker').forEach(function (el) {
+            var valActual = '';
+            if (el._flatpickr) {
+                valActual = el._flatpickr.input.value; // valor H:i del input real (oculto)
+                el._flatpickr.destroy();
+            }
+            el.removeAttribute('data-fp-init');
+            el.value = valActual;
+            var fp = flatpickr(el, buildFpOptions());
+            el.setAttribute('data-fp-init', '1');
+            if (fp.altInput) {
+                var baseClass = el.className.replace(/\btimepicker\b/, '').trim();
+                fp.altInput.className = (baseClass + ' flatpickr-alt-input').trim();
+                if (valActual) fp.setDate(valActual, false, 'H:i');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () { initTimepickers(); });
+    window.initTimepickers  = initTimepickers;
+    window.reinitTimepickers = reinitTimepickers;
+}());
+</script>
+
+<script>
+// Scroll sidebar to show active item
+(function() {
+    var activo = document.querySelector('#sidebar .nav-item-sidebar.activo');
+    if (activo) {
+        var sidebar = document.getElementById('sidebar');
+        var itemTop = activo.getBoundingClientRect().top;
+        var sidebarRect = sidebar.getBoundingClientRect();
+        var sidebarH = sidebar.clientHeight;
+        var offset = activo.offsetTop - sidebarH / 2 + activo.offsetHeight / 2;
+        sidebar.scrollTop = Math.max(0, offset);
+    }
+})();
+</script>
 
 </body>
 </html>
