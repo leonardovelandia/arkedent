@@ -1,4 +1,4 @@
-# Arkevix Dental ERP
+# Arkedent Dental ERP 
 
 Sistema ERP odontológico completo desarrollado en Laravel para la gestión integral de consultorios dentales.
 
