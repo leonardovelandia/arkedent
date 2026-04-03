@@ -29,7 +29,9 @@ class UsuarioController extends Controller
             $query->whereHas('roles', fn($q) => $q->where('name', $rol));
         }
 
-        $usuarios = $query->paginate(15)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $usuarios = $query->paginate($perPage)->withQueryString();
         $roles    = Role::orderBy('name')->pluck('name');
 
         return view('usuarios.index', compact('usuarios', 'roles', 'buscar', 'rol'));

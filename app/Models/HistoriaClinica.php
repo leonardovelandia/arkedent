@@ -28,6 +28,7 @@ class HistoriaClinica extends Model
         'numero_historia',
         'paciente_id',
         'fecha_apertura',
+        'hora_apertura',
         'motivo_consulta',
         'enfermedad_actual',
         'antecedentes_medicos',
@@ -62,6 +63,7 @@ class HistoriaClinica extends Model
 
     protected $casts = [
         'fecha_apertura'  => 'date',
+        'hora_apertura'   => 'datetime:H:i',
         'odontograma'     => 'array',
         'hallazgos'       => 'array',
         'activo'          => 'boolean',

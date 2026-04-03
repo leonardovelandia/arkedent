@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "arkedent/arkedent",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Arkedent — Sistema de gestión odontológica integral.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
@@ -13,6 +13,7 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "phpoffice/phpspreadsheet": "^5.5",
+        "spatie/laravel-backup": "^10.2",
         "spatie/laravel-permission": "^7.2"
     },
     "require-dev": {

@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v=4">
     <title>Receta {{ $receta->numero_receta }}</title>
     <style>
         * {
@@ -15,175 +14,177 @@
 
         body {
             font-family: DejaVu Sans, Arial, sans-serif;
-            font-size: 11.5px;
+            font-size: 11px;
             color: #1a1a1a;
             background: white;
             line-height: 1.5;
         }
 
         .pagina {
-            padding: 28px 42px 36px;
+            padding: 28px 40px 64px;
             max-width: 210mm;
         }
 
-        /* ── MEMBRETE ──────────────────────────────────────── */
-        .membrete {
-            border-bottom: 2px solid #1E3A5F;
-            padding-bottom: 14px;
-            margin-bottom: 20px;
-        }
-
-        .membrete-inner {
+        /* ── HEADER ─────────────────────────────────────────── */
+        .pdf-hdr {
             display: table;
             width: 100%;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #1a3a6b;
+            margin-bottom: 18px;
         }
 
-        .membrete-izq {
+        .hdr-logo-cell {
+            display: table-cell;
+            width: 14%;
+            vertical-align: middle;
+        }
+
+        .hdr-logo-cell img {
+            max-height: 60px;
+            max-width: 130px;
+        }
+
+        .hdr-info-cell {
             display: table-cell;
             vertical-align: middle;
-            width: 68%;
+            padding: 0 14px;
         }
 
-        .membrete-der {
+        .hdr-doc-cell {
             display: table-cell;
+            width: 28%;
             vertical-align: middle;
             text-align: right;
-            width: 32%;
-            font-size: 9.5px;
-            color: #1E3A5F;
-            line-height: 1.7;
         }
 
-        .logo-td {
-            display: table-cell;
-            vertical-align: middle;
-            padding-right: 14px;
-            width: 1%;
-            white-space: nowrap;
-        }
-
-        .logo-img {
-            width: 52px;
-            height: 52px;
-            object-fit: contain;
-        }
-
-        .texto-td {
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        .doctor-nombre {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1E3A5F;
-            letter-spacing: -0.2px;
+        .cons-nombre {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a3a6b;
             line-height: 1.2;
         }
 
-        .doctor-titulo {
-            font-size: 10.5px;
-            color: #1E3A5F;
+        .cons-cargo {
+            font-size: 10px;
+            color: #1a3a6b;
             margin-top: 2px;
         }
 
-        .consultorio-nombre {
-            font-size: 11px;
-            color: #1E3A5F;
-            margin-top: 3px;
+        .cons-datos {
+            font-size: 7.5px;
+            color: #6b7280;
+            margin-top: 5px;
+            line-height: 1.7;
         }
 
-        .registro {
-            font-size: 9.5px;
-            color: #1E3A5F;
-            margin-top: 4px;
-            letter-spacing: 0.2px;
+        .cons-datos span {
+            margin-right: 8px;
         }
 
-        /* ── TÍTULO CENTRAL ────────────────────────────────── */
+        .doc-badge {
+            border: 1.5px solid #1a3a6b;
+        }
+
+        .doc-badge-head {
+            background: #1a3a6b;
+            color: #fff;
+            font-size: 8px;
+            font-weight: bold;
+            padding: 5px 10px;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            text-align: center;
+        }
+
+        .doc-badge-body {
+            padding: 6px 10px;
+            text-align: center;
+            background: #f0f5fb;
+        }
+
+        .doc-badge-num {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1a3a6b;
+            font-family: monospace;
+            display: block;
+        }
+
+        .doc-badge-fecha {
+            font-size: 7.5px;
+            color: #6b7280;
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* ── TÍTULO RECETA ───────────────────────────────────── */
         .titulo-receta {
             text-align: center;
             font-size: 9.5px;
-            font-weight: 700;
+            font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2.5px;
-            color: #1E3A5F;
-            margin-bottom: 18px;
+            color: #1a3a6b;
+            margin-bottom: 16px;
             padding-bottom: 6px;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #c7d2e0;
         }
 
-        /* ── DATOS PACIENTE ────────────────────────────────── */
-        .datos-paciente {
+        /* ── PACIENTE ────────────────────────────────────────── */
+        .pac-blk {
+            background: #eff6ff;
+            border-left: 4px solid #1a3a6b;
+            padding: 9px 14px;
+            margin-bottom: 16px;
+        }
+
+        .pac-grid {
             display: table;
             width: 100%;
-            margin-bottom: 16px;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 12px;
         }
 
-        .datos-col {
+        .pac-cell {
             display: table-cell;
             vertical-align: top;
+            padding-right: 12px;
         }
 
-        .datos-col-der {
-            display: table-cell;
-            vertical-align: top;
-            text-align: right;
-            white-space: nowrap;
-            padding-left: 20px;
-            width: 1%;
+        .pac-cell:last-child {
+            padding-right: 0;
         }
 
-        .dato-label {
-            font-size: 8.5px;
-            font-weight: 700;
+        .pac-lbl {
+            font-size: 7px;
+            font-weight: bold;
+            color: #6b7280;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #999;
-            margin-bottom: 2px;
+            letter-spacing: .5px;
         }
 
-        .dato-valor {
-            font-size: 12px;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .dato-sub {
-            font-size: 9.5px;
-            color: #666;
+        .pac-val {
+            font-size: 10.5px;
+            font-weight: bold;
+            color: #111827;
             margin-top: 1px;
         }
 
-        .receta-num-label {
-            font-size: 8.5px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #999;
-            margin-bottom: 2px;
+        .pac-det {
+            font-size: 8px;
+            color: #4b5563;
         }
 
-        .receta-num-val {
-            font-size: 11px;
-            font-weight: 700;
-            color: #1a1a1a;
-            font-family: monospace;
-        }
-
-        /* ── DIAGNÓSTICO ───────────────────────────────────── */
+        /* ── DIAGNÓSTICO ─────────────────────────────────────── */
         .diagnostico {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
-        .diagnostico-label {
-            font-size: 8.5px;
-            font-weight: 700;
+        .sec-lbl {
+            font-size: 8px;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #999;
+            letter-spacing: .5px;
+            color: #6b7280;
             margin-bottom: 3px;
         }
 
@@ -193,11 +194,11 @@
             font-style: italic;
         }
 
-        /* ── MEDICAMENTOS ──────────────────────────────────── */
+        /* ── MEDICAMENTOS ────────────────────────────────────── */
         .rp-titulo {
             font-size: 15px;
             font-style: italic;
-            font-weight: 700;
+            font-weight: bold;
             color: #1a1a1a;
             margin-bottom: 12px;
         }
@@ -221,7 +222,7 @@
         }
 
         .med-negrita {
-            font-weight: 700;
+            font-weight: bold;
         }
 
         .med-sig {
@@ -230,10 +231,6 @@
             padding-left: 14px;
             line-height: 1.5;
             margin-top: 1px;
-        }
-
-        .med-sig em {
-            color: #777;
         }
 
         .med-nota {
@@ -250,32 +247,22 @@
             margin: 10px 0 10px 18px;
         }
 
-        /* ── INDICACIONES GENERALES ────────────────────────── */
+        /* ── INDICACIONES GENERALES ──────────────────────────── */
         .indic-wrap {
-            margin-top: 20px;
+            margin-top: 18px;
             padding-top: 12px;
-            border-top: 1px solid #ddd;
-        }
-
-        .indic-label {
-            font-size: 8.5px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #999;
-            margin-bottom: 5px;
+            border-top: 1px solid #e5e7eb;
         }
 
         .indic-texto {
             font-size: 10.5px;
             color: #333;
             line-height: 1.6;
-            white-space: pre-wrap;
         }
 
-        /* ── FIRMA ─────────────────────────────────────────── */
+        /* ── FIRMA PROFESIONAL ───────────────────────────────── */
         .firma-seccion {
-            margin-top: 44px;
+            margin-top: 40px;
             display: table;
             width: 100%;
         }
@@ -298,7 +285,7 @@
             height: 58px;
         }
 
-        .firma-img {
+        .firma-img-doc {
             max-height: 58px;
             max-width: 200px;
         }
@@ -311,7 +298,7 @@
 
         .firma-nombre {
             font-size: 11px;
-            font-weight: 700;
+            font-weight: bold;
             color: #1a1a1a;
         }
 
@@ -329,45 +316,61 @@
 
         .sello-dig {
             display: inline-block;
-            border: 1px solid #bbb;
+            border: 1.5px solid #1a3a6b;
             padding: 7px 14px;
             text-align: center;
+            background: #f0f5fb;
         }
 
         .sello-dig-titulo {
             font-size: 7.5px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #666;
-            font-weight: 700;
+            letter-spacing: .5px;
+            color: #1a3a6b;
+            font-weight: bold;
         }
 
         .sello-dig-fecha {
             font-size: 8px;
-            color: #999;
+            color: #6b7280;
             margin-top: 2px;
         }
 
-        /* ── PIE ───────────────────────────────────────────── */
-        .pie {
-            margin-top: 22px;
-            padding-top: 8px;
-            border-top: 1px solid #e0e0e0;
+        /* ── FOOTER FIJO ─────────────────────────────────────── */
+        .pdf-foot {
+            position: fixed;
+            bottom: 0;
+            left: 40px;
+            right: 40px;
+            border-top: 1.5px solid #c7d2e0;
+            padding: 5px 0 6px;
+            background: #fff;
             display: table;
-            width: 100%;
+            width: calc(100% - 80px);
         }
 
-        .pie-izq {
+        .pf-l {
             display: table-cell;
-            font-size: 8px;
-            color: #bbb;
+            font-size: 7px;
+            color: #9ca3af;
+            text-align: left;
+            vertical-align: middle;
         }
 
-        .pie-der {
+        .pf-c {
             display: table-cell;
+            font-size: 7px;
+            color: #9ca3af;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .pf-r {
+            display: table-cell;
+            font-size: 7px;
+            color: #9ca3af;
             text-align: right;
-            font-size: 8px;
-            color: #bbb;
+            vertical-align: middle;
             font-family: monospace;
         }
     </style>
@@ -376,47 +379,73 @@
 <body>
     <div class="pagina">
 
-        {{-- ── MEMBRETE ── --}}
-        <div class="membrete">
-            <div class="membrete-inner">
-                <div class="membrete-izq">
-                    <table style="border-collapse:collapse;width:auto;">
-                        <tr>
-                            @if ($configuracion?->logo_path)
-                                <td class="logo-td">
-                                    <img src="{{ public_path('storage/' . $configuracion->logo_path) }}"
-                                        class="logo-img" alt="Logo">
-                                </td>
-                            @endif
-                            <td class="texto-td">
-                                <div class="doctor-nombre">{{ $configuracion?->firma_nombre_doctor ?: $receta->doctor->name }}</div>
-                                @if($configuracion?->firma_cargo)
-                                <div class="doctor-titulo">{{ $configuracion->firma_cargo }}</div>
-                                @endif
-                                @if ($configuracion?->nombre_consultorio)
-                                    <div class="consultorio-nombre">{{ $configuracion->nombre_consultorio }}</div>
-                                @endif
-                                @if($configuracion?->firma_registro)
-                                    <div class="registro">Reg. Prof.: {{ $configuracion->firma_registro }}</div>
-                                @elseif($configuracion?->registro_medico)
-                                    <div class="registro">Reg. Prof.: {{ $configuracion->registro_medico }}</div>
-                                @endif
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="membrete-der">
+        {{-- ── FOOTER FIJO ── --}}
+        <div class="pdf-foot">
+            <div class="pf-l">
+                {{ $configuracion?->nombre_consultorio }}
+                @if ($configuracion?->direccion)
+                    · {{ $configuracion->direccion }}
+                @endif
+                @if ($configuracion?->ciudad)
+                    · {{ $configuracion->ciudad }}
+                @endif
+                @if ($configuracion?->telefono)
+                    · Tel: {{ $configuracion->telefono }}
+                @endif
+            </div>
+            <div class="pf-c">Documento generado el {{ now()->format('d/m/Y H:i') }}</div>
+            <div class="pf-r">{{ $receta->numero_receta }}</div>
+        </div>
+
+        {{-- ── HEADER ── --}}
+        <div class="pdf-hdr">
+            <div class="hdr-logo-cell">
+                @if ($configuracion?->logo_path)
+                    <img src="{{ public_path('storage/' . $configuracion->logo_path) }}" alt="Logo">
+                @else
+                    <div style="font-size:22px;font-weight:bold;color:#1a3a6b;">
+                        {{ mb_strtoupper(mb_substr($configuracion?->nombre_consultorio ?? 'OD', 0, 2)) }}</div>
+                @endif
+            </div>
+            <div class="hdr-info-cell">
+                @if ($configuracion?->nombre_consultorio && $configuracion?->firma_nombre_doctor)
+                    <div class="cons-nombre">{{ $configuracion->nombre_consultorio }}
+                    </div>
+                @endif
+                <div class="cons-datos">
+                    @if ($configuracion?->nit)
+                        <span>NIT: {{ $configuracion->nit }}</span>
+                    @endif
+
+                   
+
                     @if ($configuracion?->direccion)
-                        <div>{{ $configuracion->direccion }}</div>
+                        <br>
+                        <span>
+                            {{ $configuracion->direccion }}
+                            @if ($configuracion?->ciudad)
+                                , {{ $configuracion->ciudad }}
+                            @endif
+                        </span>
                     @endif
-                    @if ($configuracion?->telefono)
-                        <div>Tel. {{ $configuracion->telefono }}</div>
+                     @if ($configuracion?->telefono)
+                     <br>
+                        <span>Tel: {{ $configuracion->telefono }}</span>
                     @endif
+
                     @if ($configuracion?->email)
-                        <div>{{ $configuracion->email }}</div>
+                        <br>
+                        <span>{{ $configuracion->email }}</span>
                     @endif
-                    <div style="margin-top:4px;color:#1E3A5F;">
-                        {{ $receta->fecha->locale('es')->translatedFormat('d \d\e F \d\e Y') }}
+                </div>
+            </div>
+            <div class="hdr-doc-cell">
+                <div class="doc-badge">
+                    <div class="doc-badge-head">RECETA MÉDICA</div>
+                    <div class="doc-badge-body">
+                        <span class="doc-badge-num">{{ $receta->numero_receta }}</span>
+                        <span
+                            class="doc-badge-fecha">{{ $receta->fecha->locale('es')->translatedFormat('d \d\e F \d\e Y') }}</span>
                     </div>
                 </div>
             </div>
@@ -426,39 +455,43 @@
         <div class="titulo-receta">Receta Médica Odontológica</div>
 
         {{-- ── DATOS PACIENTE ── --}}
-        <div class="datos-paciente">
-            <div class="datos-col">
-                <div class="dato-label">Paciente</div>
-                <div class="dato-valor">{{ $receta->paciente->nombre_completo }}</div>
-                <div class="dato-sub">
-                    {{ $receta->paciente->tipo_documento }}: {{ $receta->paciente->numero_documento }}
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                    Edad: {{ $receta->paciente->edad }} años
+        <div class="pac-blk">
+            <div class="pac-grid">
+                <div class="pac-cell">
+                    <div class="pac-lbl">Paciente</div>
+                    <div class="pac-val">{{ $receta->paciente->nombre_completo }}</div>
+                    <div class="pac-det">{{ $receta->paciente->tipo_documento }}:
+                        {{ $receta->paciente->numero_documento }}</div>
                 </div>
-            </div>
-            <div class="datos-col-der">
-                <div class="receta-num-label">N° Receta</div>
-                <div class="receta-num-val">{{ $receta->numero_receta }}</div>
+                <div class="pac-cell">
+                    <div class="pac-lbl">Edad</div>
+                    <div class="pac-val">{{ $receta->paciente->edad }} años</div>
+                </div>
+                <div class="pac-cell">
+                    <div class="pac-lbl">Historia Clínica</div>
+                    <div class="pac-val">{{ $receta->paciente->numero_historia }}</div>
+                </div>
+                <div class="pac-cell">
+                    <div class="pac-lbl">Fecha Emisión</div>
+                    <div class="pac-val">{{ $receta->fecha->format('d/m/Y') }}</div>
+                </div>
             </div>
         </div>
 
         {{-- ── DIAGNÓSTICO ── --}}
         @if ($receta->diagnostico)
             <div class="diagnostico">
-                <div class="diagnostico-label">Diagnóstico</div>
+                <div class="sec-lbl">Diagnóstico</div>
                 <div class="diagnostico-texto">{{ $receta->diagnostico }}</div>
             </div>
         @endif
 
         {{-- ── MEDICAMENTOS ── --}}
         <div class="rp-titulo">Rp.</div>
-
         @php $romanos = ['I','II','III','IV','V','VI','VII','VIII','IX','X']; @endphp
 
         @forelse($receta->medicamentos ?? [] as $i => $med)
             <div class="med-item">
-
-                {{-- Nombre principal --}}
                 <div class="med-linea-1">
                     <span class="med-romano">{{ $romanos[$i] ?? $i + 1 }}.</span>
                     <span class="med-negrita">{{ $med['nombre'] ?? '' }}</span>
@@ -472,8 +505,6 @@
                         <span style="color:#777;"> &nbsp;– Cantidad: {{ $med['cantidad'] }}</span>
                     @endif
                 </div>
-
-                {{-- Posología --}}
                 @php
                     $partesSig = [];
                     if (!empty($med['frecuencia'])) {
@@ -487,12 +518,9 @@
                 @if ($sigTexto)
                     <div class="med-sig"><em>Indicaciones:</em> {{ $sigTexto }}</div>
                 @endif
-
-                {{-- Indicaciones específicas --}}
                 @if (!empty($med['indicaciones']))
                     <div class="med-nota">{{ $med['indicaciones'] }}</div>
                 @endif
-
             </div>
             @if (!$loop->last)
                 <hr class="med-hr">
@@ -505,44 +533,44 @@
         {{-- ── INDICACIONES GENERALES ── --}}
         @if ($receta->indicaciones_generales)
             <div class="indic-wrap">
-                <div class="indic-label">Indicaciones generales</div>
-                <div class="indic-texto">{{ $receta->indicaciones_generales }}</div>
+                <div class="sec-lbl">Indicaciones Generales</div>
+                <div class="indic-texto">{!! nl2br(e($receta->indicaciones_generales)) !!}</div>
             </div>
         @endif
 
-        {{-- ── FIRMA ── --}}
+        {{-- ── FIRMA PROFESIONAL ── --}}
         <div class="firma-seccion">
             <div class="firma-izq">
                 <div class="firma-canvas-wrap">
-                    @if ($configuracion?->firma_path)
-                        <img src="{{ public_path('storage/' . $configuracion->firma_path) }}" class="firma-img" alt="Firma">
+                    @if ($receta->firmado && $configuracion?->firma_path)
+                        <img src="{{ public_path('storage/' . $configuracion->firma_path) }}" class="firma-img-doc"
+                            alt="Firma">
                     @endif
                 </div>
                 <div class="firma-linea">
                     <div class="firma-nombre">{{ $configuracion?->firma_nombre_doctor ?: $receta->doctor->name }}</div>
-                    @if($configuracion?->firma_cargo)
-                    <div class="firma-cargo">{{ $configuracion->firma_cargo }}</div>
+                    @if ($configuracion?->firma_cargo)
+                        <div class="firma-cargo">{{ $configuracion->firma_cargo }}</div>
                     @endif
-                    @if($configuracion?->firma_registro)
-                    <div class="firma-reg">Reg. Prof.: {{ $configuracion->firma_registro }}</div>
+                    @if ($configuracion?->firma_registro)
+                        <div class="firma-reg">Reg. Prof.: {{ $configuracion->firma_registro }}</div>
                     @elseif($configuracion?->registro_medico)
-                    <div class="firma-reg">Reg. Prof.: {{ $configuracion->registro_medico }}</div>
+                        <div class="firma-reg">Reg. Prof.: {{ $configuracion->registro_medico }}</div>
                     @endif
                 </div>
             </div>
             <div class="firma-der">
-                <div class="sello-dig">
-                    <div class="sello-dig-titulo">Firmado digitalmente</div>
-                    <div class="sello-dig-fecha">{{ now()->format('d/m/Y H:i') }}</div>
-                </div>
+                @if ($receta->firmado)
+                    <div class="sello-dig">
+                        <div class="sello-dig-titulo">✓ Firmado digitalmente</div>
+                        <div class="sello-dig-fecha">
+                            {{ $receta->fecha_firma?->format('d/m/Y H:i') ?? now()->format('d/m/Y H:i') }}</div>
+                    </div>
+                @endif
             </div>
         </div>
 
-        {{-- ── PIE ── --}}
-        <div class="pie">
-            <div class="pie-izq">Generado: {{ now()->format('d/m/Y H:i') }}</div>
-            <div class="pie-der">{{ $receta->numero_receta }}</div>
-        </div>
+        <x-pdf-pie-profesional :config="$config" />
 
     </div>
 </body>

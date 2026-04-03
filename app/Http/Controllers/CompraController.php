@@ -44,11 +44,9 @@ class CompraController extends Controller
             $query->whereDate('fecha_compra', '<=', $request->hasta);
         }
 
-        $compras = $query->withCount('items')->orderByDesc('fecha_compra')->paginate(15)->withQueryString();
-
-        if ($request->ajax()) {
-            return view('proveedores.compras._tabla', compact('compras'));
-        }
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $compras = $query->withCount('items')->orderByDesc('fecha_compra')->paginate($perPage)->withQueryString();
 
         // Resumen
         $inicioMes  = now()->startOfMonth();

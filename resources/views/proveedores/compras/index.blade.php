@@ -41,149 +41,152 @@
 
 @section('contenido')
 
-<div class="comp-header">
-    <div>
-        <h4 style="font-family:var(--fuente-titulos); font-weight:700; color:#1c2b22; margin:0;">Historial de Compras</h4>
-        <p style="font-size:.8rem; color:#9ca3af; margin:.15rem 0 0;">Registro de compras a proveedores</p>
-    </div>
-    <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-        <a href="{{ route('proveedores.index') }}" class="btn-gris"><i class="bi bi-truck"></i> Proveedores</a>
-        <a href="{{ route('compras.create') }}" class="btn-morado"><i class="bi bi-plus-lg"></i> Registrar Compra</a>
-    </div>
-</div>
-
-@if(session('success'))
-<div style="background:#dcfce7; border:1px solid #86efac; border-radius:8px; padding:.6rem 1rem; margin-bottom:1rem; font-size:.84rem; color:#166534;">
-    <i class="bi bi-check-circle"></i> {{ session('success') }}
+@if(session('success') || session('exito'))
+<div class="alerta-flash" style="background:#dcfce7;color:#166534;border:1px solid #86efac;">
+    <i class="bi bi-check-circle-fill"></i> {{ session('success') ?? session('exito') }}
 </div>
 @endif
 @if(session('error'))
-<div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:.6rem 1rem; margin-bottom:1rem; font-size:.84rem; color:#991b1b;">
-    <i class="bi bi-exclamation-triangle"></i> {{ session('error') }}
+<div class="alerta-flash" style="background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;">
+    <i class="bi bi-exclamation-triangle-fill"></i> {{ session('error') }}
 </div>
 @endif
 
-{{-- Resumen --}}
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-valor" style="font-size:1.2rem;">${{ number_format($totalMes, 0, ',', '.') }}</div>
-        <div class="stat-label">Comprado este mes</div>
+<div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="page-titulo"><i class="bi bi-cart3 me-2"></i>Historial de Compras</h1>
+        <p class="page-subtitulo">Registro de compras a proveedores</p>
     </div>
-    <div class="stat-card">
-        <div class="stat-valor" style="font-size:1.2rem;">${{ number_format($totalAnio, 0, ',', '.') }}</div>
-        <div class="stat-label">Comprado este año</div>
-    </div>
-    <div class="stat-card" style="{{ $pendiente > 0 ? 'border-color:#fde68a;' : '' }}">
-        <div class="stat-valor" style="color:{{ $pendiente > 0 ? '#b45309' : 'var(--color-principal)' }}; font-size:1.2rem;">${{ number_format($pendiente, 0, ',', '.') }}</div>
-        <div class="stat-label">Pendiente de pago</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-valor">{{ $numProveedores }}</div>
-        <div class="stat-label">Proveedores activos</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <a href="{{ route('proveedores.index') }}"
+           style="background:#fff;color:#374151;border:1px solid #e5e7eb;border-radius:8px;padding:.5rem 1.1rem;font-size:.875rem;display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
+            <i class="bi bi-truck"></i> Proveedores
+        </a>
+        <a href="{{ route('compras.create') }}" class="btn-morado">
+            <i class="bi bi-plus-lg"></i> Registrar Compra
+        </a>
     </div>
 </div>
 
-{{-- Filtros --}}
-<div class="filtros-card">
-    <form id="form-filtros-compras" method="GET" action="{{ route('compras.index') }}">
-        <div class="filtros-grid">
-            <div>
-                <label class="form-label">Buscar</label>
-                <input type="text" name="buscar" id="filtro-buscar" class="form-input" placeholder="N° compra, proveedor…" value="{{ request('buscar') }}">
-            </div>
-            <div>
-                <label class="form-label">Estado</label>
-                <select name="estado" id="filtro-estado" class="form-input">
-                    <option value="">Todos</option>
-                    <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                    <option value="pagada"    {{ request('estado') === 'pagada'    ? 'selected' : '' }}>Pagada</option>
-                    <option value="cancelada" {{ request('estado') === 'cancelada' ? 'selected' : '' }}>Cancelada</option>
-                </select>
-            </div>
-            <div>
-                <label class="form-label">Proveedor</label>
-                <select name="proveedor_id" id="filtro-proveedor" class="form-input">
-                    <option value="">Todos</option>
-                    @foreach($proveedoresList as $p)
-                    <option value="{{ $p->id }}" {{ request('proveedor_id') == $p->id ? 'selected' : '' }}>{{ $p->nombre }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label class="form-label">Desde</label>
-                <input type="date" name="desde" id="filtro-desde" class="form-input" value="{{ request('desde') }}">
-            </div>
-            <div>
-                <label class="form-label">Hasta</label>
-                <input type="date" name="hasta" id="filtro-hasta" class="form-input" value="{{ request('hasta') }}">
-            </div>
-            <div style="display:flex; align-items:flex-end;">
-                <a href="{{ route('compras.index') }}" class="btn-gris" style="height:38px;"><i class="bi bi-x"></i></a>
-            </div>
+{{-- Cards resumen --}}
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card-sistema" style="text-align:center;padding:1.1rem;">
+            <div style="font-size:1.4rem;font-weight:800;color:var(--color-principal);">${{ number_format($totalMes, 0, ',', '.') }}</div>
+            <div style="font-size:.73rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;">Comprado este mes</div>
+            <i class="bi bi-calendar-month" style="font-size:1.2rem;color:var(--color-principal);opacity:.35;margin-top:.25rem;display:block;"></i>
         </div>
-    </form>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card-sistema" style="text-align:center;padding:1.1rem;">
+            <div style="font-size:1.4rem;font-weight:800;color:#0ea5e9;">${{ number_format($totalAnio, 0, ',', '.') }}</div>
+            <div style="font-size:.73rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;">Comprado este año</div>
+            <i class="bi bi-graph-up" style="font-size:1.2rem;color:#0ea5e9;opacity:.35;margin-top:.25rem;display:block;"></i>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card-sistema" style="text-align:center;padding:1.1rem;{{ $pendiente > 0 ? 'border-color:#fde68a;' : '' }}">
+            <div style="font-size:1.4rem;font-weight:800;color:{{ $pendiente > 0 ? '#b45309' : 'var(--color-principal)' }};">${{ number_format($pendiente, 0, ',', '.') }}</div>
+            <div style="font-size:.73rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;">Pendiente de pago</div>
+            <i class="bi bi-clock" style="font-size:1.2rem;color:#f59e0b;opacity:.35;margin-top:.25rem;display:block;"></i>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card-sistema" style="text-align:center;padding:1.1rem;">
+            <div style="font-size:1.9rem;font-weight:800;color:#8b5cf6;">{{ $numProveedores }}</div>
+            <div style="font-size:.73rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;">Proveedores activos</div>
+            <i class="bi bi-truck" style="font-size:1.2rem;color:#8b5cf6;opacity:.35;margin-top:.25rem;display:block;"></i>
+        </div>
+    </div>
 </div>
 
-{{-- Tabla --}}
-<div class="panel-card" id="tabla-container">
-    @include('proveedores.compras._tabla')
-</div>
+<x-tabla-listado
+    :paginacion="$compras"
+    placeholder="Buscar N° compra o proveedor..."
+    icono-vacio="bi-inbox"
+    mensaje-vacio="No hay compras registradas"
+>
+    <x-slot:filtros>
+        <select name="estado" class="tbl-filtro-select">
+            <option value="">Todos los estados</option>
+            <option value="pendiente" {{ request('estado')==='pendiente' ? 'selected' : '' }}>Pendiente</option>
+            <option value="pagada"    {{ request('estado')==='pagada'    ? 'selected' : '' }}>Pagada</option>
+            <option value="cancelada" {{ request('estado')==='cancelada' ? 'selected' : '' }}>Cancelada</option>
+        </select>
+        <select name="proveedor_id" class="tbl-filtro-select">
+            <option value="">Todos los proveedores</option>
+            @foreach($proveedoresList as $p)
+            <option value="{{ $p->id }}" {{ request('proveedor_id') == $p->id ? 'selected' : '' }}>{{ $p->nombre }}</option>
+            @endforeach
+        </select>
+        <input type="date" name="desde" class="tbl-filtro-date" value="{{ request('desde') }}" title="Desde">
+        <input type="date" name="hasta" class="tbl-filtro-date" value="{{ request('hasta') }}" title="Hasta">
+    </x-slot:filtros>
 
-@push('scripts')
-<script>
-(function () {
-    var baseUrl    = '{{ route('compras.index') }}';
-    var form       = document.getElementById('form-filtros-compras');
-    var contenedor = document.getElementById('tabla-container');
-    var buscar     = document.getElementById('filtro-buscar');
-    var timer;
+    <x-slot:accion-vacio>
+        <div class="mt-3">
+            <a href="{{ route('compras.create') }}" class="btn-morado">
+                <i class="bi bi-plus-circle"></i> Registrar primera compra
+            </a>
+        </div>
+    </x-slot:accion-vacio>
 
-    function getParams() {
-        return new URLSearchParams(new FormData(form)).toString();
-    }
+    <x-slot:thead>
+        <tr>
+            <th>N° Compra</th>
+            <th>Fecha</th>
+            <th>Proveedor</th>
+            <th>Factura</th>
+            <th style="text-align:center;">Ítems</th>
+            <th style="text-align:right;">Total</th>
+            <th>Método</th>
+            <th>Estado</th>
+            <th style="text-align:center;">Acciones</th>
+        </tr>
+    </x-slot:thead>
 
-    function cargarTabla(url) {
-        contenedor.classList.add('cargando');
-        history.replaceState(null, '', url);
-        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            .then(function(r) { return r.text(); })
-            .then(function(html) {
-                contenedor.innerHTML = html;
-                contenedor.classList.remove('cargando');
-                bindPaginacion();
-            })
-            .catch(function() { contenedor.classList.remove('cargando'); });
-    }
+    @foreach($compras as $compra)
+    @php
+        $estadoColors = [
+            'pendiente' => ['#fff3cd','#856404'],
+            'pagada'    => ['#d4edda','#155724'],
+            'cancelada' => ['#fee2e2','#7f1d1d'],
+        ];
+        $bc = $estadoColors[$compra->estado] ?? ['#f3f4f6','#374151'];
+    @endphp
+    <tr>
+        <td>
+            <span style="font-family:monospace;font-weight:700;color:var(--color-principal);font-size:.8rem;">
+                {{ $compra->numero_formateado }}
+            </span>
+        </td>
+        <td style="white-space:nowrap;font-size:.8rem;color:#4b5563;">{{ $compra->fecha_compra->format('d/m/Y') }}</td>
+        <td>
+            <a href="{{ route('proveedores.show', $compra->proveedor) }}" style="color:#1c2b22;text-decoration:none;font-weight:500;font-size:.82rem;">
+                {{ $compra->proveedor->nombre }}
+            </a>
+        </td>
+        <td style="font-size:.8rem;color:#6b7280;">{{ $compra->numero_factura ?: '—' }}</td>
+        <td style="text-align:center;font-size:.8rem;">{{ $compra->items_count }}</td>
+        <td style="text-align:right;font-weight:700;color:#166534;white-space:nowrap;">
+            ${{ number_format($compra->total, 0, ',', '.') }}
+        </td>
+        <td style="font-size:.78rem;color:#6b7280;">{{ $compra->metodo_pago_label }}</td>
+        <td>
+            <span style="background:{{ $bc[0] }};color:{{ $bc[1] }};border-radius:20px;padding:.12rem .65rem;font-size:.7rem;font-weight:700;">
+                {{ ucfirst($compra->estado) }}
+            </span>
+        </td>
+        <td>
+            <div style="display:flex;justify-content:center;gap:.3rem;">
+                <a href="{{ route('compras.show', $compra) }}" class="tbl-btn-accion" title="Ver">
+                    <i class="bi bi-eye"></i>
+                </a>
+            </div>
+        </td>
+    </tr>
+    @endforeach
 
-    function bindPaginacion() {
-        contenedor.querySelectorAll('.pagination a').forEach(function(a) {
-            a.addEventListener('click', function(e) {
-                e.preventDefault();
-                cargarTabla(this.href);
-            });
-        });
-    }
-
-    document.getElementById('filtro-estado').addEventListener('change',    function() { cargarTabla(baseUrl + '?' + getParams()); });
-    document.getElementById('filtro-proveedor').addEventListener('change', function() { cargarTabla(baseUrl + '?' + getParams()); });
-    document.getElementById('filtro-desde').addEventListener('change',     function() { cargarTabla(baseUrl + '?' + getParams()); });
-    document.getElementById('filtro-hasta').addEventListener('change',     function() { cargarTabla(baseUrl + '?' + getParams()); });
-
-    buscar.addEventListener('input', function() {
-        clearTimeout(timer);
-        timer = setTimeout(function() { cargarTabla(baseUrl + '?' + getParams()); }, 500);
-    });
-
-    document.querySelector('a[href="{{ route('compras.index') }}"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        form.querySelectorAll('select').forEach(function(s) { s.value = ''; });
-        buscar.value = '';
-        cargarTabla(baseUrl);
-    });
-
-    bindPaginacion();
-})();
-</script>
-@endpush
+</x-tabla-listado>
 
 @endsection

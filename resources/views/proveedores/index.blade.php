@@ -45,127 +45,159 @@
 
 @section('contenido')
 
-<div class="prov-header">
-    <div>
-        <h4 style="font-family:var(--fuente-titulos); font-weight:700; color:#1c2b22; margin:0;">Proveedores</h4>
-        <p style="font-size:.8rem; color:#9ca3af; margin:.15rem 0 0;">Gestión de proveedores de materiales e insumos</p>
-    </div>
-    <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-        <a href="{{ route('compras.index') }}" class="btn-gris"><i class="bi bi-cart"></i> Historial Compras</a>
-        <a href="{{ route('proveedores.comparar') }}" class="btn-azul"><i class="bi bi-bar-chart"></i> Comparar Precios</a>
-        <a href="{{ route('proveedores.create') }}" class="btn-morado"><i class="bi bi-plus-lg"></i> Nuevo Proveedor</a>
-    </div>
-</div>
-
-@if(session('success'))
-<div style="background:#dcfce7; border:1px solid #86efac; border-radius:8px; padding:.6rem 1rem; margin-bottom:1rem; font-size:.84rem; color:#166534;">
-    <i class="bi bi-check-circle"></i> {{ session('success') }}
+@if(session('exito') || session('success'))
+<div class="alerta-flash" style="background:#dcfce7;color:#166534;border:1px solid #86efac;">
+    <i class="bi bi-check-circle-fill"></i> {{ session('exito') ?? session('success') }}
 </div>
 @endif
 
-{{-- Resumen --}}
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-valor">{{ $totalActivos }}</div>
-        <div class="stat-label">Proveedores activos</div>
+<div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="page-titulo"><i class="bi bi-truck me-2"></i>Proveedores</h1>
+        <p class="page-subtitulo">Gestión de proveedores de materiales e insumos</p>
     </div>
-    <div class="stat-card">
-        <div class="stat-valor" style="font-size:1.15rem;">${{ number_format($comprasMes, 0, ',', '.') }}</div>
-        <div class="stat-label">Compras este mes</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-valor" style="font-size:1rem; color:#1c2b22;">{{ $proveedorFrecuente?->proveedor?->nombre ?? '—' }}</div>
-        <div class="stat-label">Proveedor más frecuente (mes)</div>
-    </div>
-    <div class="stat-card" style="border-color:{{ $comprasPendientes > 0 ? '#fde68a' : 'var(--fondo-borde)' }};">
-        <div class="stat-valor" style="color:{{ $comprasPendientes > 0 ? '#b45309' : 'var(--color-principal)' }}; font-size:1.15rem;">${{ number_format($comprasPendientes, 0, ',', '.') }}</div>
-        <div class="stat-label">Compras pendientes de pago</div>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <a href="{{ route('compras.index') }}"
+           style="background:#fff;color:#374151;border:1px solid #e5e7eb;border-radius:8px;padding:.5rem 1.1rem;font-size:.875rem;display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
+            <i class="bi bi-cart"></i> Historial Compras
+        </a>
+        <a href="{{ route('proveedores.comparar') }}"
+           style="background:#1e40af;color:#fff;border:none;border-radius:8px;padding:.5rem 1.1rem;font-size:.875rem;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;">
+            <i class="bi bi-bar-chart"></i> Comparar Precios
+        </a>
+        <a href="{{ route('proveedores.create') }}" class="btn-morado">
+            <i class="bi bi-plus-lg"></i> Nuevo Proveedor
+        </a>
     </div>
 </div>
 
-{{-- Filtros --}}
-<div class="filtros-card">
-    <form id="form-filtros-prov" method="GET" action="{{ route('proveedores.index') }}">
-        <div class="filtros-grid">
-            <div>
-                <label class="form-label">Buscar</label>
-                <input type="text" name="buscar" id="filtro-buscar" class="form-input" placeholder="Nombre, NIT o contacto…" value="{{ request('buscar') }}">
-            </div>
-            <div>
-                <label class="form-label">Categoría</label>
-                <select name="categoria" id="filtro-categoria" class="form-input">
-                    <option value="">Todas</option>
-                    @foreach($categorias as $key => $label)
-                        <option value="{{ $key }}" {{ request('categoria') === $key ? 'selected' : '' }}>{{ $label }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div style="display:flex; align-items:flex-end;">
-                <a href="{{ route('proveedores.index') }}" id="btn-limpiar-prov" class="btn-gris" style="height:38px;"><i class="bi bi-x"></i></a>
-            </div>
+{{-- Cards resumen --}}
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card-sistema" style="text-align:center;padding:1.1rem;">
+            <div style="font-size:1.9rem;font-weight:800;color:var(--color-principal);">{{ $totalActivos }}</div>
+            <div style="font-size:.73rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;">Proveedores activos</div>
+            <i class="bi bi-truck" style="font-size:1.2rem;color:var(--color-principal);opacity:.35;margin-top:.25rem;display:block;"></i>
         </div>
-    </form>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card-sistema" style="text-align:center;padding:1.1rem;">
+            <div style="font-size:1.5rem;font-weight:800;color:#0ea5e9;">${{ number_format($comprasMes, 0, ',', '.') }}</div>
+            <div style="font-size:.73rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;">Compras este mes</div>
+            <i class="bi bi-calendar-month" style="font-size:1.2rem;color:#0ea5e9;opacity:.35;margin-top:.25rem;display:block;"></i>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card-sistema" style="text-align:center;padding:1.1rem;">
+            <div style="font-size:1rem;font-weight:700;color:#1c2b22;margin-top:.3rem;">{{ $proveedorFrecuente?->proveedor?->nombre ?? '—' }}</div>
+            <div style="font-size:.73rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;">Más frecuente (mes)</div>
+            <i class="bi bi-star" style="font-size:1.2rem;color:#f59e0b;opacity:.35;margin-top:.25rem;display:block;"></i>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card-sistema" style="text-align:center;padding:1.1rem;{{ $comprasPendientes > 0 ? 'border-color:#fde68a;' : '' }}">
+            <div style="font-size:1.5rem;font-weight:800;color:{{ $comprasPendientes > 0 ? '#b45309' : 'var(--color-principal)' }};">${{ number_format($comprasPendientes, 0, ',', '.') }}</div>
+            <div style="font-size:.73rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;">Compras pendientes pago</div>
+            <i class="bi bi-clock" style="font-size:1.2rem;color:#f59e0b;opacity:.35;margin-top:.25rem;display:block;"></i>
+        </div>
+    </div>
 </div>
 
-{{-- Tabla --}}
-<div class="panel-card" id="tabla-container">
-    @include('proveedores._tabla')
-</div>
+<x-tabla-listado
+    :paginacion="$proveedores"
+    placeholder="Buscar nombre, NIT o contacto..."
+    icono-vacio="bi-truck"
+    mensaje-vacio="No hay proveedores registrados"
+>
+    <x-slot:filtros>
+        <select name="categoria" class="tbl-filtro-select">
+            <option value="">Todas las categorías</option>
+            @foreach($categorias as $key => $label)
+            <option value="{{ $key }}" {{ request('categoria') === $key ? 'selected' : '' }}>{{ $label }}</option>
+            @endforeach
+        </select>
+    </x-slot:filtros>
 
-@push('scripts')
-<script>
-(function () {
-    var baseUrl    = '{{ route('proveedores.index') }}';
-    var form       = document.getElementById('form-filtros-prov');
-    var contenedor = document.getElementById('tabla-container');
-    var buscar     = document.getElementById('filtro-buscar');
-    var timer;
+    <x-slot:accion-vacio>
+        <div class="mt-3">
+            <a href="{{ route('proveedores.create') }}" class="btn-morado">
+                <i class="bi bi-plus-circle"></i> Registrar primer proveedor
+            </a>
+        </div>
+    </x-slot:accion-vacio>
 
-    function getParams() {
-        return new URLSearchParams(new FormData(form)).toString();
-    }
+    <x-slot:thead>
+        <tr>
+            <th>Nombre</th>
+            <th>NIT</th>
+            <th>Ciudad</th>
+            <th>Contacto</th>
+            <th>Teléfono</th>
+            <th>Categorías</th>
+            <th>Calificación</th>
+            <th style="text-align:right;">Total Compras</th>
+            <th style="text-align:center;">Acciones</th>
+        </tr>
+    </x-slot:thead>
 
-    function cargarTabla(url) {
-        contenedor.classList.add('cargando');
-        history.replaceState(null, '', url);
-        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            .then(function(r) { return r.text(); })
-            .then(function(html) {
-                contenedor.innerHTML = html;
-                contenedor.classList.remove('cargando');
-                bindPaginacion();
-            })
-            .catch(function() { contenedor.classList.remove('cargando'); });
-    }
+    @foreach($proveedores as $proveedor)
+    <tr>
+        <td>
+            <div style="font-weight:600;color:#1c2b22;">{{ $proveedor->nombre }}</div>
+            @if($proveedor->condiciones_pago)
+            <div style="font-size:.72rem;color:#9ca3af;">{{ $proveedor->condiciones_pago }}</div>
+            @endif
+        </td>
+        <td style="font-size:.8rem;color:#6b7280;">{{ $proveedor->nit ?: '—' }}</td>
+        <td style="font-size:.8rem;">{{ $proveedor->ciudad ?: '—' }}</td>
+        <td style="font-size:.8rem;">{{ $proveedor->contacto ?: '—' }}</td>
+        <td style="font-size:.8rem;white-space:nowrap;">
+            {{ $proveedor->telefono ?: '—' }}
+            @if($proveedor->whatsapp)
+            <a href="https://wa.me/57{{ $proveedor->whatsapp }}" target="_blank" style="color:#166534;margin-left:.3rem;font-size:.85rem;"><i class="bi bi-whatsapp"></i></a>
+            @endif
+        </td>
+        <td style="max-width:200px;">
+            @if($proveedor->categorias && count($proveedor->categorias))
+            @php $etqs = \App\Models\Proveedor::etiquetasCategorias(); @endphp
+            @foreach(array_slice($proveedor->categorias, 0, 3) as $cat)
+            <span style="display:inline-block;font-size:.68rem;font-weight:600;padding:.1rem .45rem;border-radius:50px;background:var(--color-muy-claro);color:var(--color-principal);margin:.1rem;">{{ $etqs[$cat] ?? $cat }}</span>
+            @endforeach
+            @if(count($proveedor->categorias) > 3)
+            <span style="display:inline-block;font-size:.68rem;font-weight:600;padding:.1rem .45rem;border-radius:50px;background:#f3f4f6;color:#6b7280;margin:.1rem;">+{{ count($proveedor->categorias) - 3 }}</span>
+            @endif
+            @else
+            <span style="color:#9ca3af;font-size:.78rem;">—</span>
+            @endif
+        </td>
+        <td>
+            @if($proveedor->calificacion)
+            <div style="display:flex;gap:.1rem;align-items:center;">
+                @for($i = 1; $i <= 5; $i++)
+                <i class="bi bi-star{{ $i <= $proveedor->calificacion ? '-fill' : '' }}"
+                   style="color:{{ $i <= $proveedor->calificacion ? '#FFC107' : '#DEE2E6' }};font-size:.85rem;"></i>
+                @endfor
+            </div>
+            @else
+            <span style="color:#9ca3af;font-size:.78rem;">—</span>
+            @endif
+        </td>
+        <td style="text-align:right;font-weight:600;color:#166534;">
+            ${{ number_format($proveedor->total_compras ?? 0, 0, ',', '.') }}
+        </td>
+        <td>
+            <div style="display:flex;justify-content:center;gap:.3rem;">
+                <a href="{{ route('proveedores.show', $proveedor) }}" class="tbl-btn-accion" title="Ver">
+                    <i class="bi bi-eye"></i>
+                </a>
+                <a href="{{ route('proveedores.edit', $proveedor) }}" class="tbl-btn-accion" title="Editar">
+                    <i class="bi bi-pencil"></i>
+                </a>
+            </div>
+        </td>
+    </tr>
+    @endforeach
 
-    function bindPaginacion() {
-        contenedor.querySelectorAll('.pagination a').forEach(function(a) {
-            a.addEventListener('click', function(e) {
-                e.preventDefault();
-                cargarTabla(this.href);
-            });
-        });
-    }
-
-    document.getElementById('filtro-categoria').addEventListener('change', function() {
-        cargarTabla(baseUrl + '?' + getParams());
-    });
-
-    buscar.addEventListener('input', function() {
-        clearTimeout(timer);
-        timer = setTimeout(function() { cargarTabla(baseUrl + '?' + getParams()); }, 500);
-    });
-
-    document.getElementById('btn-limpiar-prov').addEventListener('click', function(e) {
-        e.preventDefault();
-        form.querySelectorAll('select').forEach(function(s) { s.value = ''; });
-        buscar.value = '';
-        cargarTabla(baseUrl);
-    });
-
-    bindPaginacion();
-})();
-</script>
-@endpush
+</x-tabla-listado>
 
 @endsection

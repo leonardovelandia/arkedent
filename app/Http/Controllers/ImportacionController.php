@@ -175,43 +175,43 @@ class ImportacionController extends Controller
     {
         $plantillas = [
             'pacientes' => [
-                'nombre'   => 'Plantilla_Pacientes_ArkevixDentalERP.csv',
+                'nombre'   => 'Plantilla_Pacientes_Arkedent.csv',
                 'headers'  => ['Nombres','Apellidos','Tipo Documento','Numero Documento','Fecha Nacimiento','Genero','Telefono','Email','Direccion','Ciudad','Ocupacion','Acudiente','Telefono Emergencia'],
                 'ejemplo'  => ['Maria Fernanda','Gonzalez Lopez','CC','1234567890','1990-05-15','Femenino','3001234567','maria@email.com','Calle 45 #12-34','Medellin','Profesora','Juan Gonzalez','3009876543'],
                 'ejemplo2' => ['Carlos Alberto','Ramirez Torres','TI','987654321','2008-11-22','Masculino','3109998877','','Av. 80 #56-78','Bogota','Estudiante','Ana Torres','3201112233'],
             ],
             'citas' => [
-                'nombre'   => 'Plantilla_Citas_ArkevixDentalERP.csv',
+                'nombre'   => 'Plantilla_Citas_Arkedent.csv',
                 'headers'  => ['Numero Documento Paciente','Fecha','Hora Inicio','Hora Fin','Procedimiento','Estado','Notas'],
                 'ejemplo'  => ['1234567890','2024-03-15','09:00','10:00','Limpieza dental','atendida','Paciente puntual'],
                 'ejemplo2' => ['987654321','2024-04-20','14:00','15:00','Extraccion','pendiente',''],
             ],
             'pagos' => [
-                'nombre'   => 'Plantilla_Pagos_ArkevixDentalERP.csv',
+                'nombre'   => 'Plantilla_Pagos_Arkedent.csv',
                 'headers'  => ['Numero Documento Paciente','Fecha Pago','Valor','Metodo Pago','Concepto','Numero Recibo'],
                 'ejemplo'  => ['1234567890','2024-03-15','150000','efectivo','Limpieza dental','REC-001'],
                 'ejemplo2' => ['987654321','2024-04-20','80000','transferencia','Consulta','REC-002'],
             ],
             'evoluciones' => [
-                'nombre'   => 'Plantilla_Evoluciones_ArkevixDentalERP.csv',
+                'nombre'   => 'Plantilla_Evoluciones_Arkedent.csv',
                 'headers'  => ['Numero Documento Paciente','Fecha','Procedimiento','Descripcion','Materiales','Observaciones'],
                 'ejemplo'  => ['1234567890','2024-03-15','Profilaxis','Se realizo limpieza profesional','Pasta profilactica','Excelente higiene'],
                 'ejemplo2' => ['987654321','2024-04-20','Extraccion molar','Extraccion pieza 36 sin complicaciones','Anestesia local','Indicaciones post-operatorio dadas'],
             ],
             'historia_clinica' => [
-                'nombre'   => 'Plantilla_HistoriaClinica_ArkevixDentalERP.csv',
+                'nombre'   => 'Plantilla_HistoriaClinica_Arkedent.csv',
                 'headers'  => ['Numero Documento Paciente','Fecha Apertura','Motivo Consulta','Enfermedad Actual','Antecedentes Medicos','Medicamentos','Alergias','Antecedentes Familiares','Presion Arterial','Observaciones'],
                 'ejemplo'  => ['1234567890','2024-01-10','Dolor dental','Caries profunda','Hipertension','Losartan 50mg','Penicilina','Diabetes familiar','120/80',''],
                 'ejemplo2' => ['987654321','2024-02-15','Control general','Sin novedad','Ninguno','','','','130/85','Paciente cooperador'],
             ],
             'tratamientos' => [
-                'nombre'   => 'Plantilla_Tratamientos_ArkevixDentalERP.csv',
+                'nombre'   => 'Plantilla_Tratamientos_Arkedent.csv',
                 'headers'  => ['Numero Documento Paciente','Nombre Tratamiento','Valor Total','Saldo Pendiente','Estado','Fecha Inicio','Fecha Fin','Notas'],
                 'ejemplo'  => ['1234567890','Ortodoncia completa','4500000','2000000','en_proceso','2024-01-15','','Brackets metalicos'],
                 'ejemplo2' => ['987654321','Limpieza y blanqueamiento','350000','0','terminado','2024-03-01','2024-03-01',''],
             ],
             'consentimientos' => [
-                'nombre'   => 'Plantilla_Consentimientos_ArkevixDentalERP.csv',
+                'nombre'   => 'Plantilla_Consentimientos_Arkedent.csv',
                 'headers'  => ['Numero Documento Paciente','Fecha Autorizacion','Acepta Almacenamiento','Acepta WhatsApp','Acepta Email','Acepta Llamadas','Acepta Recordatorios','Acepta Compartir','Firmado'],
                 'ejemplo'  => ['1234567890','2024-01-10','si','si','si','no','si','no','si'],
                 'ejemplo2' => ['987654321','2024-02-15','si','no','si','si','si','no','si'],

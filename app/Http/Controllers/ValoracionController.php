@@ -29,12 +29,8 @@ class ValoracionController extends Controller
             ->when($desde, fn($q) => $q->whereDate('fecha', '>=', $desde))
             ->when($hasta, fn($q) => $q->whereDate('fecha', '<=', $hasta))
             ->orderBy('fecha', 'desc')
-            ->paginate(20)
+            ->paginate(in_array((int) $request->input('per_page', 10), [10, 25, 50]) ? (int) $request->input('per_page', 10) : 10)
             ->withQueryString();
-
-        if ($request->ajax()) {
-            return view('valoraciones._tabla', compact('valoraciones'));
-        }
 
         return view('valoraciones.index', compact('valoraciones', 'buscar', 'estado', 'desde', 'hasta'));
     }
@@ -70,6 +66,8 @@ class ValoracionController extends Controller
         $request->validate([
             'paciente_id'     => 'required|exists:pacientes,id',
             'fecha'           => 'required|date',
+            'hora_inicio'     => 'nullable|date_format:H:i',
+            'hora_fin'        => 'nullable|date_format:H:i',
             'motivo_consulta' => 'required|string',
             'diagnosticos'    => 'nullable|string',
             'plan_tratamiento'=> 'nullable|string',
@@ -82,6 +80,8 @@ class ValoracionController extends Controller
 
         $diagnosticos     = $request->diagnosticos     ? json_decode($request->diagnosticos, true)     : null;
         $planTratamiento  = $request->plan_tratamiento ? json_decode($request->plan_tratamiento, true)  : null;
+        $odontograma      = $request->odontograma      ? json_decode($request->odontograma, true)       : null;
+        $hallazgos        = $request->hallazgos        ? json_decode($request->hallazgos, true)         : null;
 
         $valoracion = Valoracion::create([
             'paciente_id'             => $request->paciente_id,
@@ -89,6 +89,8 @@ class ValoracionController extends Controller
             'cita_id'                 => $request->cita_id ?: null,
             'user_id'                 => auth()->id(),
             'fecha'                   => $request->fecha,
+            'hora_inicio'             => $request->hora_inicio ?: null,
+            'hora_fin'                => $request->hora_fin ?: null,
             'motivo_consulta'         => $request->motivo_consulta,
             'extraoral_cara'          => $request->extraoral_cara,
             'extraoral_atm'           => $request->extraoral_atm,
@@ -105,6 +107,8 @@ class ValoracionController extends Controller
             'plan_tratamiento'        => $planTratamiento,
             'pronostico'              => $request->pronostico ?: null,
             'observaciones_generales' => $request->observaciones_generales,
+            'odontograma'             => $odontograma,
+            'hallazgos'               => $hallazgos,
             'estado'                  => $request->estado,
         ]);
 
@@ -141,6 +145,8 @@ class ValoracionController extends Controller
         $request->validate([
             'paciente_id'     => 'required|exists:pacientes,id',
             'fecha'           => 'required|date',
+            'hora_inicio'     => 'nullable|date_format:H:i',
+            'hora_fin'        => 'nullable|date_format:H:i',
             'motivo_consulta' => 'required|string',
             'diagnosticos'    => 'nullable|string',
             'plan_tratamiento'=> 'nullable|string',
@@ -150,9 +156,13 @@ class ValoracionController extends Controller
 
         $diagnosticos    = $request->diagnosticos     ? json_decode($request->diagnosticos, true)    : null;
         $planTratamiento = $request->plan_tratamiento ? json_decode($request->plan_tratamiento, true) : null;
+        $odontograma     = $request->odontograma      ? json_decode($request->odontograma, true)      : null;
+        $hallazgos       = $request->hallazgos        ? json_decode($request->hallazgos, true)        : null;
 
         $valoracion->update([
             'fecha'                   => $request->fecha,
+            'hora_inicio'             => $request->hora_inicio ?: null,
+            'hora_fin'                => $request->hora_fin ?: null,
             'motivo_consulta'         => $request->motivo_consulta,
             'extraoral_cara'          => $request->extraoral_cara,
             'extraoral_atm'           => $request->extraoral_atm,
@@ -169,6 +179,8 @@ class ValoracionController extends Controller
             'plan_tratamiento'        => $planTratamiento,
             'pronostico'              => $request->pronostico ?: null,
             'observaciones_generales' => $request->observaciones_generales,
+            'odontograma'             => $odontograma,
+            'hallazgos'               => $hallazgos,
             'estado'                  => $request->estado,
         ]);
 
@@ -249,6 +261,17 @@ class ValoracionController extends Controller
         return redirect()
             ->route('presupuestos.show', $presupuesto)
             ->with('exito', 'Presupuesto generado correctamente desde el plan de tratamiento.');
+    }
+
+    public function pdf(Valoracion $valoracion)
+    {
+        $valoracion->load(['paciente', 'historiaClinica', 'doctor', 'presupuesto.items']);
+        $config = \App\Models\Configuracion::first();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('valoraciones.pdf', compact('valoracion', 'config'))
+            ->setPaper('letter', 'portrait');
+
+        return $pdf->stream('valoracion-' . $valoracion->numero_valoracion . '.pdf');
     }
 
     public function destroy(Valoracion $valoracion)

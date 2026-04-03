@@ -32,6 +32,7 @@ class Cita extends Model
         'fecha',
         'hora_inicio',
         'hora_fin',
+        'hora_atencion_real',
         'procedimiento',
         'estado',
         'motivo_cancelacion',

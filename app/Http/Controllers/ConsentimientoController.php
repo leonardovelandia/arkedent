@@ -44,7 +44,9 @@ class ConsentimientoController extends Controller
             $query->where('paciente_id', $pacienteId);
         }
 
-        $consentimientos = $query->paginate(15)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $consentimientos = $query->paginate($perPage)->withQueryString();
 
         return view('consentimientos.index', compact('consentimientos'));
     }
@@ -164,7 +166,7 @@ class ConsentimientoController extends Controller
                 'firmado'     => true,
                 'firma_data'  => $firmaData,
                 'fecha_firma' => now(),
-                'ip_firma'    => $request->ip(),
+                'ip_firma'    => $request->getClientIp(),
             ],
             $trazabilidad
         ));
@@ -174,7 +176,7 @@ class ConsentimientoController extends Controller
             'id'       => $consentimiento->id,
             'numero'   => $consentimiento->numero_consentimiento,
             'paciente' => $consentimiento->paciente->nombre_completo ?? '',
-            'ip'       => $trazabilidad['firma_ip'] ?? $request->ip(),
+            'ip'       => $trazabilidad['firma_ip'] ?? $request->getClientIp(),
             'hash'     => $trazabilidad['documento_hash'],
             'token'    => $trazabilidad['firma_verificacion_token'],
         ]);

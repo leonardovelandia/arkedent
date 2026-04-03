@@ -24,49 +24,37 @@ class Evolucion extends Model
         });
     }
 
-    protected $fillable = [
-        'numero_evolucion',
-        'paciente_id',
-        'historia_clinica_id',
-        'user_id',
-        'fecha',
-        'hora',
-        'procedimiento',
-        'descripcion',
-        'materiales',
-        'presion_arterial',
-        'frecuencia_cardiaca',
-        'proxima_cita_fecha',
-        'proxima_cita_procedimiento',
-        'observaciones',
-        'dientes_tratados',
-        'activo',
-        'firmado',
-        'firma_data',
-        'fecha_firma',
-        'ip_firma',
-        // Trazabilidad
-        'firma_user_agent',
-        'firma_timestamp',
-        'firma_timezone',
-        'firma_hash',
-        'documento_hash',
-        'firma_dispositivo',
-        'firma_navegador',
-        'firma_verificacion_token',
-    ];
+    protected $guarded = ['*'];
 
     protected $casts = [
-        'fecha'              => 'date',
+        'fecha' => 'date',
+        'hora_inicio' => 'datetime:H:i',
+        'hora_fin' => 'datetime:H:i',
         'proxima_cita_fecha' => 'date:Y-m-d',
-        'materiales'         => 'array',
-        'activo'             => 'boolean',
-        'firmado'            => 'boolean',
-        'fecha_firma'        => 'datetime',
-        'firma_timestamp'    => 'datetime',
+        'materiales' => 'array',
+        'activo' => 'boolean',
+        'firmado' => 'boolean',
+        'fecha_firma' => 'datetime',
+        'firma_timestamp' => 'datetime',
     ];
 
     // ── Accessors ─────────────────────────────────────────────
+    public function getDuracionAttribute(): ?string
+    {
+        if (!$this->hora_inicio || !$this->hora_fin)
+            return null;
+        $inicio = \Carbon\Carbon::parse($this->hora_inicio);
+        $fin = \Carbon\Carbon::parse($this->hora_fin);
+        $mins = $inicio->diffInMinutes($fin);
+        if ($mins <= 0)
+            return null;
+        $h = (int) floor($mins / 60);
+        $m = $mins % 60;
+        if ($h === 0)
+            return "{$m} min";
+        return $m > 0 ? "{$h}h {$m}min" : "{$h}h";
+    }
+
     public function getFechaFormateadaAttribute(): string
     {
         return \Carbon\Carbon::parse($this->fecha)->format('d/m/Y');

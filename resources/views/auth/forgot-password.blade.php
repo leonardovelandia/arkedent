@@ -1,6 +1,6 @@
 {{-- ============================================================
      VISTA: Recuperar Contraseña
-     Sistema: Tatiana Velandia Odontología
+     Sistema: Arkedent
      ============================================================ --}}
 <!DOCTYPE html>
 <html lang="es">

@@ -17,8 +17,8 @@ class AuditoriaController extends Controller
         if ($request->filled('hasta')) {
             $query->whereDate('created_at', '<=', $request->hasta);
         }
-        if ($request->filled('usuario')) {
-            $query->where('user_nombre', 'like', '%' . $request->usuario . '%');
+        if ($request->filled('buscar')) {
+            $query->where('user_nombre', 'like', '%' . $request->buscar . '%');
         }
         if ($request->filled('modulo')) {
             $query->where('modulo', $request->modulo);
@@ -27,7 +27,9 @@ class AuditoriaController extends Controller
             $query->where('accion', $request->accion);
         }
 
-        $logs    = $query->paginate(50)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $logs    = $query->paginate($perPage)->withQueryString();
         $modulos = DB::table('logs_auditoria')->distinct()->orderBy('modulo')->pluck('modulo');
         $acciones = DB::table('logs_auditoria')->distinct()->orderBy('accion')->pluck('accion');
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Desarrollador — ArkevixDentalERP</title>
+    <title>Acceso Desarrollador — Arkedent</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,7 +61,7 @@
     <div class="logo">
         <i class="bi bi-shield-lock logo-icono"></i>
         <div class="logo-titulo">PANEL DESARROLLADOR</div>
-        <div class="logo-sub">ArkevixDentalERP — Acceso restringido</div>
+        <div class="logo-sub">Arkedent — Acceso restringido</div>
     </div>
 
     @if(session('error'))

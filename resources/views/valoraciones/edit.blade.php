@@ -66,7 +66,6 @@
 @csrf @method('PUT')
 
 <input type="hidden" name="paciente_id"    value="{{ $valoracion->paciente_id }}">
-<input type="hidden" name="diagnosticos"    id="json-diagnosticos">
 <input type="hidden" name="plan_tratamiento" id="json-plan">
 <input type="hidden" name="estado"          id="campo-estado" value="{{ $valoracion->estado }}">
 
@@ -164,24 +163,13 @@
     </div>
 </div>
 
-{{-- Sección 4: Diagnósticos --}}
-<div class="doc-section sec-diagnosticos">
-    <div class="doc-section-header"><i class="bi bi-search" style="color:var(--color-principal);"></i> Diagnósticos (CIE-10)</div>
+{{-- Sección 3B: Odontograma --}}
+<div class="doc-section">
+    <div class="doc-section-header" style="background:var(--color-muy-claro);">
+        <i class="bi bi-grid-3x3" style="color:var(--color-principal);"></i> Odontograma
+    </div>
     <div class="doc-section-body">
-        <div style="overflow-x:auto;">
-        <table class="tabla-dinamica" id="tabla-dx">
-            <thead><tr>
-                <th style="width:110px;">Código CIE-10</th>
-                <th>Diagnóstico</th>
-                <th style="width:80px;">Diente</th>
-                <th style="width:90px;">Cara</th>
-                <th>Observación</th>
-                <th style="width:36px;"></th>
-            </tr></thead>
-            <tbody id="body-dx"></tbody>
-        </table>
-        </div>
-        <button type="button" class="btn-add-row" onclick="addDiagnostico()"><i class="bi bi-plus-circle"></i> Agregar diagnóstico</button>
+        <x-odontograma :datos="old('odontograma', $valoracion->odontograma)" :modo="'editar'" :hallazgos="old('hallazgos', $valoracion->hallazgos)" />
     </div>
 </div>
 
@@ -276,44 +264,7 @@ const CIE10 = [
 const CARAS = ['Vestibular','Palatino','Mesial','Distal','Oclusal','Incisal','Lingual','Cervical'];
 const PRIORIDADES = ['Alta','Media','Baja'];
 
-var dxData   = @json($valoracion->diagnosticos ?? []);
 var planData = @json($valoracion->plan_tratamiento ?? []);
-
-function addDiagnostico(d) {
-    d = d || { codigo:'', nombre:'', diente:'', cara:'', observacion:'' };
-    dxData.push(d);
-    renderDx();
-}
-function removeDx(i) { dxData.splice(i, 1); renderDx(); }
-
-function renderDx() {
-    var tbody = document.getElementById('body-dx');
-    tbody.innerHTML = '';
-    dxData.forEach(function(d, i) {
-        var tr = document.createElement('tr');
-        tr.innerHTML =
-            '<td><div class="cie10-wrapper"><input class="inp" value="' + esc(d.codigo) + '" placeholder="K02.1" oninput="filtroCIE10(this,' + i + ')" onblur="ocultarCIE10(' + i + ')"><div class="cie10-dropdown" id="dd-' + i + '"></div></div></td>' +
-            '<td><input class="inp" value="' + esc(d.nombre) + '" id="dx-nombre-' + i + '" oninput="dxData[' + i + '].nombre=this.value"></td>' +
-            '<td><input class="inp" value="' + esc(d.diente) + '" oninput="dxData[' + i + '].diente=this.value"></td>' +
-            '<td>' + selectCara('dxData[' + i + '].cara', d.cara) + '</td>' +
-            '<td><input class="inp" value="' + esc(d.observacion) + '" oninput="dxData[' + i + '].observacion=this.value"></td>' +
-            '<td><button type="button" class="btn-del-row" onclick="removeDx(' + i + ')"><i class="bi bi-trash3"></i></button></td>';
-        tbody.appendChild(tr);
-    });
-}
-
-function filtroCIE10(inp, i) {
-    dxData[i].codigo = inp.value;
-    var q = inp.value.toUpperCase();
-    if (q.length < 1) { ocultarCIE10(i); return; }
-    var filtrados = CIE10.filter(function(c) { return c.codigo.toUpperCase().includes(q) || c.nombre.toUpperCase().includes(q); }).slice(0, 8);
-    var dd = document.getElementById('dd-' + i);
-    if (!filtrados.length) { dd.style.display = 'none'; return; }
-    dd.innerHTML = filtrados.map(function(c) { return '<div class="cie10-item" onmousedown="selCIE10(' + i + ',\'' + c.codigo + '\',\'' + esc(c.nombre) + '\')"><span class="cie10-code">' + c.codigo + '</span>' + c.nombre + '</div>'; }).join('');
-    dd.style.display = 'block';
-}
-function selCIE10(i, codigo, nombre) { dxData[i].codigo = codigo; dxData[i].nombre = nombre; renderDx(); }
-function ocultarCIE10(i) { setTimeout(function(){ var dd=document.getElementById('dd-'+i); if(dd) dd.style.display='none'; }, 200); }
 
 function addProcedimiento(p) {
     p = p || { procedimiento:'', diente:'', cara:'', cantidad:1, valor_unitario:0, prioridad:'Media', notas:'' };
@@ -361,12 +312,10 @@ function esc(s) { return String(s||'').replace(/"/g, '&quot;'); }
 
 function serializarYEnviar(estado) {
     document.getElementById('campo-estado').value = estado;
-    document.getElementById('json-diagnosticos').value = JSON.stringify(dxData.filter(function(d){ return d.codigo||d.nombre; }));
     document.getElementById('json-plan').value = JSON.stringify(planData.filter(function(p){ return p.procedimiento; }));
     document.getElementById('form-valoracion').submit();
 }
 
-renderDx();
 renderPlan();
 </script>
 <datalist id="procs-list">

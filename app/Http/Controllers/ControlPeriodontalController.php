@@ -25,13 +25,15 @@ class ControlPeriodontalController extends Controller
             'paciente_id'          => 'required|exists:pacientes,id',
             'user_id'              => 'required|exists:users,id',
             'fecha_control'        => 'required|date',
+            'hora_inicio'          => 'nullable|date_format:H:i',
+            'hora_fin'             => 'nullable|date_format:H:i',
             'tipo_sesion'          => 'required',
             'numero_sesion'        => 'required|integer',
         ]);
 
         $data = $request->only([
             'ficha_periodontal_id','paciente_id','user_id',
-            'fecha_control','numero_sesion','tipo_sesion',
+            'fecha_control','hora_inicio','hora_fin','numero_sesion','tipo_sesion',
             'indice_placa_control','indice_gingival_control',
             'anestesia_utilizada','instrumentos_utilizados',
             'observaciones','indicaciones_paciente','proxima_cita_semanas',
@@ -75,11 +77,13 @@ class ControlPeriodontalController extends Controller
 
         $request->validate([
             'fecha_control' => 'required|date',
+            'hora_inicio'   => 'nullable|date_format:H:i',
+            'hora_fin'      => 'nullable|date_format:H:i',
             'tipo_sesion'   => 'required',
         ]);
 
         $data = $request->only([
-            'user_id','fecha_control','tipo_sesion',
+            'user_id','fecha_control','hora_inicio','hora_fin','tipo_sesion',
             'indice_placa_control','indice_gingival_control',
             'anestesia_utilizada','instrumentos_utilizados',
             'observaciones','indicaciones_paciente','proxima_cita_semanas',

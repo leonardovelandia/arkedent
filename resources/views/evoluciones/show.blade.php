@@ -67,6 +67,18 @@
                 @if($evolucion->hora)
                     <span class="evol-meta-item"><i class="bi bi-clock"></i> {{ \Carbon\Carbon::parse($evolucion->hora)->format('h:i A') }}</span>
                 @endif
+                @if($evolucion->hora_inicio)
+                    <span class="evol-meta-item">
+                        <i class="bi bi-stopwatch"></i>
+                        {{ \Carbon\Carbon::parse($evolucion->hora_inicio)->format('H:i') }}
+                        @if($evolucion->hora_fin)
+                            — {{ \Carbon\Carbon::parse($evolucion->hora_fin)->format('H:i') }}
+                        @endif
+                        @if($evolucion->duracion)
+                            <span style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:50px;padding:1px 8px;font-size:.72rem;font-weight:700;margin-left:4px;">{{ $evolucion->duracion }}</span>
+                        @endif
+                    </span>
+                @endif
                 <span class="evol-meta-item"><i class="bi bi-journal-medical"></i> {{ $evolucion->paciente->numero_historia }}</span>
                 @if($evolucion->dientes_tratados)
                     <span class="badge-dientes"><i class="bi bi-tooth"></i> {{ $evolucion->dientes_tratados }}</span>

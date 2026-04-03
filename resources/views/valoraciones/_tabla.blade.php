@@ -72,24 +72,33 @@
             @endif
         </td>
         <td style="padding:.6rem 1rem;text-align:center;">
-            <div style="display:flex;gap:.35rem;justify-content:center;">
-                <a href="{{ route('valoraciones.show', $val) }}" class="btn-out" style="padding:.22rem .55rem;font-size:.78rem;">
+            <div style="display:flex;gap:.35rem;justify-content:center;align-items:center;">
+                {{-- Ver --}}
+                <a href="{{ route('valoraciones.show', $val) }}" title="Ver detalle"
+                   style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;border:1px solid var(--color-muy-claro);background:#fff;color:var(--color-principal);text-decoration:none;font-size:.85rem;transition:background .15s;">
                     <i class="bi bi-eye"></i>
                 </a>
+                {{-- PDF --}}
+                <a href="{{ route('valoraciones.pdf', $val) }}" target="_blank" title="Descargar PDF"
+                   style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;border:1px solid #ede9fe;background:#f5f3ff;color:var(--color-principal);text-decoration:none;font-size:.85rem;transition:background .15s;">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                </a>
+                {{-- Editar --}}
                 @if($val->estado === 'en_proceso')
-                <a href="{{ route('valoraciones.edit', $val) }}" class="btn-gris" style="padding:.22rem .55rem;font-size:.78rem;">
+                <a href="{{ route('valoraciones.edit', $val) }}" title="Editar"
+                   style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;border:1px solid var(--color-muy-claro);background:#fff;color:#374151;text-decoration:none;font-size:.82rem;transition:background .15s;">
                     <i class="bi bi-pencil"></i>
                 </a>
                 @endif
-                @if(!$val->presupuesto_id && !empty($val->plan_tratamiento))
-                <form method="POST" action="{{ route('valoraciones.generar-presupuesto', $val) }}" style="margin:0;">
-                    @csrf
-                    <button type="submit" onclick="return confirm('¿Generar presupuesto?');"
-                            style="background:#d1fae5;color:#166534;border:1px solid #6ee7b7;border-radius:6px;padding:.22rem .5rem;font-size:.78rem;cursor:pointer;">
-                        <i class="bi bi-file-earmark-plus"></i>
+                {{-- Eliminar --}}
+                <form method="POST" action="{{ route('valoraciones.destroy', $val) }}" style="margin:0;">
+                    @csrf @method('DELETE')
+                    <button type="submit" title="Eliminar"
+                            onclick="return confirm('¿Cancelar y eliminar esta valoración?');"
+                            style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;border:1px solid #fee2e2;background:#fff5f5;color:#dc2626;font-size:.82rem;cursor:pointer;transition:background .15s;">
+                        <i class="bi bi-trash"></i>
                     </button>
                 </form>
-                @endif
             </div>
         </td>
     </tr>

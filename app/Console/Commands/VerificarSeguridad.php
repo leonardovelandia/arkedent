@@ -12,7 +12,7 @@ class VerificarSeguridad extends Command
     public function handle(): void
     {
         $this->info('═══════════════════════════════════════');
-        $this->info('  VERIFICACIÓN DE SEGURIDAD — ArkevixDentalERP');
+        $this->info('  VERIFICACIÓN DE SEGURIDAD — Arkedent');
         $this->info('═══════════════════════════════════════');
 
         $errores = 0;
@@ -48,7 +48,7 @@ class VerificarSeguridad extends Command
         }
 
         // DEV_PASSWORD
-        if (env('DEV_PASSWORD') === 'arkevix2026') {
+        if (env('DEV_PASSWORD') === 'arkedent2026') {
             $this->warn('⚠️  DEV_PASSWORD es la contraseña por defecto — cambiar en producción');
         } else {
             $this->info('✅ DEV_PASSWORD personalizada');

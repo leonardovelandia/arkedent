@@ -1,6 +1,6 @@
 {{-- ============================================================
      VISTA: Egresos Recurrentes
-     Sistema: Arkevix Dental ERP
+     Sistema: Arkedent
      Layout: layouts.app
      ============================================================ --}}
 @extends('layouts.app')
@@ -47,11 +47,11 @@
     </div>
     <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
         <a href="{{ route('egresos.index') }}"
-           style="display:inline-flex;align-items:center;gap:.4rem;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:8px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;text-decoration:none;">
+           style="display:inline-flex;align-items:center;gap:.4rem;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:8px;padding:.5rem 1rem;font-size:.85rem;font-weight:500;text-decoration:none;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
             <i class="bi bi-arrow-left"></i> Volver a Egresos
         </a>
         <a href="{{ route('egresos.create') }}"
-           style="display:inline-flex;align-items:center;gap:.4rem;background:#DC3545;color:#fff;border:none;border-radius:8px;padding:.5rem 1rem;font-size:.85rem;font-weight:600;text-decoration:none;">
+           style="display:inline-flex;align-items:center;gap:.4rem;background:#DC3545;color:#fff;border:none;border-radius:8px;padding:.5rem 1rem;font-size:.85rem;font-weight:600;text-decoration:none;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
             <i class="bi bi-plus-lg"></i> Registrar Egreso
         </a>
     </div>
@@ -64,7 +64,7 @@
 @endif
 
 {{-- Leyenda de colores de fechas --}}
-<div style="background:#fff;border:1px solid var(--fondo-borde);border-radius:10px;padding:.75rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;font-size:.78rem;">
+<div class="tabla-container" style="background:#fff;border:1px solid var(--fondo-borde);border-radius:10px;padding:.75rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;font-size:.78rem;">
     <strong style="color:#374151;">Estado de próximo pago:</strong>
     <span><span class="fecha-vencida">● Vencido</span> — La fecha ya pasó</span>
     <span><span class="fecha-proxima">● Esta semana</span> — Vence en los próximos 7 días</span>

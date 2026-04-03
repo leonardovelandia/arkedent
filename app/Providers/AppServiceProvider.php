@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Listeners\LockAccountAfterFailedLogins;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
@@ -29,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         // ─────────────────────────────────────────────────────────
         // Listener: bloquear cuenta tras 5 intentos fallidos
         // ─────────────────────────────────────────────────────────
+        Paginator::useBootstrapFive();
+
         Event::listen(Failed::class, LockAccountAfterFailedLogins::class);
 
         // ─────────────────────────────────────────────────────────

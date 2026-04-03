@@ -1,6 +1,6 @@
 {{-- ============================================================
      VISTA: Registrar Egreso
-     Sistema: Arkevix Dental ERP
+     Sistema: Arkedent
      Layout: layouts.app
      ============================================================ --}}
 @extends('layouts.app')

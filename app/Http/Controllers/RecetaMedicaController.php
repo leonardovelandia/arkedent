@@ -40,7 +40,9 @@ class RecetaMedicaController extends Controller
             $query->whereDate('fecha', '<=', $request->hasta);
         }
 
-        $recetas  = $query->orderBy('fecha', 'desc')->paginate(20)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $recetas  = $query->orderBy('fecha', 'desc')->paginate($perPage)->withQueryString();
         $doctores = User::orderBy('name')->get();
 
         $totalHoy    = RecetaMedica::whereDate('fecha', today())->where('activo', true)->count();
@@ -52,7 +54,7 @@ class RecetaMedicaController extends Controller
 
     public function create(Request $request)
     {
-        $pacientes  = Paciente::activos()->orderBy('apellido')->get(['id', 'nombre', 'apellido', 'numero_historia']);
+        $pacientes  = Paciente::activos()->orderBy('nombre')->get(['id', 'nombre', 'apellido', 'numero_historia', 'numero_documento']);
         $doctores   = User::orderBy('name')->get();
         $paciente   = null;
         $evolucion  = null;
@@ -87,6 +89,12 @@ class RecetaMedicaController extends Controller
             $validated['medicamentos'] = $decoded ?: null;
         } else {
             $validated['medicamentos'] = null;
+        }
+
+        if ($request->input('firma_tipo') === 'con_firma') {
+            $validated['firmado']    = true;
+            $validated['fecha_firma'] = now();
+            $validated['ip_firma']   = $request->getClientIp();
         }
 
         $receta = RecetaMedica::create($validated);
@@ -151,11 +159,16 @@ class RecetaMedicaController extends Controller
 
         $receta = RecetaMedica::findOrFail($id);
 
+        if ($receta->firmado) {
+            return redirect()->route('recetas.show', $receta)
+                ->with('aviso', 'Esta receta ya fue firmada y no puede volver a firmarse.');
+        }
+
         $receta->update([
             'firmado'    => true,
             'firma_data' => $request->firma_data,
             'fecha_firma'=> now(),
-            'ip_firma'   => $request->ip(),
+            'ip_firma'   => $request->getClientIp(),
         ]);
 
         return redirect()->route('recetas.show', $receta)

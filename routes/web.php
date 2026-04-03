@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
-| Rutas Web — Sistema ARKEVIX DENTAL ERP
+| Rutas Web — Sistema ODONTREX
 |--------------------------------------------------------------------------
 |
 | Todas las rutas del sistema están protegidas por autenticación.
@@ -72,26 +72,26 @@ require __DIR__ . '/auth.php';
 Route::get('/dev/login', function () {
     $redirigir = request('redirigir', '/dev/modulos');
     return view('dev.login', compact('redirigir'));
-})->name('dev.auth.form');
+})->middleware(['auth', 'role:administrador'])->name('dev.auth.form');
 
 Route::post('/dev/auth', function (\Illuminate\Http\Request $request) {
     $redirigir   = $request->input('redirigir', '/dev');
-    $passwordDev = env('DEV_PASSWORD', 'arkevix2024');
+    $passwordDev = env('DEV_PASSWORD', 'arkedent2024');
     if ($request->input('dev_password') === $passwordDev) {
         return redirect($redirigir)
             ->cookie('dev_panel_auth', hash_hmac('sha256', $passwordDev, config('app.key')), 60 * 8);
     }
     return redirect()->route('dev.auth.form', ['redirigir' => $redirigir])
         ->with('error', 'Contraseña incorrecta. Intenta de nuevo.');
-})->name('dev.auth.login');
+})->middleware(['auth', 'role:administrador'])->name('dev.auth.login');
 
 Route::get('/dev/logout', function () {
     return redirect()->route('dashboard')
         ->cookie(\Cookie::forget('dev_panel_auth'));
-})->name('dev.auth.logout');
+})->middleware(['auth'])->name('dev.auth.logout');
 
-// ─── Panel dev: protegido por sesión dev ──────────────────────
-Route::middleware(['dev.auth'])->group(function () {
+// ─── Panel dev: protegido por sesión Laravel + rol administrador + cookie dev ─
+Route::middleware(['auth', 'role:administrador', 'dev.auth'])->group(function () {
     Route::get('/dev', function () {
         return redirect()->route('dev.importacion.index');
     })->name('dev.home');
@@ -166,6 +166,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('valoraciones', \App\Http\Controllers\ValoracionController::class);
         Route::post('valoraciones/{valoracion}/completar', [\App\Http\Controllers\ValoracionController::class, 'completar'])->name('valoraciones.completar');
         Route::post('valoraciones/{valoracion}/generar-presupuesto', [\App\Http\Controllers\ValoracionController::class, 'generarPresupuesto'])->name('valoraciones.generar-presupuesto');
+        Route::get('valoraciones/{valoracion}/pdf', [\App\Http\Controllers\ValoracionController::class, 'pdf'])->name('valoraciones.pdf');
     });
 
     // ── Módulo: Presupuestos ───────────────────────────────
@@ -427,6 +428,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('configuracion/logo', [\App\Http\Controllers\ConfiguracionController::class, 'actualizarLogo'])->name('configuracion.logo');
         Route::post('configuracion/firma', [\App\Http\Controllers\ConfiguracionController::class, 'actualizarFirma'])->name('configuracion.firma');
         Route::delete('configuracion/firma', [\App\Http\Controllers\ConfiguracionController::class, 'eliminarFirma'])->name('configuracion.firma.eliminar');
+        // Backup manual (Res. 1995/1999)
+        Route::post('configuracion/backup/ejecutar', function () {
+            try {
+                \Artisan::call('backup:run', ['--only-db' => true]);
+                return back()->with('exito', 'Backup de base de datos realizado exitosamente.');
+            } catch (\Exception $e) {
+                return back()->with('error', 'Error al ejecutar backup: ' . $e->getMessage());
+            }
+        })->name('configuracion.backup.ejecutar');
     });
 
     // ── Perfil del usuario autenticado ────────────────────

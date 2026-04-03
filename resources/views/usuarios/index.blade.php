@@ -30,125 +30,110 @@
 </style>
 @endpush
 
+@push('estilos')
+<style>
+    .badge-rol { display:inline-flex; align-items:center; gap:.3rem; padding:.25rem .65rem; border-radius:50px; font-size:.72rem; font-weight:600; }
+    .rol-doctora { background:var(--color-muy-claro); color:var(--color-principal); }
+    .rol-administrador { background:#dbeafe; color:#1d4ed8; }
+    .rol-asistente { background:#d1fae5; color:#065f46; }
+    .rol-default { background:#f3f4f6; color:#374151; }
+</style>
+@endpush
+
 @section('contenido')
 
-<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
-    <div style="display:flex;align-items:center;gap:.75rem;">
-        <div style="width:40px;height:40px;background:linear-gradient(135deg,var(--color-principal),var(--color-claro));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;">
-            <i class="bi bi-people-fill"></i>
-        </div>
-        <div>
-            <h4 style="font-family:var(--fuente-titulos);font-weight:700;color:#1c2b22;margin:0;">Usuarios y Roles</h4>
-            <p style="font-size:.82rem;color:#9ca3af;margin:0;">Gestión de usuarios del sistema</p>
-        </div>
+<div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
+    <div>
+        <h1 class="page-titulo">Usuarios y Roles</h1>
+        <p class="page-subtitulo">Gestión de usuarios del sistema</p>
     </div>
     <a href="{{ route('usuarios.create') }}" class="btn-morado">
         <i class="bi bi-plus-lg"></i> Nuevo usuario
     </a>
 </div>
 
-<div class="tabla-card">
-    <div class="tabla-header">
-        <div style="font-family:var(--fuente-principal);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--color-hover);"><i class="bi bi-people"></i> Usuarios registrados</div>
-        <div style="font-size:.82rem;color:#9ca3af;">{{ $usuarios->total() }} usuario(s)</div>
-    </div>
-
-    <div class="tabla-search">
-        <form method="GET" action="{{ route('usuarios.index') }}" style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;width:100%;">
-            <input type="text" name="buscar" class="inp-buscar" placeholder="Buscar por nombre o email…"
-                   value="{{ $buscar }}" style="flex:1;min-width:200px;">
-            <select name="rol" class="inp-buscar" style="min-width:150px;">
-                <option value="">Todos los roles</option>
-                @foreach($roles as $r)
-                <option value="{{ $r }}" {{ $rol == $r ? 'selected' : '' }}>{{ ucfirst($r) }}</option>
-                @endforeach
-            </select>
-            <button type="submit" class="btn-morado" style="padding:.45rem .9rem;">
-                <i class="bi bi-search"></i> Buscar
-            </button>
-            @if($buscar || $rol)
-            <a href="{{ route('usuarios.index') }}" class="btn-gris">
-                <i class="bi bi-x-lg"></i> Limpiar
-            </a>
-            @endif
-        </form>
-    </div>
-
-    @if($usuarios->isEmpty())
-    <div class="empty-state">
-        <i class="bi bi-people" style="font-size:2.5rem;display:block;margin-bottom:.75rem;color:var(--color-claro);"></i>
-        <div style="font-weight:600;color:#6b7280;">No hay usuarios registrados</div>
-        <a href="{{ route('usuarios.create') }}" class="btn-morado" style="margin-top:1rem;">
-            <i class="bi bi-plus-lg"></i> Crear primer usuario
-        </a>
-    </div>
-    @else
-    <table>
-        <thead>
-            <tr>
-                <th>Usuario</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Registrado</th>
-                <th style="text-align:right;">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($usuarios as $u)
-            <tr>
-                <td>
-                    <div style="display:flex;align-items:center;gap:.65rem;">
-                        <div class="avatar-circulo">{{ strtoupper(substr($u->name,0,1)) }}{{ strtoupper(substr(explode(' ',$u->name.' ')[1]??'',0,1)) }}</div>
-                        <div>
-                            <div style="font-weight:600;">{{ $u->name }}</div>
-                            @if($u->id === auth()->id())
-                            <div style="font-size:.72rem;color:var(--color-principal);font-weight:500;">Tú</div>
-                            @endif
-                        </div>
-                    </div>
-                </td>
-                <td style="color:#6b7280;">{{ $u->email }}</td>
-                <td>
-                    @forelse($u->roles as $r)
-                    @php $labelRol = match($r->name) { 'doctora'=>'Doctor(a)', 'administrador'=>'Administrador', 'asistente'=>'Asistente', default=>ucfirst($r->name) }; @endphp
-                    <span class="badge-rol rol-{{ $r->name }}">
-                        <i class="bi bi-shield-check"></i> {{ $labelRol }}
-                    </span>
-                    @empty
-                    <span style="font-size:.78rem;color:#9ca3af;">Sin rol</span>
-                    @endforelse
-                </td>
-                <td style="color:#9ca3af;font-size:.82rem;">{{ $u->created_at->format('d/m/Y') }}</td>
-                <td>
-                    <div style="display:flex;justify-content:flex-end;gap:.35rem;">
-                        <a href="{{ route('usuarios.show', $u) }}" class="btn-gris">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                        <a href="{{ route('usuarios.edit', $u) }}" class="btn-gris">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                        @if($u->id !== auth()->id())
-                        <form method="POST" action="{{ route('usuarios.destroy', $u) }}"
-                              onsubmit="return confirm('¿Eliminar el usuario {{ $u->name }}? Esta acción no se puede deshacer.')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn-rojo">
-                                <i class="bi bi-trash3"></i>
-                            </button>
-                        </form>
-                        @endif
-                    </div>
-                </td>
-            </tr>
+<x-tabla-listado
+    :paginacion="$usuarios"
+    placeholder="Buscar por nombre o email..."
+    icono-vacio="bi-people"
+    mensaje-vacio="No hay usuarios registrados"
+>
+    <x-slot:filtros>
+        <select name="rol" class="tbl-filtro-select">
+            <option value="">Todos los roles</option>
+            @foreach($roles as $r)
+            <option value="{{ $r }}" {{ $rol == $r ? 'selected' : '' }}>{{ ucfirst($r) }}</option>
             @endforeach
-        </tbody>
-    </table>
+        </select>
+    </x-slot:filtros>
 
-    @if($usuarios->hasPages())
-    <div style="padding:.75rem 1.25rem;border-top:1px solid var(--fondo-borde);">
-        {{ $usuarios->links() }}
-    </div>
-    @endif
-    @endif
-</div>
+    <x-slot:accion-vacio>
+        <div class="mt-3">
+            <a href="{{ route('usuarios.create') }}" class="btn-morado">
+                <i class="bi bi-plus-lg"></i> Crear primer usuario
+            </a>
+        </div>
+    </x-slot:accion-vacio>
+
+    <x-slot:thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Registrado</th>
+            <th style="text-align:center;">Acciones</th>
+        </tr>
+    </x-slot:thead>
+
+    @foreach($usuarios as $u)
+    <tr>
+        <td>
+            <div style="display:flex;align-items:center;gap:.65rem;">
+                <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--color-principal),var(--color-claro));color:#fff;font-size:.8rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    {{ strtoupper(substr($u->name,0,1)) }}{{ strtoupper(substr(explode(' ',$u->name.' ')[1]??'',0,1)) }}
+                </div>
+                <div>
+                    <div style="font-weight:600;color:#1c2b22;">{{ $u->name }}</div>
+                    @if($u->id === auth()->id())
+                    <div style="font-size:.72rem;color:var(--color-principal);font-weight:500;">Tú</div>
+                    @endif
+                </div>
+            </div>
+        </td>
+        <td style="color:#6b7280;">{{ $u->email }}</td>
+        <td>
+            @forelse($u->roles as $r)
+            @php $labelRol = match($r->name) { 'doctora'=>'Doctor(a)', 'administrador'=>'Administrador', 'asistente'=>'Asistente', default=>ucfirst($r->name) }; @endphp
+            <span class="badge-rol rol-{{ $r->name }}">
+                <i class="bi bi-shield-check"></i> {{ $labelRol }}
+            </span>
+            @empty
+            <span style="font-size:.78rem;color:#9ca3af;">Sin rol</span>
+            @endforelse
+        </td>
+        <td style="color:#9ca3af;font-size:.82rem;">{{ $u->created_at->format('d/m/Y') }}</td>
+        <td>
+            <div style="display:flex;justify-content:center;gap:.3rem;">
+                <a href="{{ route('usuarios.show', $u) }}" class="tbl-btn-accion" title="Ver">
+                    <i class="bi bi-eye"></i>
+                </a>
+                <a href="{{ route('usuarios.edit', $u) }}" class="tbl-btn-accion" title="Editar">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                @if($u->id !== auth()->id())
+                <form method="POST" action="{{ route('usuarios.destroy', $u) }}"
+                      onsubmit="return confirm('¿Eliminar el usuario {{ $u->name }}? Esta acción no se puede deshacer.')">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="tbl-btn-accion danger" title="Eliminar">
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                </form>
+                @endif
+            </div>
+        </td>
+    </tr>
+    @endforeach
+
+</x-tabla-listado>
 
 @endsection

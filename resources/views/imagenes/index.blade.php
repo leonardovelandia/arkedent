@@ -8,7 +8,7 @@
 .ts-wrapper.single.focus .ts-control, .ts-wrapper.single.input-active .ts-control { border-color:var(--color-principal)!important; box-shadow:0 0 0 3px rgba(107,33,168,.08)!important; }
 .ts-dropdown { border:1.5px solid var(--color-principal); border-radius:8px; box-shadow:0 8px 24px rgba(107,33,168,.12); font-size:.85rem; z-index:9999; }
 .ts-dropdown .active { background:var(--color-muy-claro); color:var(--color-principal); }
-    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer; }
+    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);s }
     .btn-morado:hover { filter:brightness(1.12); color:#fff; }
     .btn-desactivado { opacity:.45; pointer-events:none; cursor:not-allowed; filter:grayscale(.4); }
     .btn-out { background:transparent; color:var(--color-principal); border:1px solid var(--color-principal); border-radius:8px; padding:.45rem 1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.35rem; transition:background .15s; text-decoration:none; }

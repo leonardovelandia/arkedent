@@ -8,23 +8,23 @@
 <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap;">
     <a href="{{ route('libro-contable.index') }}"
        style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 1rem; border-radius:8px; font-size:0.85rem; font-weight:600; text-decoration:none;
-              background:var(--color-muy-claro); color:var(--color-principal);">
+              background:var(--color-muy-claro); color:var(--color-principal);box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
         <i class="bi bi-journal-text"></i> Libro de Caja
     </a>
     <a href="{{ route('libro-contable.estado-resultados') }}"
        style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 1rem; border-radius:8px; font-size:0.85rem; font-weight:600; text-decoration:none;
-              background:var(--color-principal); color:white;">
+              background:var(--color-principal); color:white;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
         <i class="bi bi-bar-chart-line"></i> Estado de Resultados
     </a>
     <a href="{{ route('libro-contable.comparativo') }}"
        style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 1rem; border-radius:8px; font-size:0.85rem; font-weight:600; text-decoration:none;
-              background:var(--color-muy-claro); color:var(--color-principal);">
+              background:var(--color-muy-claro); color:var(--color-principal);box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
         <i class="bi bi-graph-up"></i> Comparativo 12 Meses
     </a>
 </div>
 
 {{-- Selector mes/año --}}
-<div style="background:white; border-radius:12px; padding:1.1rem 1.25rem; box-shadow:0 1px 4px rgba(0,0,0,.07); margin-bottom:1.25rem;">
+<div style="background:white; border-radius:12px; padding:1.1rem 1.25rem; box-shadow:0 1px 4px rgba(0,0,0,.07); margin-bottom:1.25rem;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
     <form method="GET" action="{{ route('libro-contable.estado-resultados') }}"
           style="display:flex; flex-wrap:wrap; gap:.75rem; align-items:flex-end;">
         <div style="display:flex; flex-direction:column; gap:.25rem;">
@@ -59,7 +59,7 @@
 <div style="display:grid; grid-template-columns:1fr 360px; gap:1.25rem; align-items:start;">
 
     {{-- Documento contable --}}
-    <div style="background:white; border-radius:12px; padding:2rem; box-shadow:0 1px 4px rgba(0,0,0,.07);">
+    <div style="background:white; border-radius:12px; padding:2rem; box-shadow:0 1px 4px rgba(0,0,0,.07);box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
 
         {{-- Encabezado --}}
         <div style="text-align:center; margin-bottom:1.5rem; border-bottom:2px solid var(--color-muy-claro); padding-bottom:1rem;">
@@ -130,7 +130,7 @@
     </div>
 
     {{-- Panel lateral: comparativa + dona --}}
-    <div style="display:flex; flex-direction:column; gap:1rem;">
+    <div style="display:flex; flex-direction:column; gap:1rem;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
 
         {{-- Comparativa mes anterior --}}
         <div style="background:white; border-radius:12px; padding:1.25rem; box-shadow:0 1px 4px rgba(0,0,0,.07);">

@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   TEMAS VISUALES — Sistema Tatiana Velandia Odontología
+   TEMAS VISUALES — Sistema Arkedent
    Cada tema define variables CSS que aplican globalmente
    al colocar data-tema="..." en el elemento <body>
 ══════════════════════════════════════════════════════════════ */
@@ -8,144 +8,144 @@
    TEMA 1 — Morado Elegante (default dama)
 ══════════════════════════════════════════ */
 [data-tema="morado-elegante"] {
-    --color-principal:     #6B21A8;
-    --color-claro:         #7C3AED;
-    --color-muy-claro:     #F3E8FF;
-    --color-hover:         #581C87;
-    --color-sidebar:       #3B0764;
-    --color-sidebar-2:     #4C1D95;
-    --color-banner-1:      #6B21A8;
-    --color-banner-2:      #3B0764;
-    --color-badge-bg:      #F3E8FF;
-    --color-badge-texto:   #6B21A8;
-    --color-acento-activo: #C084FC;
-    --fondo-app:           #faf8f4;
-    --fondo-borde:         #ede9e0;
-    --fondo-card-alt:      #faf8ff;
-    --gradiente-btn:       linear-gradient(135deg, #7C3AED 0%, #6B21A8 100%);
-    --gradiente-btn-hover: linear-gradient(135deg, #6B21A8 0%, #4C1D95 100%);
-    --gradiente-sidebar:   linear-gradient(155deg, #6B21A8 0%, #4C1D95 60%, #3B0764 100%);
-    --sombra-principal:    rgba(107, 33, 168, 0.15);
+   --color-principal: #6B21A8;
+   --color-claro: #7C3AED;
+   --color-muy-claro: #F3E8FF;
+   --color-hover: #581C87;
+   --color-sidebar: #3B0764;
+   --color-sidebar-2: #4C1D95;
+   --color-banner-1: #6B21A8;
+   --color-banner-2: #3B0764;
+   --color-badge-bg: #F3E8FF;
+   --color-badge-texto: #6B21A8;
+   --color-acento-activo: #C084FC;
+   --fondo-app: #faf8f4;
+   --fondo-borde: #ede9e0;
+   --fondo-card-alt: #faf8ff;
+   --gradiente-btn: linear-gradient(135deg, #7C3AED 0%, #6B21A8 100%);
+   --gradiente-btn-hover: linear-gradient(135deg, #6B21A8 0%, #4C1D95 100%);
+   --gradiente-sidebar: linear-gradient(155deg, #6B21A8 0%, #4C1D95 60%, #3B0764 100%);
+   --sombra-principal: rgba(107, 33, 168, 0.15);
 }
 
 /* ══════════════════════════════════════════
-   TEMA 2 — Rosa Profesional (dama)
+   TEMA 2 — Rosa Pastel (dama)
 ══════════════════════════════════════════ */
 [data-tema="rosa-profesional"] {
-    --color-principal:     #BE185D;
-    --color-claro:         #EC4899;
-    --color-muy-claro:     #FCE7F3;
-    --color-hover:         #9D174D;
-    --color-sidebar:       #831843;
-    --color-sidebar-2:     #9D174D;
-    --color-banner-1:      #BE185D;
-    --color-banner-2:      #831843;
-    --color-badge-bg:      #FCE7F3;
-    --color-badge-texto:   #BE185D;
-    --color-acento-activo: #F9A8D4;
-    --fondo-app:           #fff8f9;
-    --fondo-borde:         #fce7f3;
-    --fondo-card-alt:      #fff0f5;
-    --gradiente-btn:       linear-gradient(135deg, #EC4899 0%, #BE185D 100%);
-    --gradiente-btn-hover: linear-gradient(135deg, #BE185D 0%, #9D174D 100%);
-    --gradiente-sidebar:   linear-gradient(155deg, #BE185D 0%, #9D174D 60%, #831843 100%);
-    --sombra-principal:    rgba(190, 24, 93, 0.15);
+   --color-principal: #C2476B;
+   --color-claro: #F472B6;
+   --color-muy-claro: #FFF0F8;
+   --color-hover: #A83560;
+   --color-sidebar: #9D174D;
+   --color-sidebar-2: #BE4B6B;
+   --color-banner-1: #C2476B;
+   --color-banner-2: #9D174D;
+   --color-badge-bg: #FFF0F8;
+   --color-badge-texto: #C2476B;
+   --color-acento-activo: #FBCFE8;
+   --fondo-app: #fffbfd;
+   --fondo-borde: #ffeef7;
+   --fondo-card-alt: #fff5fa;
+   --gradiente-btn: linear-gradient(135deg, #F472B6 0%, #C2476B 100%);
+   --gradiente-btn-hover: linear-gradient(135deg, #C2476B 0%, #A83560 100%);
+   --gradiente-sidebar: linear-gradient(155deg, #C2476B 0%, #A83560 60%, #9D174D 100%);
+   --sombra-principal: rgba(194, 71, 107, 0.15);
 }
 
 /* ══════════════════════════════════════════
    TEMA 3 — Verde Esmeralda (dama)
 ══════════════════════════════════════════ */
 [data-tema="verde-esmeralda"] {
-    --color-principal:     #065F46;
-    --color-claro:         #10B981;
-    --color-muy-claro:     #D1FAE5;
-    --color-hover:         #047857;
-    --color-sidebar:       #022C22;
-    --color-sidebar-2:     #065F46;
-    --color-banner-1:      #065F46;
-    --color-banner-2:      #022C22;
-    --color-badge-bg:      #D1FAE5;
-    --color-badge-texto:   #065F46;
-    --color-acento-activo: #6EE7B7;
-    --fondo-app:           #f0fdf9;
-    --fondo-borde:         #d1fae5;
-    --fondo-card-alt:      #f0fdf9;
-    --gradiente-btn:       linear-gradient(135deg, #10B981 0%, #065F46 100%);
-    --gradiente-btn-hover: linear-gradient(135deg, #065F46 0%, #022C22 100%);
-    --gradiente-sidebar:   linear-gradient(155deg, #065F46 0%, #047857 60%, #022C22 100%);
-    --sombra-principal:    rgba(6, 95, 70, 0.15);
+   --color-principal: #065F46;
+   --color-claro: #10B981;
+   --color-muy-claro: #D1FAE5;
+   --color-hover: #047857;
+   --color-sidebar: #022C22;
+   --color-sidebar-2: #065F46;
+   --color-banner-1: #065F46;
+   --color-banner-2: #022C22;
+   --color-badge-bg: #D1FAE5;
+   --color-badge-texto: #065F46;
+   --color-acento-activo: #6EE7B7;
+   --fondo-app: #f0fdf9;
+   --fondo-borde: #d1fae5;
+   --fondo-card-alt: #f0fdf9;
+   --gradiente-btn: linear-gradient(135deg, #10B981 0%, #065F46 100%);
+   --gradiente-btn-hover: linear-gradient(135deg, #065F46 0%, #022C22 100%);
+   --gradiente-sidebar: linear-gradient(155deg, #065F46 0%, #047857 60%, #022C22 100%);
+   --sombra-principal: rgba(6, 95, 70, 0.15);
 }
 
 /* ══════════════════════════════════════════
    TEMA 4 — Azul Marino (hombre)
 ══════════════════════════════════════════ */
 [data-tema="azul-marino"] {
-    --color-principal:     #1E3A5F;
-    --color-claro:         #2563EB;
-    --color-muy-claro:     #DBEAFE;
-    --color-hover:         #1E40AF;
-    --color-sidebar:       #0F1F3D;
-    --color-sidebar-2:     #1E3A5F;
-    --color-banner-1:      #1E3A5F;
-    --color-banner-2:      #0F1F3D;
-    --color-badge-bg:      #DBEAFE;
-    --color-badge-texto:   #1E3A5F;
-    --color-acento-activo: #93C5FD;
-    --fondo-app:           #f8faff;
-    --fondo-borde:         #dbeafe;
-    --fondo-card-alt:      #eff6ff;
-    --gradiente-btn:       linear-gradient(135deg, #2563EB 0%, #1E3A5F 100%);
-    --gradiente-btn-hover: linear-gradient(135deg, #1E3A5F 0%, #0F1F3D 100%);
-    --gradiente-sidebar:   linear-gradient(155deg, #1E3A5F 0%, #1E40AF 60%, #0F1F3D 100%);
-    --sombra-principal:    rgba(30, 58, 95, 0.15);
+   --color-principal: #1E3A5F;
+   --color-claro: #2563EB;
+   --color-muy-claro: #DBEAFE;
+   --color-hover: #1E40AF;
+   --color-sidebar: #0F1F3D;
+   --color-sidebar-2: #1E3A5F;
+   --color-banner-1: #1E3A5F;
+   --color-banner-2: #0F1F3D;
+   --color-badge-bg: #DBEAFE;
+   --color-badge-texto: #1E3A5F;
+   --color-acento-activo: #93C5FD;
+   --fondo-app: #f8faff;
+   --fondo-borde: #dbeafe;
+   --fondo-card-alt: #eff6ff;
+   --gradiente-btn: linear-gradient(135deg, #2563EB 0%, #1E3A5F 100%);
+   --gradiente-btn-hover: linear-gradient(135deg, #1E3A5F 0%, #0F1F3D 100%);
+   --gradiente-sidebar: linear-gradient(155deg, #1E3A5F 0%, #1E40AF 60%, #0F1F3D 100%);
+   --sombra-principal: rgba(30, 58, 95, 0.15);
 }
 
 /* ══════════════════════════════════════════
    TEMA 5 — Carbón Moderno (hombre)
 ══════════════════════════════════════════ */
 [data-tema="carbon-moderno"] {
-    --color-principal:     #4F46E5;
-    --color-claro:         #6366F1;
-    --color-muy-claro:     #EEF2FF;
-    --color-hover:         #4338CA;
-    --color-sidebar:       #111827;
-    --color-sidebar-2:     #1F2937;
-    --color-banner-1:      #1F2937;
-    --color-banner-2:      #111827;
-    --color-badge-bg:      #EEF2FF;
-    --color-badge-texto:   #4F46E5;
-    --color-acento-activo: #A5B4FC;
-    --fondo-app:           #F9FAFB;
-    --fondo-borde:         #E5E7EB;
-    --fondo-card-alt:      #F3F4F6;
-    --gradiente-btn:       linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-    --gradiente-btn-hover: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
-    --gradiente-sidebar:   linear-gradient(155deg, #1F2937 0%, #374151 60%, #111827 100%);
-    --sombra-principal:    rgba(79, 70, 229, 0.15);
+   --color-principal: #4F46E5;
+   --color-claro: #6366F1;
+   --color-muy-claro: #EEF2FF;
+   --color-hover: #4338CA;
+   --color-sidebar: #111827;
+   --color-sidebar-2: #1F2937;
+   --color-banner-1: #1F2937;
+   --color-banner-2: #111827;
+   --color-badge-bg: #EEF2FF;
+   --color-badge-texto: #4F46E5;
+   --color-acento-activo: #A5B4FC;
+   --fondo-app: #F9FAFB;
+   --fondo-borde: #E5E7EB;
+   --fondo-card-alt: #F3F4F6;
+   --gradiente-btn: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+   --gradiente-btn-hover: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+   --gradiente-sidebar: linear-gradient(155deg, #1F2937 0%, #374151 60%, #111827 100%);
+   --sombra-principal: rgba(79, 70, 229, 0.15);
 }
 
 /* ══════════════════════════════════════════
-   TEMA 6 — Verde Premium (hombre)
+   TEMA 6 — Azul Clínico (unisex · dental)
 ══════════════════════════════════════════ */
-[data-tema="verde-premium"] {
-    --color-principal:     #14532D;
-    --color-claro:         #16A34A;
-    --color-muy-claro:     #DCFCE7;
-    --color-hover:         #166534;
-    --color-sidebar:       #052E16;
-    --color-sidebar-2:     #14532D;
-    --color-banner-1:      #14532D;
-    --color-banner-2:      #052E16;
-    --color-badge-bg:      #DCFCE7;
-    --color-badge-texto:   #14532D;
-    --color-acento-activo: #86EFAC;
-    --fondo-app:           #f7fdf8;
-    --fondo-borde:         #dcfce7;
-    --fondo-card-alt:      #f0fdf4;
-    --gradiente-btn:       linear-gradient(135deg, #16A34A 0%, #14532D 100%);
-    --gradiente-btn-hover: linear-gradient(135deg, #14532D 0%, #052E16 100%);
-    --gradiente-sidebar:   linear-gradient(155deg, #14532D 0%, #166534 60%, #052E16 100%);
-    --sombra-principal:    rgba(20, 83, 45, 0.15);
+[data-tema="azul-clinico"] {
+   --color-principal: #1E3A8A;
+   --color-claro: #22D3EE;
+   --color-muy-claro: #ECFEFF;
+   --color-hover: #1E3163;
+   --color-sidebar: #0B132B;
+   --color-sidebar-2: #1E3A8A;
+   --color-banner-1: #1E3A8A;
+   --color-banner-2: #0B132B;
+   --color-badge-bg: #ECFEFF;
+   --color-badge-texto: #1E3A8A;
+   --color-acento-activo: #67E8F9;
+   --fondo-app: #f0f9ff;
+   --fondo-borde: #cffafe;
+   --fondo-card-alt: #ecfeff;
+   --gradiente-btn: linear-gradient(135deg, #22D3EE 0%, #1E3A8A 100%);
+   --gradiente-btn-hover: linear-gradient(135deg, #1E3A8A 0%, #1E3163 100%);
+  --gradiente-sidebar: linear-gradient(155deg, #169BBE 0%, #066F8C 60%, #0F3546 100%);
+   --sombra-principal: rgba(30, 58, 138, 0.15);
 }
 
 /*
@@ -153,9 +153,9 @@
  * Cada tema tiene una fuente sugerida pero el admin puede cambiarla
  *
  * Morado Elegante  → DM Sans          + Playfair Display
- * Rosa Profesional → Nunito           + Cormorant Garamond
+ * Rosa Pastel       → Nunito           + Cormorant Garamond
  * Verde Esmeralda  → Inter            + Libre Baskerville
  * Azul Marino      → Source Sans Pro  + Merriweather
  * Carbón Moderno   → Space Grotesk    + Syne
- * Verde Premium    → Outfit           + Lora
+ * Azul Clínico     → Outfit           + Lora
  */

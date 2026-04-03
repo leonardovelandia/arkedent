@@ -51,7 +51,10 @@ class PagoController extends Controller
             $query->whereDate('fecha_pago', '<=', $request->input('fecha_hasta'));
         }
 
-        $pagos = $query->paginate(15)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+
+        $pagos = $query->paginate($perPage)->withQueryString();
 
         // Resumen
         $totalMes  = Pago::whereMonth('fecha_pago', $hoy->month)

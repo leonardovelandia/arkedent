@@ -296,7 +296,7 @@
 }
 .odo-hall-nota-inline {
     border: 1px solid #e5e7eb; border-radius: 6px; padding: .25rem .5rem;
-    font-size: .76rem; outline: none; width: 120px; font-family: inherit;
+    font-size: .76rem; outline: none; width: 200px; font-family: inherit;
     transition: border-color .12s;
 }
 .odo-hall-nota-inline:focus { border-color: var(--color-principal); }
@@ -321,9 +321,6 @@
         </button>
         <button type="button" id="{{ $uid }}-btn-infantil" class="odo-btn" onclick="OD_{{ $uid }}.toggleTipo('infantil')">
             <i class="bi bi-person-fill"></i> Infantil
-        </button>
-        <button type="button" id="{{ $uid }}-btn-multiple" class="odo-btn" onclick="OD_{{ $uid }}.toggleMultiple()" title="Seleccionar varios dientes y aplicar el mismo estado">
-            <i class="bi bi-grid-3x3-gap"></i> Selección múltiple
         </button>
         <button type="button" class="odo-btn peligro" onclick="OD_{{ $uid }}.limpiarTodo()">
             <i class="bi bi-arrow-counterclockwise"></i> Limpiar todo
@@ -369,23 +366,17 @@
             <table style="width:100%;border-collapse:collapse;font-size:.82rem;min-width:480px;">
                 <thead>
                     <tr>
-                        <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">Diagnóstico</th>
-                        <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">Procedimiento</th>
                         <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">Pieza</th>
                         <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">Cara</th>
-                        <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">Nota</th>
+                        <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">ICDAS</th>
+                        <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">Diagnóstico CIE-10</th>
+                        <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">Procedimiento</th>
+                        <th style="background:var(--color-muy-claro);color:var(--color-hover);font-weight:700;font-size:.73rem;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .85rem;border-bottom:2px solid var(--color-muy-claro);white-space:nowrap;">Observación</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($hallazgosArray as $h)
                     <tr style="transition:background .1s;" onmouseover="this.style.background='var(--fondo-card-alt)'" onmouseout="this.style.background=''">
-                        <td style="padding:.5rem .85rem;border-bottom:1px solid var(--fondo-borde);vertical-align:middle;">
-                            @if(!empty($h['diagnostico_codigo']))
-                                <span style="font-weight:700;color:var(--color-principal);margin-right:.3rem;">{{ $h['diagnostico_codigo'] }}</span>
-                            @endif
-                            {{ $h['diagnostico_nombre'] ?? '' }}
-                        </td>
-                        <td style="padding:.5rem .85rem;border-bottom:1px solid var(--fondo-borde);vertical-align:middle;font-size:.78rem;color:#4b5563;">{{ $h['procedimiento'] ?? '—' }}</td>
                         <td style="padding:.5rem .85rem;border-bottom:1px solid var(--fondo-borde);vertical-align:middle;">
                             @if(!empty($h['pieza']))
                                 <span style="background:var(--color-muy-claro);color:var(--color-hover);border-radius:20px;padding:.18rem .6rem;font-size:.75rem;font-weight:700;display:inline-block;">{{ $h['pieza'] }}</span>
@@ -400,7 +391,21 @@
                             @else —
                             @endif
                         </td>
-                        <td style="padding:.5rem .85rem;border-bottom:1px solid var(--fondo-borde);vertical-align:middle;color:#6b7280;font-size:.78rem;">{{ $h['nota'] ?? '' }}</td>
+                        <td style="padding:.5rem .85rem;border-bottom:1px solid var(--fondo-borde);vertical-align:middle;">
+                            @if(!empty($h['icdas_codigo']))
+                                <span style="background:#f5f3ff;color:#7c3aed;border-radius:4px;padding:.15rem .5rem;font-size:.75rem;font-weight:700;">ICDAS {{ $h['icdas_codigo'] }}</span>
+                            @else —
+                            @endif
+                        </td>
+                        <td style="padding:.5rem .85rem;border-bottom:1px solid var(--fondo-borde);vertical-align:middle;">
+                            @if(!empty($h['diagnostico_codigo']))
+                                <span style="font-weight:700;color:var(--color-principal);font-family:monospace;font-size:.78rem;margin-right:.3rem;">{{ $h['diagnostico_codigo'] }}</span>
+                            @endif
+                            {{ $h['diagnostico_nombre'] ?? '' }}
+                            @if(empty($h['diagnostico_codigo']) && empty($h['diagnostico_nombre'])) — @endif
+                        </td>
+                        <td style="padding:.5rem .85rem;border-bottom:1px solid var(--fondo-borde);vertical-align:middle;font-size:.78rem;color:#4b5563;">{{ $h['procedimiento'] ?? '—' }}</td>
+                        <td style="padding:.5rem .85rem;border-bottom:1px solid var(--fondo-borde);vertical-align:middle;color:#6b7280;font-size:.78rem;">{{ $h['observacion'] ?? $h['nota'] ?? '' }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -446,39 +451,31 @@
             {{-- Col derecha --}}
             <div class="odo-hall-col">
                 <div class="odo-hall-field">
-                    <label class="odo-hall-lbl">Diagnóstico CIE-10</label>
+                    <label class="odo-hall-lbl">Diagnóstico (ICDAS / CIE-10)</label>
                     <div class="odo-hall-input-wrap" style="position:relative;">
                         <i class="bi bi-search"></i>
                         <input type="text" id="{{ $uid }}-h-diag-txt" class="odo-hall-ctrl"
-                               placeholder="Buscar código o nombre..."
+                               placeholder="Buscar ICDAS, código CIE-10 o nombre..."
                                autocomplete="off"
                                oninput="OD_{{ $uid }}.filtrarDiag(this.value)"
                                onkeydown="OD_{{ $uid }}.navDiag(event)">
                         <input type="hidden" id="{{ $uid }}-h-diag-cod" value="">
                         <input type="hidden" id="{{ $uid }}-h-diag-nom" value="">
+                        <input type="hidden" id="{{ $uid }}-h-icdas" value="">
                         <div id="{{ $uid }}-h-diag-dd" class="odo-ac-dropdown"></div>
                     </div>
                 </div>
                 <div class="odo-hall-field">
                     <label class="odo-hall-lbl">Procedimiento</label>
-                    <select id="{{ $uid }}-h-proc" class="odo-hall-ctrl">
-                        <option value="">— Selecciona procedimiento —</option>
-                        <option value="Sellante de fosas y fisuras">Sellante de fosas y fisuras</option>
-                        <option value="Restauración de caries en resina">Restauración de caries en resina</option>
-                        <option value="Restauración de caries en amalgama">Restauración de caries en amalgama</option>
-                        <option value="Extracción simple">Extracción simple</option>
-                        <option value="Extracción quirúrgica">Extracción quirúrgica</option>
-                        <option value="Endodoncia unirradicular">Endodoncia unirradicular</option>
-                        <option value="Endodoncia birradicular">Endodoncia birradicular</option>
-                        <option value="Endodoncia multirradicular">Endodoncia multirradicular</option>
-                        <option value="Corona metal porcelana">Corona metal porcelana</option>
-                        <option value="Corona zirconia">Corona zirconia</option>
-                        <option value="Implante dental">Implante dental</option>
-                        <option value="Profilaxis dental">Profilaxis dental</option>
-                        <option value="Raspado y alisado radicular">Raspado y alisado radicular</option>
-                        <option value="Cirugía periodontal">Cirugía periodontal</option>
-                        <option value="Blanqueamiento dental">Blanqueamiento dental</option>
-                    </select>
+                    <div style="position:relative;">
+                        <input type="text" id="{{ $uid }}-h-proc" class="odo-hall-ctrl"
+                               placeholder="Escribe o elige procedimiento..."
+                               autocomplete="off"
+                               oninput="OD_{{ $uid }}.filtrarProc(this.value)"
+                               onkeydown="OD_{{ $uid }}.navProc(event)"
+                               onblur="setTimeout(function(){ var dd=document.getElementById('{{ $uid }}-h-proc-dd'); if(dd) dd.classList.remove('abierto'); }, 180)">
+                        <div id="{{ $uid }}-h-proc-dd" class="odo-ac-dropdown"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -494,11 +491,11 @@
             <table class="odo-hall-tabla">
                 <thead>
                     <tr>
-                        <th>Diagnóstico</th>
+                        <th>ICDAS / CIE-10 — Diagnóstico</th>
                         <th>Procedimiento</th>
                         <th>Pieza</th>
                         <th>Cara</th>
-                        <th>Nota</th>
+                        <th>Observación</th>
                         <th style="text-align:center;width:60px;"></th>
                     </tr>
                 </thead>
@@ -530,17 +527,19 @@ var EDITABLE = {{ $esEditable ? 'true' : 'false' }};
 var ESTADOS = {
     sano:                { color:'#FFFFFF', borde:'#9ca3af',  label:'Sano' },
     caries:              { color:'#FFC107', borde:'#d97706',  label:'Caries' },
-    restaurado_resina:   { color:'#17A2B8', borde:'#0e7490',  label:'Rest. Resina' },
-    restaurado_amalgama: { color:'#495057', borde:'#1f2937',  label:'Rest. Amalgama' },
+    restaurado_resina:   { color:'#17A2B8', borde:'#0e7490',  label:'Resina' },
+    restaurado_amalgama: { color:'#495057', borde:'#1f2937',  label:'Amalgama' },
     corona:              { color:'#0D6EFD', borde:'#1d4ed8',  label:'Corona' },
+    endodoncia:          { color:'#a855f7', borde:'#7c3aed',  label:'Endodoncia' },
     extraccion_indicada: { color:'#DC3545', borde:'#991b1b',  label:'Extracción ind.' },
     extraido:            { color:'#adb5bd', borde:'#6b7280',  label:'Extraído' },
-    implante:            { color:'var(--color-principal)', borde:'#4c1d95',  label:'Implante' },
+    implante:            { color:'#7c3aed', borde:'#4c1d95',  label:'Implante' },
     fractura:            { color:'#FD7E14', borde:'#c2410c',  label:'Fractura' },
     sellante:            { color:'#28A745', borde:'#166534',  label:'Sellante' },
     ausente:             { color:'#F9FAFB', borde:'#9ca3af',  label:'Ausente' },
+    temporal:            { color:'#f9d5b3', borde:'#d97706',  label:'Temporal' },
 };
-var COMPLETOS = ['extraido','implante','ausente'];
+var COMPLETOS = ['extraido','implante','ausente','endodoncia'];
 
 var ADULTO = {
     sup_der: [18,17,16,15,14,13,12,11],
@@ -936,22 +935,41 @@ document.addEventListener('click', function(e) {
 });
 
 // ── HALLAZGOS ─────────────────────────────────────────────────
+// Catálogo combinado ICDAS + CIE-10
+// tipo: 'icdas' | 'cie10'
 var CIE10 = [
-    {codigo:'K02.0', nombre:'Caries limitada al esmalte'},
-    {codigo:'K02.1', nombre:'Caries de la dentina'},
-    {codigo:'K02.2', nombre:'Caries del cemento'},
-    {codigo:'K02.3', nombre:'Caries dentaria detenida'},
-    {codigo:'K04.0', nombre:'Pulpitis'},
-    {codigo:'K04.1', nombre:'Necrosis de la pulpa'},
-    {codigo:'K04.5', nombre:'Periodontitis apical crónica'},
-    {codigo:'K05.0', nombre:'Gingivitis aguda'},
-    {codigo:'K05.1', nombre:'Gingivitis crónica'},
-    {codigo:'K05.2', nombre:'Periodontitis aguda'},
-    {codigo:'K05.3', nombre:'Periodontitis crónica'},
-    {codigo:'K08.1', nombre:'Pérdida de dientes por accidente'},
-    {codigo:'K08.2', nombre:'Atrofia del maxilar sin dientes'},
-    {codigo:'S02.5', nombre:'Fractura del diente'},
-    {codigo:'Z29.8', nombre:'Sellante preventivo'},
+    // ICDAS
+    {codigo:'ICDAS 0', nombre:'Superficie sana (sin lesión visible)', icdas:'0', tipo:'icdas'},
+    {codigo:'ICDAS 1', nombre:'Primer cambio visual en esmalte (lesión inicial)', icdas:'1', tipo:'icdas'},
+    {codigo:'ICDAS 2', nombre:'Cambio visual definido en esmalte', icdas:'2', tipo:'icdas'},
+    {codigo:'ICDAS 3', nombre:'Ruptura localizada del esmalte sin dentina visible', icdas:'3', tipo:'icdas'},
+    {codigo:'ICDAS 4', nombre:'Sombra oscura de dentina subyacente', icdas:'4', tipo:'icdas'},
+    {codigo:'ICDAS 5', nombre:'Cavidad detectable con dentina visible', icdas:'5', tipo:'icdas'},
+    {codigo:'ICDAS 6', nombre:'Cavidad extensa con dentina visible', icdas:'6', tipo:'icdas'},
+    // CIE-10 odontología
+    {codigo:'K02.0', nombre:'Caries limitada al esmalte', tipo:'cie10'},
+    {codigo:'K02.1', nombre:'Caries de la dentina', tipo:'cie10'},
+    {codigo:'K02.2', nombre:'Caries del cemento', tipo:'cie10'},
+    {codigo:'K02.3', nombre:'Caries dentaria detenida', tipo:'cie10'},
+    {codigo:'K04.0', nombre:'Pulpitis', tipo:'cie10'},
+    {codigo:'K04.1', nombre:'Necrosis de la pulpa', tipo:'cie10'},
+    {codigo:'K04.5', nombre:'Periodontitis apical crónica', tipo:'cie10'},
+    {codigo:'K04.6', nombre:'Absceso periapical con fístula', tipo:'cie10'},
+    {codigo:'K04.7', nombre:'Absceso periapical sin fístula', tipo:'cie10'},
+    {codigo:'K05.0', nombre:'Gingivitis aguda', tipo:'cie10'},
+    {codigo:'K05.1', nombre:'Gingivitis crónica', tipo:'cie10'},
+    {codigo:'K05.2', nombre:'Periodontitis aguda', tipo:'cie10'},
+    {codigo:'K05.3', nombre:'Periodontitis crónica', tipo:'cie10'},
+    {codigo:'K05.4', nombre:'Periodontitis del adulto avanzada', tipo:'cie10'},
+    {codigo:'K06.0', nombre:'Recesión gingival', tipo:'cie10'},
+    {codigo:'K06.1', nombre:'Hiperplasia gingival', tipo:'cie10'},
+    {codigo:'K08.0', nombre:'Pérdida de dientes por accidente o extracción', tipo:'cie10'},
+    {codigo:'K08.2', nombre:'Atrofia del maxilar sin dientes', tipo:'cie10'},
+    {codigo:'K09.0', nombre:'Quiste dentígero', tipo:'cie10'},
+    {codigo:'K10.2', nombre:'Osteítis del maxilar', tipo:'cie10'},
+    {codigo:'S02.5', nombre:'Fractura del diente', tipo:'cie10'},
+    {codigo:'Z29.8', nombre:'Sellante preventivo aplicado', tipo:'cie10'},
+    {codigo:'Z46.3', nombre:'Ajuste de prótesis dental', tipo:'cie10'},
 ];
 var acIdx = -1; // índice resaltado en autocomplete
 var hallazgos = (function(){
@@ -995,21 +1013,89 @@ function toggleAusente(checked) {
     if (proc) proc.disabled = checked;
 }
 
-// Autocomplete CIE-10
+// Autocomplete Procedimiento
+var PROCEDIMIENTOS_ODO = [
+    'Sellante de fosas y fisuras',
+    'Restauración en resina',
+    'Restauración en amalgama',
+    'Obturación temporal',
+    'Extracción simple',
+    'Extracción quirúrgica',
+    'Endodoncia unirradicular',
+    'Endodoncia birradicular',
+    'Endodoncia multirradicular',
+    'Retratamiento endodóntico',
+    'Corona metal porcelana',
+    'Corona zirconia',
+    'Corona temporal',
+    'Incrustación cerámica',
+    'Carilla de porcelana',
+    'Implante dental',
+    'Puente fijo',
+    'Prótesis parcial removible',
+    'Prótesis total',
+    'Profilaxis dental',
+    'Raspado y alisado radicular',
+    'Curetaje periodontal',
+    'Cirugía periodontal',
+    'Blanqueamiento dental',
+    'Radiografía periapical',
+    'Radiografía panorámica',
+    'Cirugía de tercer molar',
+    'Tratamiento de fractura dental',
+    'Ferulización dental',
+];
+var procIdx = -1;
+var _procResults = [];
+function filtrarProc(q) {
+    procIdx = -1;
+    var dd = document.getElementById(UID+'-h-proc-dd');
+    if (!q || q.length < 1) { _procResults = []; dd.classList.remove('abierto'); return; }
+    _procResults = PROCEDIMIENTOS_ODO.filter(function(p){ return p.toLowerCase().includes(q.toLowerCase()); });
+    if (_procResults.length === 0) { dd.classList.remove('abierto'); return; }
+    dd.innerHTML = _procResults.map(function(p, i){
+        return '<div class="odo-ac-item" data-i="'+i+'" onmousedown="OD_'+UID+'.selProc('+i+')">'+escH(p)+'</div>';
+    }).join('');
+    dd.classList.add('abierto');
+}
+function navProc(e) {
+    var dd = document.getElementById(UID+'-h-proc-dd');
+    var items = dd.querySelectorAll('.odo-ac-item');
+    if (!dd.classList.contains('abierto') || items.length === 0) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); procIdx = Math.min(procIdx+1, items.length-1); items.forEach(function(it,i){ it.classList.toggle('resaltado',i===procIdx); }); if(procIdx>=0) items[procIdx].scrollIntoView({block:'nearest'}); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); procIdx = Math.max(procIdx-1, 0); items.forEach(function(it,i){ it.classList.toggle('resaltado',i===procIdx); }); if(procIdx>=0) items[procIdx].scrollIntoView({block:'nearest'}); }
+    else if (e.key === 'Enter' && procIdx >= 0) { e.preventDefault(); selProc(procIdx); }
+    else if (e.key === 'Escape') { dd.classList.remove('abierto'); }
+}
+function selProc(idx) {
+    var val = _procResults[idx];
+    if (val === undefined) return;
+    var inp = document.getElementById(UID+'-h-proc');
+    if (inp) inp.value = val;
+    var dd = document.getElementById(UID+'-h-proc-dd');
+    if (dd) dd.classList.remove('abierto');
+}
+
+// Autocomplete combinado ICDAS / CIE-10
+var _diagResults = []; // guarda los resultados del último filtro
 function filtrarDiag(q) {
     acIdx = -1;
     var dd = document.getElementById(UID+'-h-diag-dd');
     document.getElementById(UID+'-h-diag-cod').value = '';
     document.getElementById(UID+'-h-diag-nom').value = '';
+    document.getElementById(UID+'-h-icdas').value = '';
     if (!q || q.length < 1) { dd.classList.remove('abierto'); return; }
-    var res = CIE10.filter(function(d){
+    _diagResults = CIE10.filter(function(d){
         return d.codigo.toLowerCase().includes(q.toLowerCase()) ||
                d.nombre.toLowerCase().includes(q.toLowerCase());
     });
-    if (res.length === 0) { dd.classList.remove('abierto'); return; }
-    dd.innerHTML = res.map(function(d, i){
-        return '<div class="odo-ac-item" data-cod="'+d.codigo+'" data-nom="'+escH(d.nombre)+'" data-i="'+i+'" onmousedown="OD_'+UID+'.selDiag(\''+escH(d.codigo)+'\',\''+escH(d.nombre)+'\')">' +
-            '<span class="odo-ac-codigo">'+d.codigo+'</span>'+d.nombre+'</div>';
+    if (_diagResults.length === 0) { dd.classList.remove('abierto'); return; }
+    dd.innerHTML = _diagResults.map(function(d, i){
+        var badge = d.tipo === 'icdas'
+            ? '<span style="font-size:.68rem;font-weight:700;background:#f5f3ff;color:#7c3aed;border-radius:4px;padding:1px 5px;margin-right:4px;">ICDAS</span>'
+            : '<span style="font-size:.68rem;font-weight:700;background:#eff6ff;color:#1d4ed8;border-radius:4px;padding:1px 5px;margin-right:4px;">CIE-10</span>';
+        return '<div class="odo-ac-item" data-i="'+i+'" onmousedown="OD_'+UID+'.selDiag('+i+')">' +
+            badge + '<span class="odo-ac-codigo">'+escH(d.codigo)+'</span> '+escH(d.nombre)+'</div>';
     }).join('');
     dd.classList.add('abierto');
 }
@@ -1020,17 +1106,20 @@ function navDiag(e) {
     if (!dd.classList.contains('abierto') || items.length === 0) return;
     if (e.key === 'ArrowDown') { e.preventDefault(); acIdx = Math.min(acIdx+1, items.length-1); resaltarAc(items); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); acIdx = Math.max(acIdx-1, 0); resaltarAc(items); }
-    else if (e.key === 'Enter' && acIdx >= 0) { e.preventDefault(); var it = items[acIdx]; selDiag(it.getAttribute('data-cod'), it.getAttribute('data-nom')); }
+    else if (e.key === 'Enter' && acIdx >= 0) { e.preventDefault(); selDiag(acIdx); }
     else if (e.key === 'Escape') { dd.classList.remove('abierto'); }
 }
 function resaltarAc(items) {
     items.forEach(function(it, i){ it.classList.toggle('resaltado', i===acIdx); });
     if (acIdx >= 0) items[acIdx].scrollIntoView({block:'nearest'});
 }
-function selDiag(cod, nom) {
-    document.getElementById(UID+'-h-diag-txt').value = cod + ' — ' + nom;
-    document.getElementById(UID+'-h-diag-cod').value = cod;
-    document.getElementById(UID+'-h-diag-nom').value = nom;
+function selDiag(idx) {
+    var d = _diagResults[idx];
+    if (!d) return;
+    document.getElementById(UID+'-h-diag-txt').value = d.codigo + ' — ' + d.nombre;
+    document.getElementById(UID+'-h-diag-cod').value = d.tipo === 'cie10' ? d.codigo : '';
+    document.getElementById(UID+'-h-diag-nom').value = d.nombre;
+    document.getElementById(UID+'-h-icdas').value   = d.tipo === 'icdas' ? d.codigo : '';
     var dd = document.getElementById(UID+'-h-diag-dd');
     if (dd) dd.classList.remove('abierto');
 }
@@ -1049,13 +1138,15 @@ document.addEventListener('click', function(e) {
 function estadoDesdeHallazgo(proc, ausente) {
     if (ausente) return {tipo:'completo', estado:'ausente'};
     var p = (proc||'').toLowerCase();
-    if (p.includes('extracción') || p.includes('extraccion')) return {tipo:'completo', estado:'extraido'};
-    if (p.includes('implante'))  return {tipo:'completo', estado:'implante'};
-    if (p.includes('corona'))    return {tipo:'completo', estado:'corona'};
-    if (p.includes('resina'))    return {tipo:'superficie', estado:'restaurado_resina'};
-    if (p.includes('amalgama'))  return {tipo:'superficie', estado:'restaurado_amalgama'};
-    if (p.includes('sellante'))  return {tipo:'superficie', estado:'sellante'};
-    return null; // sin cambio en odontograma desde procedimiento
+    if (p.includes('extracción') || p.includes('extraccion') || p.includes('exodoncia')) return {tipo:'completo', estado:'extraido'};
+    if (p.includes('implante'))   return {tipo:'completo', estado:'implante'};
+    if (p.includes('endodoncia')) return {tipo:'completo', estado:'endodoncia'};
+    if (p.includes('corona') || p.includes('prótesis fija')) return {tipo:'completo', estado:'corona'};
+    if (p.includes('resina') || p.includes('obturación') || p.includes('obturacion')) return {tipo:'superficie', estado:'restaurado_resina'};
+    if (p.includes('amalgama'))   return {tipo:'superficie', estado:'restaurado_amalgama'};
+    if (p.includes('sellante'))   return {tipo:'superficie', estado:'sellante'};
+    if (p.includes('fractura'))   return {tipo:'superficie', estado:'fractura'};
+    return null;
 }
 
 function estadoDesdeADiag(cod) {
@@ -1090,24 +1181,25 @@ function agregarHallazgo() {
     var cara    = document.getElementById(UID+'-h-cara').value;
     var diagCod = document.getElementById(UID+'-h-diag-cod').value;
     var diagNom = document.getElementById(UID+'-h-diag-nom').value;
+    var icdas   = document.getElementById(UID+'-h-icdas').value || '';
     var proc    = document.getElementById(UID+'-h-proc').value;
     var ausente = document.getElementById(UID+'-h-ausente').checked;
     var diagTxt = document.getElementById(UID+'-h-diag-txt').value.trim();
 
-    // Si escribió texto libre sin seleccionar de la lista, usarlo
-    if (!diagCod && diagTxt) { diagNom = diagTxt; }
+    if (!diagCod && !diagNom && !icdas && diagTxt) { diagNom = diagTxt; }
 
     if (!pieza) { alert('Selecciona la pieza dental.'); return; }
-    if (!diagCod && !diagNom) { alert('Ingresa el diagnóstico.'); return; }
+    if (!diagCod && !diagNom && !icdas && !proc && !ausente) { alert('Ingresa al menos un diagnóstico o procedimiento.'); return; }
 
     hallazgos.push({
         pieza: pieza,
         cara: ausente ? '' : (cara || ''),
+        icdas_codigo: icdas.trim(),
         diagnostico_codigo: diagCod,
         diagnostico_nombre: diagNom,
         procedimiento: ausente ? '' : (proc || ''),
         ausente: ausente,
-        nota: ''
+        observacion: ''
     });
 
     sincronizarOdontograma(pieza, cara, diagCod, proc, ausente);
@@ -1120,6 +1212,7 @@ function agregarHallazgo() {
     document.getElementById(UID+'-h-diag-txt').value = '';
     document.getElementById(UID+'-h-diag-cod').value = '';
     document.getElementById(UID+'-h-diag-nom').value = '';
+    document.getElementById(UID+'-h-icdas').value = '';
     document.getElementById(UID+'-h-proc').value = '';
     document.getElementById(UID+'-h-ausente').checked = false;
     toggleAusente(false);
@@ -1132,7 +1225,7 @@ function eliminarHallazgo(i) {
 }
 
 function guardarNotaHallazgo(i, val) {
-    if (hallazgos[i]) hallazgos[i].nota = val;
+    if (hallazgos[i]) { hallazgos[i].observacion = val; hallazgos[i].nota = val; }
     serializarHallazgos();
 }
 
@@ -1152,15 +1245,16 @@ function renderTablaHallazgos() {
     hallazgos.forEach(function(h, i) {
         var tr = document.createElement('tr');
         tr.setAttribute('data-idx', i);
-        var diagText = h.diagnostico_codigo
-            ? '<span class="odo-ac-codigo">'+escH(h.diagnostico_codigo)+'</span>' + escH(h.diagnostico_nombre)
-            : escH(h.diagnostico_nombre);
+        var prefijo = '';
+        if (h.icdas_codigo) prefijo += '<span style="font-size:.72rem;font-weight:700;color:#7c3aed;background:#f5f3ff;border-radius:4px;padding:1px 5px;margin-right:3px;">'+escH(h.icdas_codigo)+'</span>';
+        if (h.diagnostico_codigo) prefijo += '<span class="odo-ac-codigo">'+escH(h.diagnostico_codigo)+'</span>';
+        var diagText = prefijo + escH(h.diagnostico_nombre || '');
         tr.innerHTML =
             '<td>'+diagText+'</td>' +
             '<td style="font-size:.78rem;color:#4b5563;">'+escH(h.procedimiento||'—')+'</td>' +
             '<td><span class="odo-hall-badge-pieza">'+escH(h.pieza)+'</span></td>' +
             '<td>'+(h.ausente ? '<span style="color:#dc2626;font-size:.75rem;font-weight:600;">Ausente</span>' : (h.cara ? '<span class="odo-hall-badge-cara">'+escH(h.cara)+'</span>' : '—'))+'</td>' +
-            '<td><input type="text" class="odo-hall-nota-inline" placeholder="Nota..." value="'+escH(h.nota||'')+'" oninput="OD_'+UID+'.guardarNotaHallazgo('+i+',this.value)"></td>' +
+            '<td><input type="text" class="odo-hall-nota-inline" placeholder="Observación..." value="'+escH(h.observacion||h.nota||'')+'" oninput="OD_'+UID+'.guardarNotaHallazgo('+i+',this.value)"></td>' +
             '<td style="text-align:center;">' +
                 '<button type="button" class="odo-hall-accion del" title="Eliminar" onclick="OD_'+UID+'.eliminarHallazgo('+i+')">' +
                     '<i class="bi bi-trash3"></i>' +
@@ -1188,6 +1282,9 @@ window['OD_'+UID] = {
     filtrarDiag: filtrarDiag,
     navDiag: navDiag,
     selDiag: selDiag,
+    filtrarProc: filtrarProc,
+    navProc: navProc,
+    selProc: selProc,
     toggleAusente: toggleAusente,
     agregarHallazgo: agregarHallazgo,
     eliminarHallazgo: eliminarHallazgo,
@@ -1195,6 +1292,13 @@ window['OD_'+UID] = {
 };
 
 // Inicializar
+// Re-sincronizar odontograma visual desde hallazgos guardados
+if (hallazgos.length > 0) {
+    hallazgos.forEach(function(h) {
+        sincronizarOdontograma(h.pieza, h.cara, h.diagnostico_codigo, h.procedimiento, h.ausente);
+    });
+    serializarJSON();
+}
 render();
 if (EDITABLE) {
     actualizarSelectPiezas();

@@ -31,6 +31,8 @@ class Valoracion extends Model
         'cita_id',
         'user_id',
         'fecha',
+        'hora_inicio',
+        'hora_fin',
         'motivo_consulta',
         'extraoral_cara',
         'extraoral_atm',
@@ -47,17 +49,36 @@ class Valoracion extends Model
         'plan_tratamiento',
         'pronostico',
         'observaciones_generales',
+        'odontograma',
+        'hallazgos',
         'presupuesto_id',
         'estado',
         'activo',
     ];
 
     protected $casts = [
-        'fecha'           => 'date',
-        'diagnosticos'    => 'array',
-        'plan_tratamiento'=> 'array',
-        'activo'          => 'boolean',
+        'fecha'            => 'date',
+        'hora_inicio'      => 'datetime:H:i',
+        'hora_fin'         => 'datetime:H:i',
+        'diagnosticos'     => 'array',
+        'plan_tratamiento' => 'array',
+        'odontograma'      => 'array',
+        'hallazgos'        => 'array',
+        'activo'           => 'boolean',
     ];
+
+    public function getDuracionAttribute(): ?string
+    {
+        if (!$this->hora_inicio || !$this->hora_fin) return null;
+        $inicio = \Carbon\Carbon::parse($this->hora_inicio);
+        $fin    = \Carbon\Carbon::parse($this->hora_fin);
+        $mins   = $inicio->diffInMinutes($fin);
+        if ($mins <= 0) return null;
+        $h = (int) floor($mins / 60);
+        $m = $mins % 60;
+        if ($h === 0) return "{$m} min";
+        return $m > 0 ? "{$h}h {$m}min" : "{$h}h";
+    }
 
     public function paciente()
     {

@@ -90,6 +90,9 @@
                 <i class="bi bi-file-earmark-text"></i> Ver Presupuesto
             </a>
             @endif
+            <a href="{{ route('valoraciones.pdf', $valoracion) }}" target="_blank" class="btn-out">
+                <i class="bi bi-file-earmark-pdf"></i> PDF
+            </a>
             <a href="{{ route('pacientes.show', $valoracion->paciente) }}" class="btn-out">
                 <i class="bi bi-arrow-left"></i> Paciente
             </a>
@@ -234,40 +237,16 @@
 </div>
 @endif
 
-{{-- ═══ SECCIÓN 4: DIAGNÓSTICOS ═══ --}}
+{{-- ═══ SECCIÓN 3B: ODONTOGRAMA ═══ --}}
+@if($valoracion->odontograma)
 <div class="doc-section">
-    <div class="doc-section-header" style="background:#fffdf0;"><i class="bi bi-search"></i> Diagnósticos</div>
-    <div class="doc-section-body" style="background:#fffdf0;">
-        @if(empty($valoracion->diagnosticos))
-        <p style="color:#9ca3af;font-style:italic;font-size:.875rem;">Sin diagnósticos registrados.</p>
-        @else
-        <div style="overflow-x:auto;">
-        <table class="tabla-val">
-            <thead>
-                <tr>
-                    <th>Código CIE-10</th>
-                    <th>Diagnóstico</th>
-                    <th>Diente</th>
-                    <th>Cara</th>
-                    <th>Observación</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach($valoracion->diagnosticos as $dx)
-            <tr>
-                <td><span style="font-family:monospace;font-weight:700;color:var(--color-principal);">{{ $dx['codigo'] ?? '—' }}</span></td>
-                <td style="font-weight:500;">{{ $dx['nombre'] ?? '—' }}</td>
-                <td>{{ $dx['diente'] ?? '—' }}</td>
-                <td>{{ $dx['cara'] ?? '—' }}</td>
-                <td style="color:#6b7280;">{{ $dx['observacion'] ?? '' }}</td>
-            </tr>
-            @endforeach
-            </tbody>
-        </table>
-        </div>
-        @endif
+    <div class="doc-section-header" style="background:var(--color-muy-claro);"><i class="bi bi-grid-3x3"></i> Odontograma</div>
+    <div class="doc-section-body">
+        <x-odontograma :datos="$valoracion->odontograma" :modo="'ver'" :hallazgos="$valoracion->hallazgos" />
     </div>
 </div>
+@endif
+
 
 {{-- ═══ SECCIÓN 5: PLAN DE TRATAMIENTO ═══ --}}
 <div class="doc-section">

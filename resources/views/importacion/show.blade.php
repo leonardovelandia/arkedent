@@ -1,6 +1,6 @@
 {{-- ============================================================
      VISTA: Detalle de Importación
-     Sistema: Arkevix Dental ERP
+     Sistema: Arkedent
      Layout: layouts.app
      ============================================================ --}}
 @extends('layouts.dev')

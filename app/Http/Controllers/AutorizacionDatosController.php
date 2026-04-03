@@ -15,8 +15,17 @@ class AutorizacionDatosController extends Controller
     public function create(Request $request)
     {
         $paciente = Paciente::findOrFail($request->input('paciente_id'));
-        $config   = Configuracion::obtener();
 
+        $existente = $paciente->autorizacionDatos;
+        if ($existente) {
+            $msg = $existente->firmado
+                ? 'Este paciente ya tiene una autorización firmada.'
+                : 'Este paciente ya tiene una autorización pendiente de firma.';
+            return redirect()->route('autorizacion.show', $existente->id)
+                ->with('aviso', $msg);
+        }
+
+        $config = Configuracion::obtener();
         return view('autorizacion.create', compact('paciente', 'config'));
     }
 
@@ -35,25 +44,50 @@ class AutorizacionDatosController extends Controller
         ]);
 
         $paciente  = Paciente::findOrFail($request->input('paciente_id'));
+
+        $existente = $paciente->autorizacionDatos;
+        if ($existente?->firmado) {
+            return redirect()->route('autorizacion.show', $existente->id)
+                ->with('aviso', 'Este paciente ya tiene una autorización firmada.');
+        }
+
         $firmar    = $request->input('accion') === 'firmar' && $request->filled('firma_data');
 
-        $autorizacion = AutorizacionDatos::create([
-            'paciente_id'                => $paciente->id,
-            'user_id'                    => auth()->id(),
-            'fecha_autorizacion'         => today(),
-            'acepta_almacenamiento'      => $request->boolean('acepta_almacenamiento'),
-            'acepta_contacto_whatsapp'   => $request->boolean('acepta_contacto_whatsapp'),
-            'acepta_contacto_email'      => $request->boolean('acepta_contacto_email'),
-            'acepta_contacto_llamada'    => $request->boolean('acepta_contacto_llamada'),
-            'acepta_recordatorios'       => $request->boolean('acepta_recordatorios'),
-            'acepta_compartir_entidades' => $request->boolean('acepta_compartir_entidades'),
-            'firmado'                    => $firmar,
-            'firma_data'                 => $firmar ? $request->input('firma_data') : null,
-            'fecha_firma'                => $firmar ? now() : null,
-            'ip_firma'                   => $firmar ? $request->ip() : null,
-            'metodo_firma'               => $firmar ? 'digital' : null,
-            'observaciones'              => $request->input('observaciones'),
-        ]);
+        $firmaData    = $firmar ? $request->input('firma_data') : null;
+        $trazabilidad = [];
+
+        if ($firmar) {
+            $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
+                $request,
+                $firmaData,
+                [
+                    'paciente' => $paciente->nombre_completo ?? '',
+                    'doc'      => $paciente->numero_documento ?? '',
+                    'fecha'    => now()->toDateString(),
+                ]
+            );
+        }
+
+        $autorizacion = AutorizacionDatos::create(array_merge(
+            [
+                'paciente_id'                => $paciente->id,
+                'user_id'                    => auth()->id(),
+                'fecha_autorizacion'         => today(),
+                'acepta_almacenamiento'      => $request->boolean('acepta_almacenamiento'),
+                'acepta_contacto_whatsapp'   => $request->boolean('acepta_contacto_whatsapp'),
+                'acepta_contacto_email'      => $request->boolean('acepta_contacto_email'),
+                'acepta_contacto_llamada'    => $request->boolean('acepta_contacto_llamada'),
+                'acepta_recordatorios'       => $request->boolean('acepta_recordatorios'),
+                'acepta_compartir_entidades' => $request->boolean('acepta_compartir_entidades'),
+                'firmado'                    => $firmar,
+                'firma_data'                 => $firmaData,
+                'fecha_firma'                => $firmar ? now() : null,
+                'ip_firma'                   => $firmar ? $request->getClientIp() : null,
+                'metodo_firma'               => $firmar ? 'digital' : null,
+                'observaciones'              => $request->input('observaciones'),
+            ],
+            $trazabilidad
+        ));
 
         // Actualizar paciente
         $paciente->update([
@@ -85,6 +119,12 @@ class AutorizacionDatosController extends Controller
         ]);
 
         $autorizacion = AutorizacionDatos::findOrFail($id);
+
+        if ($autorizacion->firmado) {
+            return redirect()->route('autorizacion.show', $id)
+                ->with('aviso', 'Esta autorización ya fue firmada y no puede volver a firmarse.');
+        }
+
         $firmaData    = $request->input('firma_data');
 
         $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
@@ -104,7 +144,7 @@ class AutorizacionDatosController extends Controller
                 'firmado'      => true,
                 'firma_data'   => $firmaData,
                 'fecha_firma'  => now(),
-                'ip_firma'     => $request->ip(),
+                'ip_firma'     => $request->getClientIp(),
                 'metodo_firma' => $request->input('metodo_firma', 'digital'),
             ],
             $trazabilidad
@@ -119,7 +159,7 @@ class AutorizacionDatosController extends Controller
             'modelo'   => 'AutorizacionDatos',
             'id'       => $autorizacion->id,
             'paciente' => $autorizacion->paciente->nombre_completo ?? '',
-            'ip'       => $request->ip(),
+            'ip'       => $request->getClientIp(),
             'hash'     => $trazabilidad['documento_hash'],
             'token'    => $trazabilidad['firma_verificacion_token'],
         ]);

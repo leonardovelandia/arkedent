@@ -43,11 +43,9 @@ class InventarioController extends Controller
             }
         }
 
-        $materiales = $query->orderBy('nombre')->paginate(20)->withQueryString();
-
-        if ($request->ajax()) {
-            return view('inventario._tabla', compact('materiales'));
-        }
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $materiales = $query->orderBy('nombre')->paginate($perPage)->withQueryString();
 
         $categorias  = CategoriaInventario::activas()->orderBy('nombre')->get();
         $alertas     = Material::stockBajo()->where('activo', true)->get();

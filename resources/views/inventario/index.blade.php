@@ -68,31 +68,31 @@
 @section('contenido')
 
 @if($alertas->count() > 0)
-<div class="alert-banner">
-    <i class="bi bi-exclamation-triangle-fill" style="color:#856404; font-size:1.1rem; margin-top:.1rem; flex-shrink:0;"></i>
+<div style="background:#FFF3CD;border:1px solid #FFC107;border-radius:10px;padding:.875rem 1.25rem;margin-bottom:1rem;display:flex;align-items:flex-start;gap:.75rem;">
+    <i class="bi bi-exclamation-triangle-fill" style="color:#856404;font-size:1.1rem;margin-top:.1rem;flex-shrink:0;"></i>
     <div style="flex:1;">
-        <strong style="color:#856404; font-size:.85rem;">
-            {{ $alertas->count() }} material(es) con stock bajo o crítico
-        </strong>
-        <div style="font-size:.77rem; color:#856404; margin-top:.2rem;">
-            {{ $alertas->pluck('nombre')->join(', ') }}
-        </div>
+        <strong style="color:#856404;font-size:.85rem;">{{ $alertas->count() }} material(es) con stock bajo o crítico</strong>
+        <div style="font-size:.77rem;color:#856404;margin-top:.2rem;">{{ $alertas->pluck('nombre')->join(', ') }}</div>
     </div>
-    <a href="{{ route('inventario.index', ['estado' => 'critico']) }}" style="margin-left:auto; font-size:.78rem; color:#856404; font-weight:600; white-space:nowrap; text-decoration:none;">
-        Ver críticos →
-    </a>
+    <a href="{{ route('inventario.index', ['estado' => 'critico']) }}" style="font-size:.78rem;color:#856404;font-weight:600;white-space:nowrap;text-decoration:none;">Ver críticos →</a>
 </div>
 @endif
 
-<div class="inv-header">
+<div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
     <div>
-        <h4 style="font-family:var(--fuente-titulos); font-weight:700; color:#1c2b22; margin:0;">Inventario</h4>
-        <p style="font-size:.82rem; color:#9ca3af; margin:0;">Control de materiales e insumos del consultorio</p>
+        <h1 class="page-titulo">Inventario</h1>
+        <p class="page-subtitulo">Control de materiales e insumos del consultorio</p>
     </div>
-    <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-        <a href="{{ route('inventario-categorias.index') }}" class="btn-gris"><i class="bi bi-tags"></i> Categorías</a>
-        <a href="{{ route('compras.create') }}" class="btn-verde"><i class="bi bi-cart-plus"></i> Registrar Compra</a>
-        <a href="{{ route('inventario.create') }}" class="btn-morado"><i class="bi bi-plus-lg"></i> Nuevo Material</a>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <a href="{{ route('inventario-categorias.index') }}" class="btn-morado" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
+            <i class="bi bi-tags"></i> Categorías
+        </a>
+        <a href="{{ route('compras.create') }}" class="btn-morado" style="background:#166534;">
+            <i class="bi bi-cart-plus"></i> Registrar Compra
+        </a>
+        <a href="{{ route('inventario.create') }}" class="btn-morado">
+            <i class="bi bi-plus-lg"></i> Nuevo Material
+        </a>
     </div>
 </div>
 
@@ -120,109 +120,114 @@
     </div>
 </div>
 
-{{-- Filtros --}}
-<div class="filtros-card">
-    <form id="form-filtros" method="GET" action="{{ route('inventario.index') }}">
-        <div class="filtros-grid">
-            <div>
-                <label class="form-label">Categoría</label>
-                <select name="categoria_id" class="form-input">
-                    <option value="">Todas</option>
-                    @foreach($categorias as $cat)
-                    <option value="{{ $cat->id }}" {{ $categoriaId == $cat->id ? 'selected' : '' }}>{{ $cat->nombre }}</option>
-                    @endforeach
-                </select>
+<x-tabla-listado
+    :paginacion="$materiales"
+    placeholder="Nombre o código..."
+    icono-vacio="bi-inbox"
+    mensaje-vacio="No se encontraron materiales"
+>
+    <x-slot:filtros>
+        <select name="categoria_id" class="tbl-filtro-select">
+            <option value="">Todas las categorías</option>
+            @foreach($categorias as $cat)
+            <option value="{{ $cat->id }}" {{ $categoriaId == $cat->id ? 'selected' : '' }}>{{ $cat->nombre }}</option>
+            @endforeach
+        </select>
+        <select name="estado" class="tbl-filtro-select">
+            <option value="">Todos los estados</option>
+            <option value="normal"   {{ $estado === 'normal'   ? 'selected' : '' }}>Normal</option>
+            <option value="bajo"     {{ $estado === 'bajo'     ? 'selected' : '' }}>Bajo</option>
+            <option value="critico"  {{ $estado === 'critico'  ? 'selected' : '' }}>Crítico</option>
+            <option value="inactivo" {{ $estado === 'inactivo' ? 'selected' : '' }}>Desactivados</option>
+        </select>
+    </x-slot:filtros>
+
+    <x-slot:thead>
+        <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th style="text-align:center;">Stock Actual</th>
+            <th style="text-align:center;">Mínimo</th>
+            <th style="text-align:center;">Estado</th>
+            <th style="text-align:right;">Precio Unit.</th>
+            <th style="text-align:center;">Acciones</th>
+        </tr>
+    </x-slot:thead>
+
+    @foreach($materiales as $material)
+    @php $estadoStock = $material->estado_stock; @endphp
+    <tr class="{{ $material->activo ? '' : 'fila-inactiva' }}">
+        <td style="color:#9ca3af;font-size:.75rem;">{{ $material->codigo ?: '—' }}</td>
+        <td>
+            <div style="font-weight:500;color:#1c2b22;">{{ $material->nombre }}</div>
+            @if($material->ubicacion)
+            <div style="font-size:.72rem;color:#9ca3af;"><i class="bi bi-geo-alt"></i> {{ $material->ubicacion }}</div>
+            @endif
+        </td>
+        <td>
+            @if($material->categoria)
+            <span class="badge-cat" style="background:{{ $material->categoria->color ?? 'var(--color-principal)' }};">{{ $material->categoria->nombre }}</span>
+            @else
+            <span style="color:#9ca3af;font-size:.78rem;">—</span>
+            @endif
+        </td>
+        <td style="text-align:center;">
+            <div style="font-weight:600;font-size:.9rem;color:{{ $estadoStock === 'critico' ? '#dc2626' : ($estadoStock === 'bajo' ? '#d97706' : '#166534') }};">
+                {{ number_format($material->stock_actual, 2) }}
             </div>
-            <div>
-                <label class="form-label">Estado</label>
-                <select name="estado" class="form-input">
-                    <option value="">Todos</option>
-                    <option value="normal"   {{ $estado === 'normal'   ? 'selected' : '' }}>Normal</option>
-                    <option value="bajo"     {{ $estado === 'bajo'     ? 'selected' : '' }}>Bajo</option>
-                    <option value="critico"  {{ $estado === 'critico'  ? 'selected' : '' }}>Crítico</option>
-                    <option value="inactivo" {{ $estado === 'inactivo' ? 'selected' : '' }}>Desactivados</option>
-                </select>
+            <div style="font-size:.7rem;color:#9ca3af;">{{ $material->unidad_medida }}</div>
+            @if($material->porcentaje_stock !== null && $material->activo)
+            <div class="barra-stock">
+                <div class="barra-fill" style="width:{{ $material->porcentaje_stock }}%;background:{{ $estadoStock === 'critico' ? '#dc2626' : ($estadoStock === 'bajo' ? '#f59e0b' : '#166534') }};"></div>
             </div>
-            <div>
-                <label class="form-label">Buscar</label>
-                <input type="text" name="buscar" id="input-buscar" class="form-input" placeholder="Nombre o código…" value="{{ $buscar }}">
+            @endif
+        </td>
+        <td style="text-align:center;font-size:.82rem;color:#6b7280;">
+            {{ number_format($material->stock_minimo, 2) }} {{ $material->unidad_medida }}
+        </td>
+        <td style="text-align:center;">
+            @if(!$material->activo)
+            <span style="display:inline-block;font-size:.7rem;padding:.22rem .6rem;border-radius:20px;background:#f3f4f6;color:#6b7280;">
+                <i class="bi bi-slash-circle"></i> Desactivado
+            </span>
+            @else
+            <span style="display:inline-block;font-size:.7rem;padding:.22rem .6rem;border-radius:20px;background:{{ $estadoStock === 'critico' ? '#fee2e2' : ($estadoStock === 'bajo' ? '#fef3c7' : '#dcfce7') }};color:{{ $estadoStock === 'critico' ? '#dc2626' : ($estadoStock === 'bajo' ? '#d97706' : '#166534') }};">
+                @if($estadoStock === 'critico') <i class="bi bi-exclamation-triangle"></i> Crítico
+                @elseif($estadoStock === 'bajo') <i class="bi bi-arrow-down"></i> Bajo
+                @else <i class="bi bi-check-circle"></i> Normal
+                @endif
+            </span>
+            @endif
+        </td>
+        <td style="text-align:right;font-size:.82rem;white-space:nowrap;">
+            {{ $material->precio_unitario ? '$' . number_format($material->precio_unitario, 0, ',', '.') : '—' }}
+        </td>
+        <td>
+            <div style="display:flex;justify-content:center;gap:.3rem;flex-wrap:nowrap;">
+                <a href="{{ route('inventario.show', $material) }}" class="tbl-btn-accion" title="Ver">
+                    <i class="bi bi-eye"></i>
+                </a>
+                @if($material->activo)
+                <a href="{{ route('inventario.edit', $material) }}" class="tbl-btn-accion" title="Editar">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{{ route('inventario.show', $material) }}#entrada" class="tbl-btn-accion success" title="Registrar entrada">
+                    <i class="bi bi-plus-circle"></i>
+                </a>
+                @else
+                <form method="POST" action="{{ route('inventario.activar', $material) }}" style="display:inline;">
+                    @csrf @method('PATCH')
+                    <button type="submit" class="tbl-btn-accion success" title="Activar">
+                        <i class="bi bi-arrow-up-circle"></i>
+                    </button>
+                </form>
+                @endif
             </div>
-            <div style="display:flex; align-items:flex-end;">
-                <a href="{{ route('inventario.index') }}" id="btn-limpiar" class="btn-gris"><i class="bi bi-x"></i> Limpiar</a>
-            </div>
-        </div>
-    </form>
-</div>
+        </td>
+    </tr>
+    @endforeach
 
-{{-- Tabla --}}
-<div class="panel-card" id="tabla-container">
-    @include('inventario._tabla')
-</div>
-
-@push('scripts')
-<script>
-(function () {
-    var baseUrl  = '{{ route('inventario.index') }}';
-    var contenedor = document.getElementById('tabla-container');
-    var form     = document.getElementById('form-filtros');
-    var inputBuscar = document.getElementById('input-buscar');
-    var timer;
-
-    function getParams() {
-        var data = new FormData(form);
-        return new URLSearchParams(data).toString();
-    }
-
-    function cargarTabla(url) {
-        contenedor.classList.add('cargando');
-        history.replaceState(null, '', url);
-        fetch(url, {
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(function(r) { return r.text(); })
-        .then(function(html) {
-            contenedor.innerHTML = html;
-            contenedor.classList.remove('cargando');
-            bindPaginacion();
-        })
-        .catch(function() { contenedor.classList.remove('cargando'); });
-    }
-
-    function bindPaginacion() {
-        contenedor.querySelectorAll('.pagination a').forEach(function(a) {
-            a.addEventListener('click', function(e) {
-                e.preventDefault();
-                cargarTabla(this.href);
-            });
-        });
-    }
-
-    // Selects → buscar al cambiar
-    form.querySelectorAll('select').forEach(function(sel) {
-        sel.addEventListener('change', function() {
-            cargarTabla(baseUrl + '?' + getParams());
-        });
-    });
-
-    // Campo buscar → debounce 500ms
-    inputBuscar.addEventListener('input', function() {
-        clearTimeout(timer);
-        timer = setTimeout(function() {
-            cargarTabla(baseUrl + '?' + getParams());
-        }, 500);
-    });
-
-    // Botón limpiar
-    document.getElementById('btn-limpiar').addEventListener('click', function(e) {
-        e.preventDefault();
-        form.querySelectorAll('select').forEach(function(s) { s.value = ''; });
-        inputBuscar.value = '';
-        cargarTabla(baseUrl);
-    });
-
-    bindPaginacion();
-})();
-</script>
-@endpush
+</x-tabla-listado>
 
 @endsection

@@ -1,6 +1,6 @@
 {{-- ============================================================
      VISTA: Nueva Importación
-     Sistema: Arkevix Dental ERP
+     Sistema: Arkedent
      Layout: layouts.app
      ============================================================ --}}
 @extends('layouts.dev')
@@ -93,7 +93,7 @@
     .tabla-preview td { padding:.35rem .65rem; border:1px solid var(--fondo-borde); color:#374151; vertical-align:top; }
     .tabla-preview tr:nth-child(even) td { background:var(--fondo-card-alt,#f9fafb); }
 
-    .form-card { background:#fff; border:1px solid var(--fondo-borde); border-radius:12px; overflow:hidden; margin-bottom:1rem; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.08); }
+    .form-card { background:#fff; border:1px solid var(--fondo-borde); border-radius:12px; overflow:hidden; margin-bottom:1rem; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     .form-card-header { padding:.75rem 1.25rem; border-bottom:1px solid var(--fondo-borde); display:flex; align-items:center; gap:.5rem; }
     .form-card-body   { padding:1.25rem; }
 

@@ -3,7 +3,7 @@
 
 @push('estilos')
 <style>
-    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer; }
+    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     .btn-morado:hover { filter:brightness(1.12); color:#fff; }
     .form-input { border:1.5px solid var(--color-muy-claro); border-radius:8px; padding:.45rem .75rem; font-size:.875rem; color:#1c2b22; background:#fff; outline:none; }
     .form-input:focus { border-color:var(--color-principal); }
@@ -21,112 +21,114 @@
 
 @section('contenido')
 
-{{-- Flash --}}
 @if(session('exito'))
-<div style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:8px;padding:.7rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;">
+<div class="alerta-flash" style="background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;">
     <i class="bi bi-check-circle-fill"></i> {{ session('exito') }}
 </div>
 @endif
 @if(session('error'))
-<div style="background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:8px;padding:.7rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;">
+<div class="alerta-flash" style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca;">
     <i class="bi bi-exclamation-circle-fill"></i> {{ session('error') }}
 </div>
 @endif
 
-{{-- Header --}}
-<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem;">
+<div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3">
     <div>
-        <h4 style="font-family:var(--fuente-titulos);font-weight:700;color:#1c2b22;margin:0;">
-            <i class="bi bi-file-earmark-text" style="color:var(--color-principal);"></i> Presupuestos
-        </h4>
-        <p style="font-size:.82rem;color:#9ca3af;margin:0;">Gestión de presupuestos de tratamiento</p>
+        <h1 class="page-titulo">Presupuestos</h1>
+        <p class="page-subtitulo">Gestión de presupuestos de tratamiento</p>
     </div>
     <a href="{{ route('presupuestos.create') }}" class="btn-morado">
         <i class="bi bi-plus-lg"></i> Nuevo Presupuesto
     </a>
 </div>
 
-{{-- Filtros --}}
-<form id="form-filtros-pres" method="GET" style="background:#fff;border:1px solid var(--color-muy-claro);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-end;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
-    <div style="flex:1;min-width:200px;">
-        <label style="font-size:.75rem;font-weight:600;color:var(--color-hover);display:block;margin-bottom:.3rem;">Buscar</label>
-        <input type="text" name="buscar" id="filtro-buscar" class="form-input" style="width:100%;"
-               value="{{ request('buscar') }}" placeholder="Paciente o N° presupuesto…">
-    </div>
-    <div style="min-width:160px;">
-        <label style="font-size:.75rem;font-weight:600;color:var(--color-hover);display:block;margin-bottom:.3rem;">Estado</label>
-        <select name="estado" id="filtro-estado" class="form-select">
+<x-tabla-listado
+    :paginacion="$presupuestos"
+    placeholder="Paciente o N° presupuesto..."
+    icono-vacio="bi-file-earmark-text"
+    mensaje-vacio="No hay presupuestos"
+>
+    <x-slot:filtros>
+        <select name="estado" class="tbl-filtro-select">
             <option value="">Todos los estados</option>
             @foreach(['borrador','enviado','aprobado','rechazado','vencido'] as $est)
             <option value="{{ $est }}" {{ request('estado') === $est ? 'selected' : '' }}>{{ ucfirst($est) }}</option>
             @endforeach
         </select>
-    </div>
-    <a href="{{ route('presupuestos.index') }}" id="btn-limpiar-pres"
-       style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:8px;padding:.45rem .9rem;font-size:.875rem;display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;height:38px;">
-        <i class="bi bi-x"></i> Limpiar
-    </a>
-</form>
+    </x-slot:filtros>
 
-{{-- Tabla --}}
-<div id="tabla-container" style="background:#fff;border:1px solid var(--color-muy-claro);border-radius:12px;overflow:hidden;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
-    @include('presupuestos._tabla')
-</div>
+    <x-slot:accion-vacio>
+        <div class="mt-3">
+            <a href="{{ route('presupuestos.create') }}" class="btn-morado">
+                <i class="bi bi-plus-lg"></i> Nuevo Presupuesto
+            </a>
+        </div>
+    </x-slot:accion-vacio>
 
-@push('scripts')
-<script>
-(function () {
-    var baseUrl    = '{{ route('presupuestos.index') }}';
-    var form       = document.getElementById('form-filtros-pres');
-    var contenedor = document.getElementById('tabla-container');
-    var buscar     = document.getElementById('filtro-buscar');
-    var timer;
+    <x-slot:thead>
+        <tr>
+            <th>N° Presupuesto</th>
+            <th>Paciente</th>
+            <th>Fecha</th>
+            <th>Vencimiento</th>
+            <th style="text-align:right;">Total</th>
+            <th>Estado</th>
+            <th style="text-align:center;">Acciones</th>
+        </tr>
+    </x-slot:thead>
 
-    function getParams() {
-        return new URLSearchParams(new FormData(form)).toString();
-    }
+    @foreach($presupuestos as $pre)
+    @php
+        $color = $pre->estado_color;
+        $diasRestantes = $pre->dias_restantes;
+    @endphp
+    <tr>
+        <td>
+            <a href="{{ route('presupuestos.show', $pre) }}"
+               style="font-family:monospace;font-weight:700;color:var(--color-principal);text-decoration:none;font-size:.82rem;">
+                {{ $pre->numero_formateado }}
+            </a>
+        </td>
+        <td>
+            <div style="font-weight:600;color:#1c2b22;">{{ $pre->paciente->nombre_completo }}</div>
+            <div style="font-size:.75rem;color:#9ca3af;">{{ $pre->paciente->numero_historia }}</div>
+        </td>
+        <td style="font-size:.83rem;color:#4b5563;white-space:nowrap;">
+            {{ $pre->fecha_generacion->format('d/m/Y') }}
+        </td>
+        <td style="white-space:nowrap;">
+            <div style="font-size:.83rem;color:#4b5563;">{{ $pre->fecha_vencimiento->format('d/m/Y') }}</div>
+            @if(in_array($pre->estado, ['borrador','enviado']))
+                @if($diasRestantes < 0)
+                    <span style="font-size:.7rem;color:#991b1b;font-weight:600;">Vencido</span>
+                @elseif($diasRestantes <= 5)
+                    <span style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:.15rem .45rem;font-size:.7rem;font-weight:600;color:#c2410c;">
+                        <i class="bi bi-exclamation-triangle-fill"></i> {{ $diasRestantes }}d
+                    </span>
+                @endif
+            @endif
+        </td>
+        <td style="text-align:right;font-weight:700;color:#1c2b22;white-space:nowrap;">
+            $ {{ number_format($pre->total, 0, ',', '.') }}
+        </td>
+        <td>
+            <span style="padding:.2rem .65rem;border-radius:20px;font-size:.7rem;font-weight:700;display:inline-flex;align-items:center;gap:.25rem;background:{{ $color['bg'] }};color:{{ $color['text'] }};">
+                {{ $color['label'] }}
+            </span>
+        </td>
+        <td>
+            <div style="display:flex;justify-content:center;gap:.3rem;">
+                <a href="{{ route('presupuestos.show', $pre) }}" class="tbl-btn-accion" title="Ver">
+                    <i class="bi bi-eye"></i>
+                </a>
+                <a href="{{ route('presupuestos.pdf', $pre) }}" class="tbl-btn-accion" target="_blank" title="PDF">
+                    <i class="bi bi-file-pdf"></i>
+                </a>
+            </div>
+        </td>
+    </tr>
+    @endforeach
 
-    function cargarTabla(url) {
-        contenedor.classList.add('cargando');
-        history.replaceState(null, '', url);
-        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            .then(function(r) { return r.text(); })
-            .then(function(html) {
-                contenedor.innerHTML = html;
-                contenedor.classList.remove('cargando');
-                bindPaginacion();
-            })
-            .catch(function() { contenedor.classList.remove('cargando'); });
-    }
-
-    function bindPaginacion() {
-        contenedor.querySelectorAll('.pagination a').forEach(function(a) {
-            a.addEventListener('click', function(e) {
-                e.preventDefault();
-                cargarTabla(this.href);
-            });
-        });
-    }
-
-    document.getElementById('filtro-estado').addEventListener('change', function() {
-        cargarTabla(baseUrl + '?' + getParams());
-    });
-
-    buscar.addEventListener('input', function() {
-        clearTimeout(timer);
-        timer = setTimeout(function() { cargarTabla(baseUrl + '?' + getParams()); }, 500);
-    });
-
-    document.getElementById('btn-limpiar-pres').addEventListener('click', function(e) {
-        e.preventDefault();
-        form.querySelectorAll('select').forEach(function(s) { s.value = ''; });
-        buscar.value = '';
-        cargarTabla(baseUrl);
-    });
-
-    bindPaginacion();
-})();
-</script>
-@endpush
+</x-tabla-listado>
 
 @endsection

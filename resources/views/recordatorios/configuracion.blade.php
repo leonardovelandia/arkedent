@@ -140,10 +140,10 @@
         <strong><i class="bi bi-check-circle-fill"></i> SMTP configurado vía SendGrid:</strong>
         <code style="display:block;margin-top:.35rem;font-size:.78rem;color:#15803d;">
             MAIL_HOST=smtp.sendgrid.net · MAIL_PORT=587 · MAIL_ENCRYPTION=tls<br>
-            MAIL_USERNAME=apikey · MAIL_FROM_ADDRESS={{ env('MAIL_FROM_ADDRESS', 'no-reply@arkevix.com') }}
+            MAIL_USERNAME=apikey · MAIL_FROM_ADDRESS={{ env('MAIL_FROM_ADDRESS', 'no-reply@arkedent.com') }}
         </code>
         <div style="margin-top:.4rem;color:#166534;">
-            El servidor SMTP se configura en <code>.env</code>. El correo del remitente debe usar el dominio autenticado en SendGrid (<strong>arkevix.com</strong>).
+            El servidor SMTP se configura en <code>.env</code>. El correo del remitente debe usar el dominio autenticado en SendGrid (<strong>arkedent.com</strong>).
         </div>
     </div>
 
@@ -159,7 +159,7 @@
             <label class="form-label">Correo del remitente</label>
             <input type="email" name="mail_from_address" class="form-input"
                 value="{{ old('mail_from_address', $config->mail_from_address ?? env('MAIL_FROM_ADDRESS')) }}"
-                placeholder="{{ env('MAIL_FROM_ADDRESS', 'no-reply@arkevix.com') }}">
+                placeholder="{{ env('MAIL_FROM_ADDRESS', 'no-reply@arkedent.com') }}">
             <div style="font-size:.72rem;color:#8fa39a;margin-top:.25rem;">Debe ser un correo del dominio autenticado en SendGrid</div>
         </div>
     </div>

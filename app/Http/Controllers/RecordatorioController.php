@@ -28,7 +28,9 @@ class RecordatorioController extends Controller
             $query->where('estado', $request->input('estado'));
         }
 
-        $recordatorios = $query->orderByDesc('fecha_programada')->paginate(20)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $recordatorios = $query->orderByDesc('fecha_programada')->paginate($perPage)->withQueryString();
 
         $enviadosHoy  = Recordatorio::where('estado', 'enviado')->whereDate('fecha_envio', today())->count();
         $pendientes   = Recordatorio::where('estado', 'pendiente')->where('activo', true)->count();

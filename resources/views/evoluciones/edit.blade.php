@@ -100,6 +100,54 @@
                 </div>
             </div>
         </div>
+
+        {{-- Horas de atención (Res. 1995/1999) --}}
+        <div class="row g-2 mt-2">
+            <div class="col-6">
+                <label class="lbl" style="color:var(--color-principal);">
+                    Hora inicio atención <span style="color:#dc3545;">*</span>
+                </label>
+                <div class="timepicker-wrap">
+                    <i class="bi bi-clock timepicker-icon"></i>
+                    <input type="text" name="hora_inicio" placeholder="HH:MM"
+                           value="{{ old('hora_inicio', $evolucion->hora_inicio ? \Carbon\Carbon::parse($evolucion->hora_inicio)->format('H:i') : '') }}"
+                           class="ctrl timepicker" autocomplete="off" readonly required>
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="lbl" style="color:var(--color-principal);">Hora fin atención</label>
+                <div class="timepicker-wrap">
+                    <i class="bi bi-clock timepicker-icon"></i>
+                    <input type="text" name="hora_fin" placeholder="HH:MM"
+                           value="{{ old('hora_fin', $evolucion->hora_fin ? \Carbon\Carbon::parse($evolucion->hora_fin)->format('H:i') : '') }}"
+                           id="hora_fin_evo_edit"
+                           class="ctrl timepicker" autocomplete="off" readonly>
+                </div>
+            </div>
+        </div>
+        <div id="duracion-display-evo-edit" style="font-size:.75rem;color:var(--color-principal);margin-top:.25rem;display:none;">
+            <i class="bi bi-clock me-1"></i>Duración: <strong id="duracion-texto-evo-edit"></strong>
+        </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var hi = document.querySelector('[name="hora_inicio"]');
+            var hf = document.getElementById('hora_fin_evo_edit');
+            var disp = document.getElementById('duracion-display-evo-edit');
+            var txt  = document.getElementById('duracion-texto-evo-edit');
+            function calcDur() {
+                if (!hi?.value || !hf?.value) { disp.style.display='none'; return; }
+                var [h1,m1]=hi.value.split(':').map(Number), [h2,m2]=hf.value.split(':').map(Number);
+                var mins=(h2*60+m2)-(h1*60+m1);
+                if (mins<=0) { disp.style.display='none'; return; }
+                var h=Math.floor(mins/60), m=mins%60;
+                txt.textContent = h>0 ? h+'h '+(m>0?m+'min':'') : m+' min';
+                disp.style.display='block';
+            }
+            hi?.addEventListener('change', calcDur);
+            hf?.addEventListener('change', calcDur);
+            calcDur(); // show on load if values present
+        });
+        </script>
     </div>
 </div>
 

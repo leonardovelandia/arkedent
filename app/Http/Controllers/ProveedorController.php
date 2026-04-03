@@ -29,16 +29,14 @@ class ProveedorController extends Controller
             $query->whereJsonContains('categorias', $request->categoria);
         }
 
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
         $proveedores = $query->withCount(['compras as total_ordenes' => function ($q) {
             $q->where('activo', true);
         }])->withSum(['compras as total_compras' => function ($q) {
             $q->where('activo', true)->where('estado', 'pagada');
         }], 'total')
-          ->orderBy('nombre')->paginate(15)->withQueryString();
-
-        if ($request->ajax()) {
-            return view('proveedores._tabla', compact('proveedores'));
-        }
+          ->orderBy('nombre')->paginate($perPage)->withQueryString();
 
         // Resumen
         $totalActivos = Proveedor::activos()->count();

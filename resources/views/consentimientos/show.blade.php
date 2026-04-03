@@ -56,10 +56,12 @@
 
 {{-- Botones de acción --}}
 <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem;">
-    <a href="{{ route('consentimientos.index') }}"
-       style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:8px;padding:.45rem 1rem;font-size:.875rem;display:inline-flex;align-items:center;gap:.3rem;text-decoration:none;">
-        <i class="bi bi-arrow-left"></i> Volver
-    </a>
+    <button type="button"
+    onclick="window.location.href='{{ route('consentimientos.index') }}'"
+    style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:8px;padding:.45rem 1rem;font-size:.875rem;display:inline-flex;align-items:center;gap:.3rem;cursor:pointer;">
+    
+    <i class="bi bi-arrow-left"></i> Volver
+</button>
     @if(!$consentimiento->firmado)
     <a href="{{ route('consentimientos.edit', $consentimiento) }}"
        class="btn-morado" style="background:transparent;color:var(--color-principal);border:1px solid var(--color-principal);">
@@ -233,7 +235,7 @@
         .then(function(r) { return r.json(); })
         .then(function(data) {
             if (data.ok) {
-                window.location.reload();
+                window.location.href = '{{ route('consentimientos.show', $consentimiento) }}';
             } else {
                 alert(data.error || 'Error al guardar la firma.');
                 document.getElementById('btn-confirmar-firma').disabled = false;

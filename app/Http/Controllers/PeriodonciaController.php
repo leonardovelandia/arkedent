@@ -28,7 +28,9 @@ class PeriodonciaController extends Controller
             $query->whereDate('fecha_inicio', '<=', $request->hasta);
         }
 
-        $fichas = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $fichas = $query->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString();
 
         $stats = [
             'activas'        => FichaPeriodontal::where('activo', true)->where('estado', 'activa')->count(),

@@ -65,14 +65,32 @@ class Configuracion extends Model
         'modo_recordatorio',
         'hora_envio_recordatorio',
         'activo',
+        'hora_backup',
+        // Datos del profesional (Res. 1995/1999)
+        'nombre_doctor',
+        'tarjeta_profesional',
+        'especialidad_medica',
+        'universidad',
+        'codigo_habilitacion',
+        'tipo_prestador',
     ];
 
     protected $casts = [
-        'dias_laborales'                => 'array',
-        'recordatorios_activos'         => 'boolean',
-        'recordatorios_email_activo'    => 'boolean',
+        'dias_laborales' => 'array',
+        'recordatorios_activos' => 'boolean',
+        'recordatorios_email_activo' => 'boolean',
         'recordatorios_whatsapp_activo' => 'boolean',
-        'activo'                        => 'boolean',
+        'activo' => 'boolean',
+        'twilio_auth_token' => 'encrypted',
+        'ultramsg_token' => 'encrypted',
+    ];
+
+    protected $hidden = [
+        'ultramsg_token',
+        'twilio_auth_token',
+        'twilio_account_sid',
+        'twilio_whatsapp_from',
+        'whatsapp_provider',
     ];
 
     /**
@@ -87,7 +105,7 @@ class Configuracion extends Model
             // Si no existe configuración, creamos una por defecto
             $config = self::create([
                 'nombre_consultorio' => 'Consultorio Odontológico',
-                'activo'             => true,
+                'activo' => true,
             ]);
         }
 

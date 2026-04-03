@@ -9,15 +9,17 @@ use App\Models\HistoriaClinica;
 use App\Traits\FormateaCampos;
 use App\Traits\TrazabilidadFirma;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 class EvolucionController extends Controller
 {
-    use FormateaCampos;
+    use FormateaCampos, AuthorizesRequests;
+
 
     public function index(Request $request)
     {
-        $buscar    = $request->input('buscar');
+        $buscar = $request->input('buscar');
         $pacienteId = $request->input('paciente_id');
 
         $evoluciones = Evolucion::with(['paciente', 'doctor'])
@@ -25,21 +27,19 @@ class EvolucionController extends Controller
             ->when($pacienteId, fn($q) => $q->where('paciente_id', $pacienteId))
             ->when($buscar, function ($q) use ($buscar) {
                 $q->where('procedimiento', 'like', "%{$buscar}%")
-                  ->orWhereHas('paciente', fn($p) =>
-                      $p->where('nombre', 'like', "%{$buscar}%")
-                        ->orWhere('apellido', 'like', "%{$buscar}%")
-                        ->orWhere('numero_documento', 'like', "%{$buscar}%")
-                  );
+                    ->orWhereHas(
+                        'paciente',
+                        fn($p) =>
+                        $p->where('nombre', 'like', "%{$buscar}%")
+                            ->orWhere('apellido', 'like', "%{$buscar}%")
+                            ->orWhere('numero_documento', 'like', "%{$buscar}%")
+                    );
             })
             ->orderBy('fecha', 'desc')
-            ->paginate(15)
+            ->paginate(in_array((int) $request->input('per_page', 10), [10, 25, 50]) ? (int) $request->input('per_page', 10) : 10)
             ->withQueryString();
 
         $pacienteFiltro = $pacienteId ? Paciente::find($pacienteId) : null;
-
-        if ($request->ajax()) {
-            return view('evoluciones._tabla', compact('evoluciones'));
-        }
 
         return view('evoluciones.index', compact('evoluciones', 'buscar', 'pacienteFiltro'));
     }
@@ -47,8 +47,8 @@ class EvolucionController extends Controller
     public function create(Request $request)
     {
         $pacienteId = $request->input('paciente_id');
-        $paciente   = null;
-        $historia   = null;
+        $paciente = null;
+        $historia = null;
 
         if ($pacienteId) {
             $paciente = Paciente::findOrFail($pacienteId);
@@ -75,21 +75,23 @@ class EvolucionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'paciente_id'                => 'required|exists:pacientes,id',
-            'historia_clinica_id'        => 'required|exists:historias_clinicas,id',
-            'fecha'                      => 'required|date',
-            'hora'                       => 'nullable|date_format:H:i',
-            'procedimiento'              => 'required|string|max:255',
-            'descripcion'                => 'required|string',
-            'materiales'                 => 'nullable|array',
-            'materiales.*.nombre'        => 'required_with:materiales|string|max:150',
-            'materiales.*.cantidad'      => 'required_with:materiales|string|max:50',
-            'presion_arterial'           => 'nullable|string|max:20',
-            'frecuencia_cardiaca'        => 'nullable|string|max:20',
-            'proxima_cita_fecha'         => 'nullable|date',
-            'proxima_cita_procedimiento' => 'nullable|string|max:255',
-            'observaciones'              => 'nullable|string',
-            'dientes_tratados'           => 'nullable|string|max:100',
+            'paciente_id' => 'required|exists:pacientes,id',
+            'historia_clinica_id' => 'required|exists:historias_clinicas,id',
+            'fecha' => 'required|date',
+            'hora' => 'nullable|date_format:H:i',
+            'hora_inicio' => 'nullable|date_format:H:i',
+            'hora_fin' => 'nullable|date_format:H:i',
+            'procedimiento' => 'required|string|max:300',
+            'descripcion' => 'required|string|max:2000',
+            'observaciones' => 'nullable|string|max:2000',
+            'materiales' => 'nullable|array',
+            'materiales.*.nombre' => 'required_with:materiales|string|max:200',
+            'materiales.*.cantidad' => 'required_with:materiales|string|max:100',
+            'presion_arterial' => 'nullable|string|max:30',
+            'frecuencia_cardiaca' => 'nullable|string|max:30',
+            'proxima_cita_fecha' => 'nullable|date',
+            'proxima_cita_procedimiento' => 'nullable|string|max:300',
+            'dientes_tratados' => 'nullable|string|max:150',
         ]);
 
         // Deserializar materiales si viene como JSON string desde el hidden input
@@ -100,8 +102,32 @@ class EvolucionController extends Controller
 
         $datos = $this->formatearDatos($validated);
         $datos['user_id'] = Auth::id();
+        $datos['hora_inicio'] = $request->hora_inicio ?: null;
+        $datos['hora_fin'] = $request->hora_fin ?: null;
 
-        $evolucion = Evolucion::create($datos);
+        $evolucion = new Evolucion();
+
+        $evolucion->paciente_id = $datos['paciente_id'];
+        $evolucion->historia_clinica_id = $datos['historia_clinica_id'];
+        $evolucion->fecha = $datos['fecha'];
+        $evolucion->hora = $datos['hora'] ?? null;
+        $evolucion->hora_inicio = $datos['hora_inicio'] ?? null;
+        $evolucion->hora_fin = $datos['hora_fin'] ?? null;
+        $evolucion->procedimiento = $datos['procedimiento'];
+        $evolucion->descripcion = $datos['descripcion'];
+        $evolucion->materiales = $datos['materiales'] ?? null;
+        $evolucion->presion_arterial = $datos['presion_arterial'] ?? null;
+        $evolucion->frecuencia_cardiaca = $datos['frecuencia_cardiaca'] ?? null;
+        $evolucion->proxima_cita_fecha = $datos['proxima_cita_fecha'] ?? null;
+        $evolucion->proxima_cita_procedimiento = $datos['proxima_cita_procedimiento'] ?? null;
+        $evolucion->observaciones = $datos['observaciones'] ?? null;
+        $evolucion->dientes_tratados = $datos['dientes_tratados'] ?? null;
+        $evolucion->activo = true;
+
+        // 🔐 IMPORTANTE
+        $evolucion->user_id = Auth::id();
+
+        $evolucion->save();
 
         // Descontar materiales del inventario automáticamente
         if (!empty($evolucion->materiales)) {
@@ -113,7 +139,8 @@ class EvolucionController extends Controller
                 if ($material) {
                     $cantidadTexto = trim($materialUsado['cantidad'] ?? '1');
                     $cantidad = (float) filter_var($cantidadTexto, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-                    if ($cantidad <= 0) $cantidad = 1;
+                    if ($cantidad <= 0)
+                        $cantidad = 1;
 
                     if ($material->stock_actual >= $cantidad) {
                         $material->registrarSalida(
@@ -134,13 +161,14 @@ class EvolucionController extends Controller
     public function show($id)
     {
         $evolucion = Evolucion::with(['paciente', 'historiaClinica', 'doctor', 'correcciones.usuario'])->findOrFail($id);
+        $this->authorize('view', $evolucion);
         return view('evoluciones.show', compact('evolucion'));
     }
 
     public function edit($id)
     {
         $evolucion = Evolucion::with(['paciente', 'historiaClinica'])->findOrFail($id);
-
+        $this->authorize('update', $evolucion);
         // Firmada = no editable nunca
         if ($evolucion->firmado) {
             return redirect()
@@ -165,7 +193,7 @@ class EvolucionController extends Controller
     public function update(Request $request, $id)
     {
         $evolucion = Evolucion::findOrFail($id);
-
+        $this->authorize('update', $evolucion);
         if ($evolucion->firmado || $evolucion->created_at->diffInHours(now()) >= 24) {
             return redirect()
                 ->route('evoluciones.show', $evolucion)
@@ -173,21 +201,23 @@ class EvolucionController extends Controller
         }
 
         $validated = $request->validate([
-            'paciente_id'                => 'required|exists:pacientes,id',
-            'historia_clinica_id'        => 'required|exists:historias_clinicas,id',
-            'fecha'                      => 'required|date',
-            'hora'                       => 'nullable|date_format:H:i',
-            'procedimiento'              => 'required|string|max:255',
-            'descripcion'                => 'required|string',
-            'materiales'                 => 'nullable|array',
-            'materiales.*.nombre'        => 'required_with:materiales|string|max:150',
-            'materiales.*.cantidad'      => 'required_with:materiales|string|max:50',
-            'presion_arterial'           => 'nullable|string|max:20',
-            'frecuencia_cardiaca'        => 'nullable|string|max:20',
-            'proxima_cita_fecha'         => 'nullable|date',
-            'proxima_cita_procedimiento' => 'nullable|string|max:255',
-            'observaciones'              => 'nullable|string',
-            'dientes_tratados'           => 'nullable|string|max:100',
+            'paciente_id' => 'required|exists:pacientes,id',
+            'historia_clinica_id' => 'required|exists:historias_clinicas,id',
+            'fecha' => 'required|date',
+            'hora' => 'nullable|date_format:H:i',
+            'hora_inicio' => 'nullable|date_format:H:i',
+            'hora_fin' => 'nullable|date_format:H:i',
+            'procedimiento' => 'required|string|max:300',
+            'descripcion' => 'required|string|max:2000',
+            'materiales' => 'nullable|array',
+            'materiales.*.nombre' => 'required_with:materiales|string|max:200',
+            'materiales.*.cantidad' => 'required_with:materiales|string|max:100',
+            'presion_arterial' => 'nullable|string|max:30',
+            'frecuencia_cardiaca' => 'nullable|string|max:30',
+            'proxima_cita_fecha' => 'nullable|date',
+            'proxima_cita_procedimiento' => 'nullable|string|max:300',
+            'observaciones' => 'nullable|string|max:2000',
+            'dientes_tratados' => 'nullable|string|max:150',
         ]);
 
         if ($request->filled('materiales_json')) {
@@ -196,8 +226,26 @@ class EvolucionController extends Controller
         }
 
         $datos = $this->formatearDatos($validated);
+        $datos['hora_inicio'] = $request->hora_inicio ?: null;
+        $datos['hora_fin'] = $request->hora_fin ?: null;
 
-        $evolucion->update($datos);
+        $evolucion->paciente_id = $datos['paciente_id'];
+        $evolucion->historia_clinica_id = $datos['historia_clinica_id'];
+        $evolucion->fecha = $datos['fecha'];
+        $evolucion->hora = $datos['hora'] ?? null;
+        $evolucion->hora_inicio = $datos['hora_inicio'] ?? null;
+        $evolucion->hora_fin = $datos['hora_fin'] ?? null;
+        $evolucion->procedimiento = $datos['procedimiento'];
+        $evolucion->descripcion = $datos['descripcion'];
+        $evolucion->materiales = $datos['materiales'] ?? null;
+        $evolucion->presion_arterial = $datos['presion_arterial'] ?? null;
+        $evolucion->frecuencia_cardiaca = $datos['frecuencia_cardiaca'] ?? null;
+        $evolucion->proxima_cita_fecha = $datos['proxima_cita_fecha'] ?? null;
+        $evolucion->proxima_cita_procedimiento = $datos['proxima_cita_procedimiento'] ?? null;
+        $evolucion->observaciones = $datos['observaciones'] ?? null;
+        $evolucion->dientes_tratados = $datos['dientes_tratados'] ?? null;
+
+        $evolucion->save();
 
         return redirect()->route('evoluciones.show', $evolucion)
             ->with('exito', 'Evolución actualizada correctamente.');
@@ -216,6 +264,12 @@ class EvolucionController extends Controller
     public function firmarVista($id)
     {
         $evolucion = Evolucion::with('paciente')->findOrFail($id);
+
+        if ($evolucion->firmado) {
+            return redirect()->route('evoluciones.show', $id)
+                ->with('aviso', 'Esta evolución ya fue firmada.');
+        }
+
         return view('evoluciones.firmar', compact('evolucion'));
     }
 
@@ -224,40 +278,44 @@ class EvolucionController extends Controller
     {
         $request->validate(['firma_data' => 'required|string']);
 
-        $evolucion    = Evolucion::findOrFail($id);
-        $firmaData    = $request->firma_data;
+        $evolucion = Evolucion::findOrFail($id);
+
+        if ($evolucion->firmado) {
+            return response()->json(['error' => 'Esta evolución ya fue firmada.'], 422);
+        }
+        $firmaData = $request->firma_data;
         $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
             $request,
             $firmaData,
             [
-                'id'            => (string) $evolucion->id,
-                'numero'        => $evolucion->numero_evolucion ?? '',
-                'paciente'      => $evolucion->paciente->nombre_completo ?? '',
-                'doc'           => $evolucion->paciente->numero_documento ?? '',
+                'id' => (string) $evolucion->id,
+                'numero' => $evolucion->numero_evolucion ?? '',
+                'paciente' => $evolucion->paciente->nombre_completo ?? '',
+                'doc' => $evolucion->paciente->numero_documento ?? '',
                 'procedimiento' => $evolucion->procedimiento ?? '',
-                'fecha'         => $evolucion->fecha instanceof \Carbon\Carbon ? $evolucion->fecha->toDateString() : (string) $evolucion->fecha,
-                'doctor'        => auth()->user()->name ?? '',
+                'fecha' => $evolucion->fecha instanceof \Carbon\Carbon ? $evolucion->fecha->toDateString() : (string) $evolucion->fecha,
+                'doctor' => auth()->user()->name ?? '',
             ]
         );
 
         $evolucion->update(array_merge(
             [
-                'firmado'     => true,
-                'firma_data'  => $firmaData,
+                'firmado' => true,
+                'firma_data' => $firmaData,
                 'fecha_firma' => now(),
-                'ip_firma'    => $request->ip(),
+                'ip_firma' => $request->getClientIp(),
             ],
             $trazabilidad
         ));
 
         \Log::channel('firmas')->info('Evolución firmada', [
-            'modelo'   => 'Evolucion',
-            'id'       => $evolucion->id,
-            'numero'   => $evolucion->numero_evolucion,
+            'modelo' => 'Evolucion',
+            'id' => $evolucion->id,
+            'numero' => $evolucion->numero_evolucion,
             'paciente' => $evolucion->paciente->nombre_completo ?? '',
-            'ip'       => $request->ip(),
-            'hash'     => $trazabilidad['documento_hash'],
-            'token'    => $trazabilidad['firma_verificacion_token'],
+            'ip' => $request->getClientIp(),
+            'hash' => $trazabilidad['documento_hash'],
+            'token' => $trazabilidad['firma_verificacion_token'],
         ]);
 
         return response()->json(['success' => true, 'message' => 'Evolución firmada correctamente']);
@@ -266,7 +324,7 @@ class EvolucionController extends Controller
     // ── PDF ───────────────────────────────────────────────────
     public function pdf($id)
     {
-        $evolucion = Evolucion::with(['paciente', 'doctor', 'correcciones.usuario'])->findOrFail($id);
+        $evolucion = Evolucion::with(['paciente', 'doctor', 'correcciones.usuario', 'historiaClinica'])->findOrFail($id);
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('evoluciones.pdf', compact('evolucion'));
         $nombreArchivo = 'evolucion-' . $evolucion->paciente->numero_historia . '-' . $evolucion->fecha->format('Y-m-d') . '.pdf';
 
@@ -292,13 +350,13 @@ class EvolucionController extends Controller
         }
 
         $camposDisponibles = [
-            'procedimiento'              => 'Procedimiento',
-            'descripcion'                => 'Descripción clínica',
-            'presion_arterial'           => 'Presión arterial',
-            'frecuencia_cardiaca'        => 'Frecuencia cardiaca',
-            'dientes_tratados'           => 'Dientes tratados',
+            'procedimiento' => 'Procedimiento',
+            'descripcion' => 'Descripción clínica',
+            'presion_arterial' => 'Presión arterial',
+            'frecuencia_cardiaca' => 'Frecuencia cardiaca',
+            'dientes_tratados' => 'Dientes tratados',
             'proxima_cita_procedimiento' => 'Próxima cita — procedimiento',
-            'observaciones'              => 'Observaciones',
+            'observaciones' => 'Observaciones',
         ];
 
         return view('evoluciones.correccion', compact('evolucion', 'camposDisponibles'));
@@ -329,26 +387,26 @@ class EvolucionController extends Controller
             return response()->json(['error' => 'Ya está firmada'], 400);
         }
 
-        $firmaData    = $request->firma_data;
+        $firmaData = $request->firma_data;
         $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
             $request,
             $firmaData,
             [
-                'id'       => (string) $correccion->id,
-                'tipo'     => 'correccion_evolucion',
-                'campo'    => $correccion->campo_corregido ?? '',
+                'id' => (string) $correccion->id,
+                'tipo' => 'correccion_evolucion',
+                'campo' => $correccion->campo_corregido ?? '',
                 'paciente' => $correccion->evolucion->paciente->nombre_completo ?? '',
-                'doc'      => $correccion->evolucion->paciente->numero_documento ?? '',
-                'fecha'    => now()->toDateString(),
+                'doc' => $correccion->evolucion->paciente->numero_documento ?? '',
+                'fecha' => now()->toDateString(),
             ]
         );
 
         $correccion->update(array_merge(
             [
-                'firmado'     => true,
-                'firma_data'  => $firmaData,
+                'firmado' => true,
+                'firma_data' => $firmaData,
                 'fecha_firma' => now(),
-                'ip_firma'    => $request->ip(),
+                'ip_firma' => $request->getClientIp(),
             ],
             $trazabilidad
         ));
@@ -366,19 +424,32 @@ class EvolucionController extends Controller
 
         $request->validate([
             'campo_corregido' => 'required|string',
-            'valor_nuevo'     => 'required|string',
-            'motivo'          => 'required|string|min:10',
+            'valor_nuevo' => 'required|string',
+            'motivo' => 'required|string|min:10',
         ]);
+        $camposPermitidos = [
+            'procedimiento',
+            'descripcion',
+            'presion_arterial',
+            'frecuencia_cardiaca',
+            'dientes_tratados',
+            'proxima_cita_procedimiento',
+            'observaciones',
+        ];
+
+        if (!in_array($request->campo_corregido, $camposPermitidos)) {
+            abort(403, 'Campo no permitido');
+        }
 
         $valorAnterior = $evolucion->{$request->campo_corregido} ?? '';
 
         CorreccionEvolucion::create([
-            'evolucion_id'    => $evolucion->id,
-            'user_id'         => auth()->id(),
+            'evolucion_id' => $evolucion->id,
+            'user_id' => auth()->id(),
             'campo_corregido' => $request->campo_corregido,
-            'valor_anterior'  => is_array($valorAnterior) ? json_encode($valorAnterior) : (string) $valorAnterior,
-            'valor_nuevo'     => $request->valor_nuevo,
-            'motivo'          => $request->motivo,
+            'valor_anterior' => is_array($valorAnterior) ? json_encode($valorAnterior) : (string) $valorAnterior,
+            'valor_nuevo' => $request->valor_nuevo,
+            'motivo' => $request->motivo,
         ]);
 
         return redirect()

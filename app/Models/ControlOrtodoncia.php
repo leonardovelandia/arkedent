@@ -26,7 +26,7 @@ class ControlOrtodoncia extends Model
 
     protected $fillable = [
         'numero_control', 'ficha_ortodontica_id', 'paciente_id', 'cita_id', 'user_id',
-        'fecha_control', 'numero_sesion',
+        'fecha_control', 'hora_inicio', 'hora_fin', 'numero_sesion',
         'arco_superior', 'arco_inferior',
         'tipo_arco_superior', 'tipo_arco_inferior',
         'calibre_superior', 'calibre_inferior',
@@ -39,6 +39,8 @@ class ControlOrtodoncia extends Model
 
     protected $casts = [
         'fecha_control'        => 'date',
+        'hora_inicio'          => 'datetime:H:i',
+        'hora_fin'             => 'datetime:H:i',
         'brackets_reemplazados'=> 'array',
         'odontograma_sesion'   => 'array',
         'elasticos'            => 'boolean',
@@ -67,6 +69,19 @@ class ControlOrtodoncia extends Model
     }
 
     // ── Accessors ─────────────────────────────────────────────
+
+    public function getDuracionAttribute(): ?string
+    {
+        if (!$this->hora_inicio || !$this->hora_fin) return null;
+        $inicio = \Carbon\Carbon::parse($this->hora_inicio);
+        $fin    = \Carbon\Carbon::parse($this->hora_fin);
+        $mins   = $inicio->diffInMinutes($fin);
+        if ($mins <= 0) return null;
+        $h = (int) floor($mins / 60);
+        $m = $mins % 60;
+        if ($h === 0) return "{$m} min";
+        return $m > 0 ? "{$h}h {$m}min" : "{$h}h";
+    }
 
     public function getTipoArcoSuperiorColorAttribute(): string
     {

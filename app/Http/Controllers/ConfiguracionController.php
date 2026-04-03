@@ -37,7 +37,7 @@ class ConfiguracionController extends Controller
             'simbolo_moneda'                  => 'nullable|string|max:5',
             'recordatorios_activos'           => 'boolean',
             'horas_anticipacion_recordatorio' => 'nullable|integer|min:1|max:168',
-            'tema'                            => 'nullable|in:morado-elegante,rosa-profesional,verde-esmeralda,azul-marino,carbon-moderno,verde-premium',
+            'tema'                            => 'nullable|in:morado-elegante,rosa-profesional,verde-esmeralda,azul-marino,carbon-moderno,azul-clinico',
             'fuente_principal'                => 'nullable|string|max:50',
             'fuente_titulos'                  => 'nullable|string|max:50',
             'firma_nombre_doctor'             => 'nullable|string|max:120',
@@ -45,6 +45,14 @@ class ConfiguracionController extends Controller
             'firma_registro'                  => 'nullable|string|max:60',
             'firma_imagen'                    => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
             'firma_canvas'                    => 'nullable|string',
+            // Datos del profesional (Res. 1995/1999)
+            'nombre_doctor'                   => 'nullable|string|max:120',
+            'tarjeta_profesional'             => 'nullable|string|max:50',
+            'especialidad_medica'             => 'nullable|string|max:100',
+            'universidad'                     => 'nullable|string|max:150',
+            'codigo_habilitacion'             => 'nullable|string|max:50',
+            'tipo_prestador'                  => 'nullable|in:consultorio_privado,ips,centro_medico',
+            'hora_backup'                     => 'nullable|regex:/^\d{2}:\d{2}$/',
         ]);
 
         $config = Configuracion::obtener();
@@ -55,6 +63,10 @@ class ConfiguracionController extends Controller
             'duracion_cita_minutos', 'formato_hora',
             'moneda', 'simbolo_moneda', 'horas_anticipacion_recordatorio',
             'firma_nombre_doctor', 'firma_cargo', 'firma_registro',
+            // Datos del profesional (Res. 1995/1999)
+            'nombre_doctor', 'tarjeta_profesional', 'especialidad_medica',
+            'universidad', 'codigo_habilitacion', 'tipo_prestador',
+            'hora_backup',
         ]);
 
         // Construir horario por día

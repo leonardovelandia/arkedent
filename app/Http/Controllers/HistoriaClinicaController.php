@@ -8,6 +8,7 @@ use App\Models\Paciente;
 use App\Traits\FormateaCampos;
 use App\Traits\TrazabilidadFirma;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class HistoriaClinicaController extends Controller
 {
@@ -16,17 +17,20 @@ class HistoriaClinicaController extends Controller
     // ── Listado de historias ──────────────────────────────────
     public function index(Request $request)
     {
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+
         $query = HistoriaClinica::with('paciente')->latest();
 
         if ($buscar = $request->input('buscar')) {
             $query->whereHas('paciente', function ($q) use ($buscar) {
-                $q->where('nombre',   'like', "%{$buscar}%")
-                  ->orWhere('apellido','like', "%{$buscar}%")
-                  ->orWhere('numero_documento', 'like', "%{$buscar}%");
+                $q->where('nombre', 'like', "%{$buscar}%")
+                    ->orWhere('apellido', 'like', "%{$buscar}%")
+                    ->orWhere('numero_documento', 'like', "%{$buscar}%");
             });
         }
 
-        $historias = $query->paginate(15)->withQueryString();
+        $historias = $query->paginate($perPage)->withQueryString();
 
         return view('historias.index', compact('historias'));
     }
@@ -41,7 +45,7 @@ class HistoriaClinicaController extends Controller
 
             if ($paciente->historiaClinica) {
                 return redirect()->route('historias.show', $paciente->historiaClinica->id)
-                                 ->with('info', 'Este paciente ya tiene una historia clínica.');
+                    ->with('info', 'Este paciente ya tiene una historia clínica.');
             }
         }
 
@@ -54,24 +58,24 @@ class HistoriaClinicaController extends Controller
     public function store(Request $request)
     {
         $validado = $request->validate([
-            'paciente_id'              => 'required|exists:pacientes,id',
-            'fecha_apertura'           => 'required|date',
-            'motivo_consulta'          => 'required|string',
-            'enfermedad_actual'        => 'nullable|string',
-            'antecedentes_medicos'     => 'nullable|string',
-            'medicamentos_actuales'    => 'nullable|string',
-            'alergias'                 => 'nullable|string',
-            'antecedentes_familiares'  => 'nullable|string',
+            'paciente_id' => 'required|exists:pacientes,id',
+            'fecha_apertura' => 'required|date',
+            'motivo_consulta' => 'required|string',
+            'enfermedad_actual' => 'nullable|string',
+            'antecedentes_medicos' => 'nullable|string',
+            'medicamentos_actuales' => 'nullable|string',
+            'alergias' => 'nullable|string',
+            'antecedentes_familiares' => 'nullable|string',
             'antecedentes_odontologicos' => 'nullable|string',
-            'habitos'                  => 'nullable|string',
-            'presion_arterial'         => 'nullable|string|max:20',
-            'frecuencia_cardiaca'      => 'nullable|string|max:20',
-            'temperatura'              => 'nullable|string|max:10',
-            'peso'                     => 'nullable|numeric',
-            'talla'                    => 'nullable|numeric',
-            'odontograma'              => 'nullable|string',
-            'hallazgos'                => 'nullable|string',
-            'observaciones_generales'  => 'nullable|string',
+            'habitos' => 'nullable|string',
+            'presion_arterial' => 'nullable|string|max:20',
+            'frecuencia_cardiaca' => 'nullable|string|max:20',
+            'temperatura' => 'nullable|string|max:10',
+            'peso' => 'nullable|numeric',
+            'talla' => 'nullable|numeric',
+            'odontograma' => 'nullable|string',
+            'hallazgos' => 'nullable|string',
+            'observaciones_generales' => 'nullable|string',
         ]);
 
         // Verificar que el paciente no tenga ya una historia
@@ -93,7 +97,7 @@ class HistoriaClinicaController extends Controller
         $historia = HistoriaClinica::create($datos);
 
         return redirect()->route('historias.show', $historia)
-                         ->with('exito', 'Historia clínica creada correctamente.');
+            ->with('exito', 'Historia clínica creada correctamente.');
     }
 
     // ── Detalle de historia ───────────────────────────────────
@@ -131,23 +135,23 @@ class HistoriaClinicaController extends Controller
         }
 
         $validado = $request->validate([
-            'fecha_apertura'           => 'required|date',
-            'motivo_consulta'          => 'required|string',
-            'enfermedad_actual'        => 'nullable|string',
-            'antecedentes_medicos'     => 'nullable|string',
-            'medicamentos_actuales'    => 'nullable|string',
-            'alergias'                 => 'nullable|string',
-            'antecedentes_familiares'  => 'nullable|string',
+            'fecha_apertura' => 'required|date',
+            'motivo_consulta' => 'required|string',
+            'enfermedad_actual' => 'nullable|string',
+            'antecedentes_medicos' => 'nullable|string',
+            'medicamentos_actuales' => 'nullable|string',
+            'alergias' => 'nullable|string',
+            'antecedentes_familiares' => 'nullable|string',
             'antecedentes_odontologicos' => 'nullable|string',
-            'habitos'                  => 'nullable|string',
-            'presion_arterial'         => 'nullable|string|max:20',
-            'frecuencia_cardiaca'      => 'nullable|string|max:20',
-            'temperatura'              => 'nullable|string|max:10',
-            'peso'                     => 'nullable|numeric',
-            'talla'                    => 'nullable|numeric',
-            'odontograma'              => 'nullable|string',
-            'hallazgos'                => 'nullable|string',
-            'observaciones_generales'  => 'nullable|string',
+            'habitos' => 'nullable|string',
+            'presion_arterial' => 'nullable|string|max:20',
+            'frecuencia_cardiaca' => 'nullable|string|max:20',
+            'temperatura' => 'nullable|string|max:10',
+            'peso' => 'nullable|numeric',
+            'talla' => 'nullable|numeric',
+            'odontograma' => 'nullable|string',
+            'hallazgos' => 'nullable|string',
+            'observaciones_generales' => 'nullable|string',
         ]);
 
         $datos = $this->formatearDatos($validado);
@@ -163,13 +167,19 @@ class HistoriaClinicaController extends Controller
         $historia->update($datos);
 
         return redirect()->route('historias.show', $historia)
-                         ->with('exito', 'Historia clínica actualizada correctamente.');
+            ->with('exito', 'Historia clínica actualizada correctamente.');
     }
 
     // ── Firma: vista ──────────────────────────────────────────
     public function firmarVista($id)
     {
         $historia = HistoriaClinica::with('paciente')->findOrFail($id);
+
+        if ($historia->firmado) {
+            return redirect()->route('historias.show', $id)
+                ->with('aviso', 'Esta historia clínica ya fue firmada.');
+        }
+
         return view('historias.firmar', compact('historia'));
     }
 
@@ -177,39 +187,43 @@ class HistoriaClinicaController extends Controller
     public function firmar(Request $request, $id)
     {
         $request->validate(['firma_data' => 'required|string']);
-        $historia  = HistoriaClinica::with('paciente')->findOrFail($id);
+        $historia = HistoriaClinica::with('paciente')->findOrFail($id);
+
+        if ($historia->firmado) {
+            return response()->json(['error' => 'Esta historia clínica ya fue firmada.'], 422);
+        }
         $firmaData = $request->firma_data;
 
         $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
             $request,
             $firmaData,
             [
-                'id'       => (string) $historia->id,
-                'numero'   => $historia->numero_historia ?? '',
+                'id' => (string) $historia->id,
+                'numero' => $historia->numero_historia ?? '',
                 'paciente' => $historia->paciente->nombre_completo ?? '',
-                'doc'      => $historia->paciente->numero_documento ?? '',
-                'fecha'    => $historia->fecha_apertura?->toDateString() ?? now()->toDateString(),
+                'doc' => $historia->paciente->numero_documento ?? '',
+                'fecha' => $historia->fecha_apertura?->toDateString() ?? now()->toDateString(),
             ]
         );
 
         $historia->update(array_merge(
             [
-                'firmado'     => true,
-                'firma_data'  => $firmaData,
+                'firmado' => true,
+                'firma_data' => $firmaData,
                 'fecha_firma' => now(),
-                'ip_firma'    => $request->ip(),
+                'ip_firma' => $request->getClientIp(),
             ],
             $trazabilidad
         ));
 
         \Log::channel('firmas')->info('Historia Clínica firmada', [
-            'modelo'   => 'HistoriaClinica',
-            'id'       => $historia->id,
-            'numero'   => $historia->numero_historia,
+            'modelo' => 'HistoriaClinica',
+            'id' => $historia->id,
+            'numero' => $historia->numero_historia,
             'paciente' => $historia->paciente->nombre_completo ?? '',
-            'ip'       => $request->ip(),
-            'hash'     => $trazabilidad['documento_hash'],
-            'token'    => $trazabilidad['firma_verificacion_token'],
+            'ip' => $request->getClientIp(),
+            'hash' => $trazabilidad['documento_hash'],
+            'token' => $trazabilidad['firma_verificacion_token'],
         ]);
 
         return response()->json(['success' => true, 'message' => 'Historia firmada correctamente']);
@@ -243,20 +257,20 @@ class HistoriaClinicaController extends Controller
         }
 
         $camposDisponibles = [
-            'motivo_consulta'            => 'Motivo de consulta',
-            'enfermedad_actual'          => 'Enfermedad actual',
-            'antecedentes_medicos'       => 'Antecedentes médicos',
-            'medicamentos_actuales'      => 'Medicamentos actuales',
-            'alergias'                   => 'Alergias',
-            'antecedentes_familiares'    => 'Antecedentes familiares',
+            'motivo_consulta' => 'Motivo de consulta',
+            'enfermedad_actual' => 'Enfermedad actual',
+            'antecedentes_medicos' => 'Antecedentes médicos',
+            'medicamentos_actuales' => 'Medicamentos actuales',
+            'alergias' => 'Alergias',
+            'antecedentes_familiares' => 'Antecedentes familiares',
             'antecedentes_odontologicos' => 'Antecedentes odontológicos',
-            'habitos'                    => 'Hábitos',
-            'presion_arterial'           => 'Presión arterial',
-            'frecuencia_cardiaca'        => 'Frecuencia cardiaca',
-            'temperatura'                => 'Temperatura',
-            'peso'                       => 'Peso',
-            'talla'                      => 'Talla',
-            'observaciones_generales'    => 'Observaciones generales',
+            'habitos' => 'Hábitos',
+            'presion_arterial' => 'Presión arterial',
+            'frecuencia_cardiaca' => 'Frecuencia cardiaca',
+            'temperatura' => 'Temperatura',
+            'peso' => 'Peso',
+            'talla' => 'Talla',
+            'observaciones_generales' => 'Observaciones generales',
         ];
 
         return view('historias.correccion', compact('historia', 'camposDisponibles'));
@@ -287,24 +301,24 @@ class HistoriaClinicaController extends Controller
             return response()->json(['error' => 'Ya está firmada'], 400);
         }
 
-        $firmaData    = $request->firma_data;
+        $firmaData = $request->firma_data;
         $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
             $request,
             $firmaData,
             [
-                'id'     => (string) $correccion->id,
+                'id' => (string) $correccion->id,
                 'numero' => $correccion->numero_correccion ?? '',
-                'campo'  => $correccion->campo_corregido ?? '',
+                'campo' => $correccion->campo_corregido ?? '',
                 'motivo' => $correccion->motivo ?? '',
             ]
         );
 
         $correccion->update(array_merge(
             [
-                'firmado'     => true,
-                'firma_data'  => $firmaData,
+                'firmado' => true,
+                'firma_data' => $firmaData,
                 'fecha_firma' => now(),
-                'ip_firma'    => $request->ip(),
+                'ip_firma' => $request->getClientIp(),
             ],
             $trazabilidad
         ));
@@ -324,21 +338,39 @@ class HistoriaClinicaController extends Controller
             return redirect()->route('historias.edit', $historia);
         }
 
+        $camposPermitidos = [
+            'motivo_consulta',
+            'enfermedad_actual',
+            'antecedentes_medicos',
+            'medicamentos_actuales',
+            'alergias',
+            'antecedentes_familiares',
+            'antecedentes_odontologicos',
+            'habitos',
+            'presion_arterial',
+            'frecuencia_cardiaca',
+            'temperatura',
+            'peso',
+            'talla',
+            'hallazgos',
+            'observaciones_generales',
+        ];
+
         $request->validate([
-            'campo_corregido' => 'required|string',
-            'valor_nuevo'     => 'required|string',
-            'motivo'          => 'required|string|min:10',
+            'campo_corregido' => ['required', 'string', Rule::in($camposPermitidos)],
+            'valor_nuevo' => 'required|string',
+            'motivo' => 'required|string|min:10',
         ]);
 
         $valorAnterior = $historia->{$request->campo_corregido} ?? '';
 
         CorreccionHistoria::create([
             'historia_clinica_id' => $historia->id,
-            'user_id'             => auth()->id(),
-            'campo_corregido'     => $request->campo_corregido,
-            'valor_anterior'      => is_array($valorAnterior) ? json_encode($valorAnterior) : (string) $valorAnterior,
-            'valor_nuevo'         => $request->valor_nuevo,
-            'motivo'              => $request->motivo,
+            'user_id' => auth()->id(),
+            'campo_corregido' => $request->campo_corregido,
+            'valor_anterior' => is_array($valorAnterior) ? json_encode($valorAnterior) : (string) $valorAnterior,
+            'valor_nuevo' => $request->valor_nuevo,
+            'motivo' => $request->motivo,
         ]);
 
         return redirect()

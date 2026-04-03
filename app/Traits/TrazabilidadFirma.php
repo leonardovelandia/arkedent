@@ -17,7 +17,7 @@ trait TrazabilidadFirma
         string $firmaData,
         array $datosDocumento
     ): array {
-        $ip        = $request->ip();
+        $ip        = $request->getClientIp();
         $userAgent = $request->userAgent() ?? '';
         $timestamp = Carbon::now()->setTimezone('America/Bogota');
 
@@ -112,7 +112,7 @@ trait TrazabilidadFirma
         return "
         <div style='border:1.5px solid {$colorPDF};border-radius:4px;margin-top:16px;overflow:hidden;font-family:Arial,sans-serif;page-break-inside:avoid;'>
             <div style='background:{$colorPDF};color:white;padding:5px 10px;font-size:7.5px;font-weight:bold;text-transform:uppercase;letter-spacing:.08em;'>
-                CONSTANCIA DE FIRMA ELECTRÓNICA — LEY 527/1999 COLOMBIA
+                CONSTANCIA DE FIRMA ELECTRÓNICA
             </div>
             <div style='padding:8px 10px;background:#fafafa;'>
                 <table style='width:100%;border-collapse:collapse;'>

@@ -1,6 +1,7 @@
+
 {{-- ============================================================
      VISTA: Dashboard Principal
-     Sistema: Arkevix Dental ERP
+     Sistema: Arkedent
      Layout: layouts.app
      ============================================================ --}}
 @extends('layouts.app')
@@ -141,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
         gap: 1rem;
         position: relative;
         overflow: hidden;
+        box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);
     }
 
     .bienvenida-banner::after {
@@ -264,6 +266,8 @@ document.addEventListener('DOMContentLoaded', function() {
         grid-template-columns: 1fr 340px;
         gap: 1rem;
         margin-bottom: 1rem;
+        
+        
     }
 
     .panel-card {
@@ -280,6 +284,8 @@ document.addEventListener('DOMContentLoaded', function() {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        box-shadow:0 8px 4px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);
+        
     }
 
     .panel-card-titulo {
@@ -578,7 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <i class="bi bi-calendar-day"></i>
                 Citas de hoy — {{ now()->locale('es')->isoFormat('D [de] MMMM') }}
             </div>
-            <a href="{{ route('citas.index') }}" class="panel-card-accion">
+            <a href="{{ route('citas.agenda') }}" class="panel-card-accion">
                 Ver agenda completa →
             </a>
         </div>
@@ -630,42 +636,42 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="acceso-grid">
             @modulo('pacientes')
-            <a href="{{ route('pacientes.create') }}" class="acceso-btn">
+            <a href="{{ route('pacientes.create') }}" class="acceso-btn" style="box-shadow:0 8px 6px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
                 <i class="bi bi-person-plus"></i>
                 <span>Nuevo Paciente</span>
             </a>
             @endmodulo
 
             @modulo('citas')
-            <a href="{{ route('citas.create') }}" class="acceso-btn">
+            <a href="{{ route('citas.create') }}" class="acceso-btn" style="box-shadow:0 8px 6px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
                 <i class="bi bi-calendar-plus"></i>
                 <span>Nueva Cita</span>
             </a>
             @endmodulo
 
             @modulo('pagos')
-            <a href="{{ route('pagos.create') }}" class="acceso-btn">
+            <a href="{{ route('pagos.create') }}" class="acceso-btn" style="box-shadow:0 8px 6px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
                 <i class="bi bi-cash-coin"></i>
                 <span>Registrar Pago</span>
             </a>
             @endmodulo
 
             @modulo('evoluciones')
-            <a href="{{ route('evoluciones.create') }}" class="acceso-btn">
+            <a href="{{ route('evoluciones.create') }}" class="acceso-btn" style="box-shadow:0 8px 6px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
                 <i class="bi bi-clipboard2-plus"></i>
                 <span>Nueva Evolución</span>
             </a>
             @endmodulo
 
             @modulo('presupuestos')
-            <a href="{{ route('presupuestos.create') }}" class="acceso-btn">
+            <a href="{{ route('presupuestos.create') }}" class="acceso-btn" style="box-shadow:0 8px 6px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
                 <i class="bi bi-file-earmark-plus"></i>
                 <span>Presupuesto</span>
             </a>
             @endmodulo
 
             @modulo('valoraciones')
-            <a href="{{ route('valoraciones.create') }}" class="acceso-btn">
+            <a href="{{ route('valoraciones.create') }}" class="acceso-btn" style="box-shadow:0 8px 6px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
                 <i class="bi bi-clipboard2-pulse"></i>
                 <span>Nueva Valoración</span>
             </a>
@@ -673,7 +679,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             @modulo('reportes')
             @if(!auth()->user()->hasRole('asistente'))
-            <a href="{{ route('reportes.index') }}" class="acceso-btn">
+            <a href="{{ route('reportes.index') }}" class="acceso-btn" style="box-shadow:0 8px 6px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
                 <i class="bi bi-graph-up"></i>
                 <span>Reportes</span>
             </a>

@@ -173,10 +173,15 @@
                    style="background:rgba(74,222,128,.2);color:#86efac;border:1px solid rgba(74,222,128,.3);border-radius:20px;padding:.22rem .85rem;font-size:.72rem;font-weight:600;text-decoration:none;">
                     <i class="bi bi-shield-check"></i> Autorización firmada
                 </a>
+            @elseif($paciente->autorizacionDatos)
+                <a href="{{ route('autorizacion.show', $paciente->autorizacionDatos->id) }}"
+                   style="background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.3);border-radius:20px;padding:.22rem .85rem;font-size:.72rem;font-weight:600;text-decoration:none;">
+                    <i class="bi bi-shield-exclamation"></i> Pendiente de firma
+                </a>
             @else
                 <a href="{{ route('autorizacion.create', ['paciente_id' => $paciente->id]) }}"
                    style="background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.3);border-radius:20px;padding:.22rem .85rem;font-size:.72rem;font-weight:600;text-decoration:none;">
-                    <i class="bi bi-shield-exclamation"></i> Firmar autorización
+                    <i class="bi bi-shield-exclamation"></i> Crear autorización
                 </a>
             @endif
         </div>

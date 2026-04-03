@@ -3,18 +3,18 @@
 
 @push('estilos')
 <style>
-    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.45rem 1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer; }
+    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.45rem 1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     .btn-morado:hover { filter:brightness(1.12); color:#fff; }
 
-    .nav-semana { background:#fff; border:1px solid var(--color-muy-claro); border-radius:12px; padding:.75rem 1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.5rem; margin-bottom:1rem; }
+    .nav-semana { background:#fff; border:1px solid var(--color-muy-claro); border-radius:12px; padding:.75rem 1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.5rem; margin-bottom:1rem; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     .nav-semana-titulo { font-weight:700; color:#1c2b22; font-size:1rem; }
 
     .agenda-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:.6rem; }
     @media(max-width:900px) { .agenda-grid { grid-template-columns:repeat(3,1fr); } }
     @media(max-width:540px) { .agenda-grid { grid-template-columns:repeat(2,1fr); } }
 
-    .col-dia { background:#fff; border:1px solid var(--color-muy-claro); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; min-height:320px; }
-    .col-dia.es-hoy { border-color:var(--color-principal); box-shadow:0 0 0 2px var(--color-muy-claro); }
+    .col-dia { background:#fff; border:1px solid var(--color-muy-claro); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; min-height:320px; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
+    .col-dia.es-hoy { border-color:var(--color-principal); box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12),0 0 0 2px var(--color-muy-claro); }
     .col-dia-head { padding:.6rem .75rem; border-bottom:1px solid var(--fondo-borde); }
     .col-dia.es-hoy .col-dia-head { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; }
     .dia-nombre { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#9ca3af; }
@@ -51,7 +51,7 @@
         <p style="font-size:.82rem;color:#9ca3af;margin:0;">Vista semanal de citas — Lunes a Sábado</p>
     </div>
     <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-        <a href="{{ route('citas.index') }}" class="btn-morado" style="background:transparent;color:var(--color-principal);border:1px solid var(--color-principal);">
+        <a href="{{ route('citas.index') }}" class="btn-morado" style="background:transparent;color:var(--color-principal);border:1px solid var(--color-principal);box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
             <i class="bi bi-list-ul"></i> Ver listado
         </a>
         <a href="{{ route('citas.create') }}" class="btn-morado">

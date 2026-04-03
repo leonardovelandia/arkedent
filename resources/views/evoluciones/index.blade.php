@@ -3,7 +3,7 @@
 
 @push('estilos')
 <style>
-    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; }
+    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     .btn-morado:hover { filter:brightness(1.12); color:#fff; }
     .btn-outline-morado { background:transparent; color:var(--color-principal); border:1px solid var(--color-principal); border-radius:8px; padding:.45rem 1rem; font-size:.82rem; font-weight:500; display:inline-flex; align-items:center; gap:.35rem; transition:background .15s; text-decoration:none; }
     .btn-outline-morado:hover { background:var(--color-muy-claro); color:var(--color-hover); }
@@ -55,107 +55,103 @@
     </a>
 </div>
 
-{{-- Buscador --}}
-<div class="card-sistema mb-3">
-    <form id="form-buscar" method="GET" action="{{ route('evoluciones.index') }}" class="search-wrap">
-        @if($pacienteFiltro)
-            <input type="hidden" name="paciente_id" value="{{ $pacienteFiltro->id }}">
-        @endif
-        <div class="search-field">
-            <span class="search-label"><i class="bi bi-search"></i> Buscar Evolución</span>
-            <div class="search-input-wrap">
-                <i class="bi bi-search"></i>
-                <input type="text" id="input-buscar" name="buscar" class="search-input"
-                       placeholder="Paciente o procedimiento..."
-                       value="{{ $buscar }}" autocomplete="off">
-            </div>
+@if($pacienteFiltro)
+<div style="margin-bottom:.75rem;">
+    <span style="background:var(--color-muy-claro);border:1px solid var(--color-muy-claro);border-radius:8px;padding:.4rem .85rem;font-size:.8rem;color:var(--color-hover);display:inline-flex;align-items:center;gap:.4rem;">
+        <i class="bi bi-person-fill"></i>
+        Mostrando evoluciones de: <strong>{{ $pacienteFiltro->nombre_completo }}</strong>
+        <a href="{{ route('evoluciones.index') }}" style="color:var(--color-hover);margin-left:.25rem;"><i class="bi bi-x"></i></a>
+    </span>
+</div>
+@endif
+
+<x-tabla-listado
+    :paginacion="$evoluciones"
+    placeholder="Paciente o procedimiento..."
+    icono-vacio="bi-clipboard2-pulse"
+    mensaje-vacio="No se encontraron evoluciones"
+>
+    @if($pacienteFiltro)
+    <x-slot:filtros>
+        <input type="hidden" name="paciente_id" value="{{ $pacienteFiltro->id }}">
+    </x-slot:filtros>
+    @endif
+
+    <x-slot:accion-vacio>
+        <div class="mt-3">
+            <a href="{{ route('evoluciones.create') }}" class="btn-morado">
+                <i class="bi bi-clipboard2-plus"></i> Registrar primera evolución
+            </a>
         </div>
-        @if($buscar || $pacienteFiltro)
-            <div class="search-field" style="justify-content:flex-end;">
-                <span class="search-label" style="opacity:0">—</span>
-                <a href="{{ route('evoluciones.index') }}" class="btn-outline-morado">
-                    <i class="bi bi-x"></i> Limpiar
+    </x-slot:accion-vacio>
+
+    <x-slot:thead>
+        <tr>
+            <th>Paciente</th>
+            <th>N° EVO</th>
+            <th>Procedimiento</th>
+            <th>Dientes</th>
+            <th>Fecha</th>
+            <th>Doctor</th>
+            <th style="text-align:center;">Acciones</th>
+        </tr>
+    </x-slot:thead>
+
+    @foreach($evoluciones as $e)
+    <tr>
+        <td>
+            <div style="display:flex;align-items:center;gap:.65rem;">
+                <span style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--color-principal),var(--color-claro));color:#fff;font-size:.75rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    {{ strtoupper(substr($e->paciente->nombre,0,1)) }}{{ strtoupper(substr($e->paciente->apellido,0,1)) }}
+                </span>
+                <div>
+                    <div style="font-weight:600;color:#1c2b22;">{{ $e->paciente->nombre_completo }}</div>
+                    <div style="font-size:.78rem;color:#6b7280;">{{ $e->paciente->numero_documento }}</div>
+                </div>
+            </div>
+        </td>
+        <td>
+            <span style="font-family:monospace;font-weight:700;color:#1d4ed8;background:#dbeafe;padding:.15rem .5rem;border-radius:6px;font-size:.82rem;">
+                {{ $e->numero_evolucion ?? ('#'.$e->id) }}
+            </span>
+        </td>
+        <td style="max-width:220px;">
+            <span style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.84rem;font-weight:500;color:#374151;">
+                {{ $e->procedimiento }}
+            </span>
+        </td>
+        <td>
+            @if($e->dientes_tratados)
+                <span style="background:var(--color-muy-claro);color:var(--color-hover);border-radius:20px;padding:.18rem .65rem;font-size:.72rem;font-weight:600;">
+                    <i class="bi bi-tooth"></i> {{ $e->dientes_tratados }}
+                </span>
+            @else
+                <span style="color:#d1d5db;">—</span>
+            @endif
+        </td>
+        <td style="font-size:.84rem;color:#4b5563;white-space:nowrap;">
+            {{ $e->fecha_formateada }}
+            @if($e->hora)
+                <div style="font-size:.72rem;color:#9ca3af;">{{ \Carbon\Carbon::parse($e->hora)->format('h:i A') }}</div>
+            @endif
+        </td>
+        <td style="font-size:.84rem;color:#4b5563;">{{ $e->doctor ? $e->doctor->name : '—' }}</td>
+        <td>
+            <div style="display:flex;justify-content:center;gap:.3rem;">
+                <a href="{{ route('evoluciones.show', $e) }}" class="tbl-btn-accion" title="Ver detalle">
+                    <i class="bi bi-eye"></i>
+                </a>
+                <a href="{{ route('evoluciones.edit', $e) }}" class="tbl-btn-accion" title="Editar">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{{ route('evoluciones.pdf', $e) }}" class="tbl-btn-accion" target="_blank" title="PDF">
+                    <i class="bi bi-file-earmark-pdf"></i>
                 </a>
             </div>
-        @endif
-    </form>
-    @if($pacienteFiltro)
-        <div style="margin-top:.65rem;">
-            <span class="filtro-pac">
-                <i class="bi bi-person-fill"></i>
-                Mostrando evoluciones de: <strong>{{ $pacienteFiltro->nombre_completo }}</strong>
-            </span>
-        </div>
-    @endif
-</div>
+        </td>
+    </tr>
+    @endforeach
 
-{{-- Tabla --}}
-<div class="card-sistema" id="tabla-container" style="padding:0;overflow:hidden;">
-    @include('evoluciones._tabla')
-</div>
-
-@push('scripts')
-<script>
-(function () {
-    var baseUrl    = '{{ route('evoluciones.index') }}';
-    var form       = document.getElementById('form-buscar');
-    var contenedor = document.getElementById('tabla-container');
-    var input      = document.getElementById('input-buscar');
-    var timer;
-
-    function getParams() {
-        return new URLSearchParams(new FormData(form)).toString();
-    }
-
-    function cargarTabla(url) {
-        contenedor.style.opacity = '.4';
-        contenedor.style.pointerEvents = 'none';
-        history.replaceState(null, '', url);
-        fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-            .then(function(r) { return r.text(); })
-            .then(function(html) {
-                contenedor.innerHTML = html;
-                contenedor.style.opacity = '';
-                contenedor.style.pointerEvents = '';
-                bindPaginacion();
-            })
-            .catch(function() {
-                contenedor.style.opacity = '';
-                contenedor.style.pointerEvents = '';
-            });
-    }
-
-    function bindPaginacion() {
-        contenedor.querySelectorAll('.pagination a').forEach(function(a) {
-            a.addEventListener('click', function(e) {
-                e.preventDefault();
-                cargarTabla(this.href);
-            });
-        });
-    }
-
-    form.addEventListener('submit', function(e) { e.preventDefault(); });
-
-    input.addEventListener('input', function () {
-        var pos = this.selectionStart;
-        this.value = this.value.toLowerCase().replace(/\b\w/g, function(l){ return l.toUpperCase(); });
-        this.setSelectionRange(pos, pos);
-        clearTimeout(timer);
-        timer = setTimeout(function() { cargarTabla(baseUrl + '?' + getParams()); }, 400);
-    });
-
-    var btnLimpiar = document.querySelector('a[href="{{ route('evoluciones.index') }}"].btn-outline-morado');
-    if (btnLimpiar) {
-        btnLimpiar.addEventListener('click', function(e) {
-            e.preventDefault();
-            input.value = '';
-            cargarTabla(baseUrl);
-        });
-    }
-
-    bindPaginacion();
-})();
-</script>
-@endpush
+</x-tabla-listado>
 
 @endsection

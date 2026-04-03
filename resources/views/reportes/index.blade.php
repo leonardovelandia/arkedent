@@ -78,10 +78,10 @@
         <p>{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</p>
     </div>
     <div class="accesos-rapidos">
-        <a href="{{ route('reportes.ingresos') }}" class="btn-reporte"><i class="bi bi-cash-coin"></i> Ingresos</a>
-        <a href="{{ route('reportes.egresos') }}"  class="btn-reporte rojo"><i class="bi bi-arrow-down-circle"></i> Egresos</a>
-        <a href="{{ route('reportes.pacientes') }}" class="btn-reporte"><i class="bi bi-people"></i> Pacientes</a>
-        <a href="{{ route('reportes.citas') }}"    class="btn-reporte"><i class="bi bi-calendar-check"></i> Citas</a>
+        <a href="{{ route('reportes.ingresos') }}" class="btn-reporte" style="box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);"><i class="bi bi-cash-coin"></i> Ingresos</a>
+        <a href="{{ route('reportes.egresos') }}"  class="btn-reporte rojo" style="box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);"><i class="bi bi-arrow-down-circle"></i> Egresos</a>
+        <a href="{{ route('reportes.pacientes') }}" class="btn-reporte" style="box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);"><i class="bi bi-people"></i> Pacientes</a>
+        <a href="{{ route('reportes.citas') }}"    class="btn-reporte" style="box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);"><i class="bi bi-calendar-check"></i> Citas</a>
     </div>
 </div>
 

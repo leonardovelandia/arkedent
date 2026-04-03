@@ -6,7 +6,7 @@
     .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.25rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer; }
     .btn-morado:hover { filter:brightness(1.12); color:#fff; }
     .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; text-decoration:none; }
-    .form-card { background:#fff; border:1px solid var(--color-muy-claro); border-radius:12px; padding:1.5rem; margin-bottom:1.25rem; }
+    .form-card { background:#fff; border:1px solid var(--color-muy-claro); border-radius:12px; padding:1.5rem; margin-bottom:1.25rem; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     .form-label { font-size:.8rem; font-weight:700; color:var(--color-hover); display:block; margin-bottom:.3rem; }
     .form-input { width:100%; border:1.5px solid var(--color-muy-claro); border-radius:8px; padding:.5rem .75rem; font-size:.875rem; color:#1c2b22; background:#fff; outline:none; transition:border-color .15s; box-sizing:border-box; }
     .form-input:focus { border-color:var(--color-principal); }

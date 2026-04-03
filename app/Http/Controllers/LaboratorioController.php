@@ -44,11 +44,9 @@ class LaboratorioController extends Controller
             $query->whereDate('created_at', '<=', $request->hasta);
         }
 
-        $ordenes = $query->orderByDesc('created_at')->paginate(20)->withQueryString();
-
-        if ($request->ajax()) {
-            return view('laboratorio._tabla', compact('ordenes'));
-        }
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
+        $ordenes = $query->orderByDesc('created_at')->paginate($perPage)->withQueryString();
 
         $laboratorios    = Laboratorio::activos()->orderBy('nombre')->get();
         $ordenesVencidas = OrdenLaboratorio::where('activo', true)->vencidas()->count();

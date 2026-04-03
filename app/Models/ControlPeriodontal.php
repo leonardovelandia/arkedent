@@ -23,7 +23,7 @@ class ControlPeriodontal extends Model
 
     protected $fillable = [
         'numero_control','ficha_periodontal_id','paciente_id','user_id',
-        'fecha_control','numero_sesion','tipo_sesion',
+        'fecha_control','hora_inicio','hora_fin','numero_sesion','tipo_sesion',
         'zonas_tratadas','sondaje_control',
         'indice_placa_control','indice_gingival_control',
         'anestesia_utilizada','instrumentos_utilizados',
@@ -32,9 +32,24 @@ class ControlPeriodontal extends Model
 
     protected $casts = [
         'fecha_control'   => 'date:Y-m-d',
+        'hora_inicio'     => 'datetime:H:i',
+        'hora_fin'        => 'datetime:H:i',
         'zonas_tratadas'  => 'array',
         'sondaje_control' => 'array',
     ];
+
+    public function getDuracionAttribute(): ?string
+    {
+        if (!$this->hora_inicio || !$this->hora_fin) return null;
+        $inicio = \Carbon\Carbon::parse($this->hora_inicio);
+        $fin    = \Carbon\Carbon::parse($this->hora_fin);
+        $mins   = $inicio->diffInMinutes($fin);
+        if ($mins <= 0) return null;
+        $h = (int) floor($mins / 60);
+        $m = $mins % 60;
+        if ($h === 0) return "{$m} min";
+        return $m > 0 ? "{$h}h {$m}min" : "{$h}h";
+    }
 
     public function fichaPeriodontal() { return $this->belongsTo(FichaPeriodontal::class); }
     public function paciente() { return $this->belongsTo(Paciente::class); }

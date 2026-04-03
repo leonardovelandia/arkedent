@@ -10,16 +10,22 @@ use Illuminate\Support\Facades\Storage;
 class PacienteController extends Controller
 {
     use FormateaCampos;
-    // ── Listado con búsqueda y filtro ─────────────────────────
+    // ── Listado con búsqueda, filtros y paginación dinámica ──
     public function index(Request $request)
     {
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10)
+            : 10;
+
         $query = Paciente::query()->orderBy('apellido');
 
-        if ($buscar = $request->input('buscar')) {
+        if ($buscar = trim($request->input('buscar', ''))) {
             $query->where(function ($q) use ($buscar) {
-                $q->where('nombre', 'like', "%{$buscar}%")
-                  ->orWhere('apellido', 'like', "%{$buscar}%")
-                  ->orWhere('numero_documento', 'like', "%{$buscar}%");
+                $q->where('nombre',           'like', "%{$buscar}%")
+                  ->orWhere('apellido',        'like', "%{$buscar}%")
+                  ->orWhere('numero_documento','like', "%{$buscar}%")
+                  ->orWhere('telefono',        'like', "%{$buscar}%")
+                  ->orWhere('email',           'like', "%{$buscar}%");
             });
         }
 
@@ -27,7 +33,7 @@ class PacienteController extends Controller
             $query->where('activo', $request->input('estado') === 'activo');
         }
 
-        $pacientes = $query->with('autorizacionDatos')->paginate(15)->withQueryString();
+        $pacientes = $query->with('autorizacionDatos')->paginate($perPage)->withQueryString();
 
         return view('pacientes.index', compact('pacientes'));
     }

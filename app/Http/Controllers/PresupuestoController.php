@@ -45,11 +45,10 @@ class PresupuestoController extends Controller
             $query->where('estado', $request->input('estado'));
         }
 
-        $presupuestos = $query->paginate(15)->withQueryString();
+        $perPage = in_array((int) $request->input('per_page', 10), [10, 25, 50])
+            ? (int) $request->input('per_page', 10) : 10;
 
-        if ($request->ajax()) {
-            return view('presupuestos._tabla', compact('presupuestos'));
-        }
+        $presupuestos = $query->paginate($perPage)->withQueryString();
 
         return view('presupuestos.index', compact('presupuestos'));
     }
@@ -296,6 +295,10 @@ class PresupuestoController extends Controller
             'firma_data' => 'required|string',
         ]);
 
+        if ($presupuesto->firmado) {
+            return response()->json(['error' => 'Este presupuesto ya fue firmado.'], 422);
+        }
+
         $firmaData    = $request->firma_data;
         $trazabilidad = TrazabilidadFirma::generarTrazabilidad(
             $request,
@@ -314,7 +317,7 @@ class PresupuestoController extends Controller
             [
                 'firmado'    => true,
                 'firma_data' => $firmaData,
-                'ip_firma'   => $request->ip(),
+                'ip_firma'   => $request->getClientIp(),
             ],
             $trazabilidad
         ));
@@ -326,7 +329,7 @@ class PresupuestoController extends Controller
             'id'       => $presupuesto->id,
             'numero'   => $presupuesto->numero_presupuesto,
             'paciente' => $presupuesto->paciente->nombre_completo ?? '',
-            'ip'       => $request->ip(),
+            'ip'       => $request->getClientIp(),
             'hash'     => $trazabilidad['documento_hash'],
             'token'    => $trazabilidad['firma_verificacion_token'],
         ]);

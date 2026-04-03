@@ -86,7 +86,7 @@ class DevController extends Controller
             'password_nuevo'  => 'required|string|min:8|confirmed',
         ]);
 
-        $actual = env('DEV_PASSWORD', 'arkevix2024');
+        $actual = env('DEV_PASSWORD', 'arkedent2024');
 
         if ($request->input('password_actual') !== $actual) {
             return back()->with('error', 'La contraseña actual es incorrecta.');

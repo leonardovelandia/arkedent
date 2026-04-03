@@ -13,7 +13,7 @@
     $dentesInferiores = [48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
 @endphp
 
-<div id="odontograma-ortodoncia-wrap" style="background:white;border-radius:16px;padding:1.5rem;border:1px solid var(--fondo-borde);box-shadow:0 4px 24px var(--sombra-principal);">
+<div id="odontograma-ortodoncia-wrap" style="background:white;border-radius:16px;padding:1.5rem;border:1px solid var(--fondo-borde);box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
 
     {{-- Leyenda --}}
     <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--fondo-borde);">
