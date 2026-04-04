@@ -64,6 +64,24 @@
     box-shadow: 0 0 0 2px var(--fondo-borde);
 }
 .ctrl-card { background: var(--fondo-card-alt); border: 1px solid var(--fondo-borde); border-radius: 10px; padding: .85rem 1rem; }
+
+/* ── Classic overrides ── */
+body:not([data-ui="glass"]) .per-tab-btn { color:var(--texto-secundario); }
+body:not([data-ui="glass"]) .per-tab-btn.activo { color:var(--color-principal); border-bottom-color:var(--color-principal); }
+body:not([data-ui="glass"]) .ctrl-card { background:var(--fondo-card-alt); border:1px solid var(--fondo-borde); }
+
+/* ── Aurora Glass overrides ── */
+body[data-ui="glass"] .per-tab-btn { color:rgba(255,255,255,0.60) !important; }
+body[data-ui="glass"] .per-tab-btn.activo { color:rgba(0,234,255,0.95) !important; border-bottom-color:rgba(0,234,255,0.80) !important; }
+body[data-ui="glass"] .sondaje-read thead th { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.80) !important; }
+body[data-ui="glass"] .sondaje-read th,
+body[data-ui="glass"] .sondaje-read td { border-color:rgba(0,234,255,0.15) !important; color:rgba(255,255,255,0.80) !important; }
+body[data-ui="glass"] .sval.s1 { background:rgba(22,101,52,0.25) !important; color:#86efac !important; }
+body[data-ui="glass"] .sval.s2 { background:rgba(133,77,14,0.25) !important; color:#fde68a !important; }
+body[data-ui="glass"] .sval.s3 { background:rgba(154,52,18,0.25) !important; color:#fdba74 !important; }
+body[data-ui="glass"] .sval.s4 { background:rgba(127,29,29,0.25) !important; color:#fca5a5 !important; }
+body[data-ui="glass"] .ctrl-card { background:rgba(0,0,0,0.20) !important; border-color:rgba(0,234,255,0.20) !important; }
+body[data-ui="glass"] .ctrl-card h6 { color:rgba(0,234,255,0.90) !important; }
 </style>
 @endpush
 

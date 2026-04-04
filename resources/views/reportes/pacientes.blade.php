@@ -54,6 +54,43 @@
 
     .btn-accion { display:inline-flex; align-items:center; gap:.3rem; padding:.25rem .6rem; border-radius:6px; font-size:.75rem; font-weight:500; text-decoration:none; background:var(--color-muy-claro); color:var(--color-principal); transition:background .15s; }
     .btn-accion:hover { background:var(--color-muy-claro); color:var(--color-principal); }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .filtros-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .metrica-reporte { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-card-header { border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .form-label { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-input { color:#1c2b22; background:#fff; border:1.5px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .tabla-reporte td { color:#374151; border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+    body:not([data-ui="glass"]) .badge-femenino  { background:#fce7f3; color:#be185d; }
+    body:not([data-ui="glass"]) .badge-masculino { background:#dbeafe; color:#1e40af; }
+    body:not([data-ui="glass"]) .badge-otro      { background:#f3f4f6; color:#374151; }
+
+    /* Glass */
+    body[data-ui="glass"] .filtros-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .metrica-reporte { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .metrica-valor { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .metrica-label { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .panel-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .panel-card-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .panel-card-titulo { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .panel-card-titulo i { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-input { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-input:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .tabla-reporte th { color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .tabla-reporte td { color:rgba(255,255,255,0.88) !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; }
+    body[data-ui="glass"] .tabla-reporte tr:hover td { background:rgba(0,234,255,0.08) !important; }
+    body[data-ui="glass"] .barra-progreso-custom { background:rgba(255,255,255,0.10) !important; }
+    body[data-ui="glass"] .badge-femenino  { background:rgba(244,114,182,0.15) !important; color:#f9a8d4 !important; border:1px solid rgba(244,114,182,0.30) !important; }
+    body[data-ui="glass"] .badge-masculino { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .badge-otro      { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.55) !important; border:1px solid rgba(255,255,255,0.15) !important; }
+    body[data-ui="glass"] .btn-accion { background:rgba(0,234,255,0.10) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .btn-back { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

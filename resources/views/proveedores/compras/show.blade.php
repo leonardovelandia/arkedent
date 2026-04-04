@@ -26,6 +26,30 @@
         .no-print { display:none !important; }
         .panel-card { box-shadow:none; border:1px solid #ccc; }
     }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .panel-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-header { border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-titulo { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .dato-label { color:#8fa39a; }
+    body:not([data-ui="glass"]) .dato-valor { color:#1c2b22; }
+    body:not([data-ui="glass"]) .tabla-items td { color:#374151; border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .total-row { color:#374151; }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .panel-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .panel-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .panel-titulo { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .panel-titulo i { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .dato-label { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .dato-valor { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .tabla-items th { color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .tabla-items td { color:rgba(255,255,255,0.88) !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; }
+    body[data-ui="glass"] .total-row { color:rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .total-final { color:rgba(0,234,255,0.90) !important; border-top:2px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
 </style>
 @endpush
 

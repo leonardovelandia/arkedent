@@ -16,6 +16,16 @@
     .por-vencer { background:#fff7ed; border:1px solid #fed7aa; border-radius:6px; padding:.15rem .45rem; font-size:.7rem; font-weight:600; color:#c2410c; }
     #tabla-container { min-height:100px; transition:opacity .15s; }
     #tabla-container.cargando { opacity:.4; pointer-events:none; }
+
+    /* Aurora Glass */
+    body[data-ui="glass"] .form-input { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-select { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-input::placeholder { color: rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .form-select option { background: #052837; }
+    /* Stat cards — inline color overrides */
+    body[data-ui="glass"] .card-sistema div[style*="color:#1c2b22"] { color: rgba(255,255,255,0.95) !important; }
+    body[data-ui="glass"] .card-sistema div[style*="color:#9ca3af"] { color: rgba(255,255,255,0.45) !important; }
+    body[data-ui="glass"] .por-vencer { background: rgba(255,138,76,0.15) !important; border-color: rgba(255,138,76,0.35) !important; color: #fdba74 !important; }
 </style>
 @endpush
 

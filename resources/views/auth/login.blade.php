@@ -945,7 +945,7 @@
                     {{-- Logo --}}
                     <img src="{{ asset('arkedent.png') }}" alt="Arkedent" style="height:50px;">
                     <p style="margin:0; font-size:0.7rem; color:#6b7280;">
-                        Dental ERP System v1.0.0
+                        Sistema de Gestión Odontológica Integral
                     </p>
 
                     <p style="margin:2px 0 0; font-size:0.6rem; color:#9ca3af;">
@@ -954,7 +954,8 @@
 
                 </div>
 
-
+                {{-- Badge de versión --}}
+                <div class="version-badge">v1.0.0</div>
 
             </div>{{-- /login-card --}}
 

@@ -20,6 +20,23 @@
     @media(max-width:540px) { .form-row { grid-template-columns:1fr; } }
 
     .plantilla-chip { display:flex; align-items:center; gap:.5rem; padding:.35rem .75rem; border-radius:8px; background:var(--color-muy-claro); border:1px solid var(--color-muy-claro); font-size:.83rem; color:var(--color-hover); font-weight:600; margin-bottom:.5rem; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .form-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .form-card h5 { color:var(--color-hover); border-bottom:2px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .campo-ctrl { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .plantilla-chip { background:var(--color-muy-claro); border-color:var(--color-muy-claro); color:var(--color-hover); }
+
+    /* Glass */
+    body[data-ui="glass"] .form-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .form-card h5 { color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .campo-lbl { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .campo-ctrl { border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; background:rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .campo-ctrl:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .campo-ctrl::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .plantilla-chip { background:rgba(0,234,255,0.08) !important; border:1px solid rgba(0,234,255,0.25) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-sub  { color:rgba(255,255,255,0.55) !important; }
 </style>
 @endpush
 

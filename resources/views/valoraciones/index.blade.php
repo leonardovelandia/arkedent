@@ -15,6 +15,13 @@
     .tabla-card { background:#fff; border:1px solid var(--fondo-borde); border-radius:12px; overflow:hidden; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     #tabla-container { min-height:100px; transition:opacity .15s; }
     #tabla-container.cargando { opacity:.4; pointer-events:none; }
+
+    /* Aurora Glass */
+    body[data-ui="glass"] .filtros-card { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; box-shadow: 0 0 8px rgba(0,234,255,0.15) !important; }
+    body[data-ui="glass"] .tabla-card { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; box-shadow: 0 0 8px rgba(0,234,255,0.15) !important; }
+    body[data-ui="glass"] .form-ctrl { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-ctrl::placeholder { color: rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .btn-gris { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.75) !important; }
 </style>
 @endpush
 

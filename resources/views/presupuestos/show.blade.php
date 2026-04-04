@@ -14,6 +14,21 @@
     .alerta-exito { background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:8px; padding:.75rem 1rem; margin-bottom:1rem; display:none; align-items:center; gap:.5rem; }
     .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:1000; display:none; align-items:center; justify-content:center; }
     .modal-box { background:#fff; border-radius:12px; padding:1.5rem; max-width:420px; width:90%; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .seccion-titulo { background:var(--color-muy-claro); color:var(--color-hover); border-bottom:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .modal-box { background:#fff; }
+    body:not([data-ui="glass"]) .canvas-firma { background:#fff; }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .seccion-titulo { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.90) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .modal-box { background:rgba(5,40,55,0.95) !important; backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.25) !important; box-shadow:0 20px 60px rgba(0,0,0,.5) !important; }
+    body[data-ui="glass"] .modal-box h5, body[data-ui="glass"] .modal-box h6 { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .modal-box p { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .canvas-firma { background:rgba(255,255,255,0.95) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .alerta-exito { background:rgba(74,222,128,0.12) !important; border-color:rgba(74,222,128,0.30) !important; color:#86efac !important; }
 </style>
 @endpush
 

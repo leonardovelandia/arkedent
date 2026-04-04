@@ -32,6 +32,45 @@
     .wa-tab.wa-tab-activo { background:var(--color-muy-claro); color:var(--color-principal); border-bottom:2px solid var(--color-principal); }
     #modo-simple-label:has(input:checked),
     #modo-interactivo-label:has(input:checked) { border-color:var(--color-principal); background:var(--color-muy-claro); }
+
+    /* ── Aurora Glass ── */
+    body[data-ui="glass"] .conf-card { background: rgba(255,255,255,0.08) !important; border: 1px solid rgba(0,234,255,0.35) !important; box-shadow: 0 0 8px rgba(0,234,255,0.18) !important; }
+    body[data-ui="glass"] .conf-titulo { color: rgba(0,234,255,0.90) !important; border-bottom-color: rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .form-label { color: rgba(0,234,255,0.85) !important; }
+    body[data-ui="glass"] .form-input { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-input::placeholder { color: rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .form-input:focus { border-color: rgba(0,234,255,0.70) !important; box-shadow: 0 0 0 3px rgba(0,234,255,0.10) !important; }
+    body[data-ui="glass"] .form-input option, body[data-ui="glass"] .form-input optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .btn-gris { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.75) !important; }
+    body[data-ui="glass"] .btn-gris:hover { background: rgba(255,255,255,0.14) !important; color: white !important; }
+    body[data-ui="glass"] .btn-outline { background: transparent !important; border-color: rgba(0,234,255,0.55) !important; color: rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .btn-outline:hover { background: rgba(0,234,255,0.10) !important; }
+    body[data-ui="glass"] .toggle-slider { background: rgba(255,255,255,0.15) !important; }
+    body[data-ui="glass"] .variables-box { background: rgba(0,234,255,0.05) !important; border-color: rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .var-badge { background: rgba(0,234,255,0.10) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .var-badge:hover { background: rgba(0,234,255,0.25) !important; color: white !important; }
+    body[data-ui="glass"] .preview-box { background: rgba(0,0,0,0.25) !important; border-color: rgba(0,234,255,0.20) !important; color: rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .wa-tab { color: rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .wa-tab:hover { background: rgba(0,234,255,0.08) !important; color: rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .wa-tab.wa-tab-activo { background: rgba(0,234,255,0.10) !important; color: rgba(0,234,255,0.95) !important; border-bottom-color: rgba(0,234,255,0.80) !important; }
+    /* Info boxes inline con fondo claro */
+    body[data-ui="glass"] div[style*="background:#f0fdf4"] { background: rgba(74,222,128,0.08) !important; border-color: rgba(74,222,128,0.30) !important; color: #86efac !important; }
+    body[data-ui="glass"] div[style*="background:#eff6ff"] { background: rgba(59,130,246,0.08) !important; border-color: rgba(59,130,246,0.30) !important; color: #93c5fd !important; }
+    body[data-ui="glass"] div[style*="background:#f0fdf4"] code,
+    body[data-ui="glass"] div[style*="background:#f0fdf4"] strong { color: #86efac !important; }
+    body[data-ui="glass"] div[style*="background:#eff6ff"] code,
+    body[data-ui="glass"] div[style*="background:#eff6ff"] strong { color: #93c5fd !important; }
+    /* Radio labels */
+    body[data-ui="glass"] #label-ultramsg,
+    body[data-ui="glass"] #label-twilio { border-color: rgba(0,234,255,0.25) !important; color: rgba(255,255,255,0.85) !important; }
+    body[data-ui="glass"] #label-ultramsg:has(input:checked),
+    body[data-ui="glass"] #label-twilio:has(input:checked) { border-color: rgba(0,234,255,0.70) !important; background: rgba(0,234,255,0.08) !important; }
+    /* Textos secundarios inline */
+    body[data-ui="glass"] div[style*="color:#8fa39a"] { color: rgba(255,255,255,0.45) !important; }
+    body[data-ui="glass"] div[style*="color:var(--color-hover)"] { color: rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] h2[style*="color:var(--color-hover)"] { color: rgba(255,255,255,0.95) !important; text-shadow: 0 0 20px rgba(0,234,255,0.40); }
+    /* Total plan box verde */
+    body[data-ui="glass"] div[style*="background:#dcfce7"] { background: rgba(74,222,128,0.08) !important; border-color: rgba(74,222,128,0.25) !important; }
 </style>
 @endpush
 

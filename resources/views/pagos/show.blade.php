@@ -27,6 +27,42 @@
     .badge-tarjeta    { background:#E8D5FF; color:var(--color-sidebar-2); }
     .badge-cheque     { background:#FFE5CC; color:#7C2D12; }
     .badge-otro       { background:#F3F4F6; color:#374151; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .info-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .info-card-titulo { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .dato-key { color:#6b7280; }
+    body:not([data-ui="glass"]) .dato-val { color:#1c2b22; }
+    body:not([data-ui="glass"]) .badge-efectivo   { background:#D4EDDA; color:#155724; }
+    body:not([data-ui="glass"]) .badge-transferencia { background:#D1ECF1; color:#0c5460; }
+    body:not([data-ui="glass"]) .badge-tarjeta    { background:#E8D5FF; color:var(--color-sidebar-2); }
+    body:not([data-ui="glass"]) .badge-cheque     { background:#FFE5CC; color:#7C2D12; }
+    body:not([data-ui="glass"]) .badge-otro       { background:#F3F4F6; color:#374151; }
+    body:not([data-ui="glass"]) .btn-volver       { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .info-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .info-card-titulo { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .dato-key { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .dato-val { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .dato-row { border-bottom-color:rgba(255,255,255,0.06) !important; }
+    body[data-ui="glass"] .progress-bar-wrap { background:rgba(255,255,255,0.10) !important; }
+    body[data-ui="glass"] .badge-efectivo   { background:rgba(74,222,128,0.20) !important; color:#86efac !important; border:1px solid rgba(74,222,128,0.35) !important; }
+    body[data-ui="glass"] .badge-transferencia { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .badge-tarjeta    { background:rgba(167,139,250,0.15) !important; color:#c4b5fd !important; border:1px solid rgba(167,139,250,0.30) !important; }
+    body[data-ui="glass"] .badge-cheque     { background:rgba(251,191,36,0.20) !important; color:#fbbf24 !important; border:1px solid rgba(251,191,36,0.35) !important; }
+    body[data-ui="glass"] .badge-otro       { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.55) !important; border:1px solid rgba(255,255,255,0.15) !important; }
+    body[data-ui="glass"] .btn-volver       { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .saldo-label      { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .saldo-valor      { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .saldo-pagado     { color:#86efac !important; }
+    body[data-ui="glass"] .saldo-pendiente  { color:#fca5a5 !important; }
+    body[data-ui="glass"] .modal-anular-inner { background:rgba(5,40,55,0.90) !important; backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.25) !important; box-shadow:0 20px 60px rgba(0,0,0,.5) !important; }
+    body[data-ui="glass"] .modal-anular-inner h5 { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .modal-anular-inner p  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .modal-anular-inner label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .modal-anular-inner textarea { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .btn-modal-close  { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

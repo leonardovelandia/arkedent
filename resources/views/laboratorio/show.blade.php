@@ -42,6 +42,40 @@
     .acciones-wrap { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.25rem; }
 
     @media(max-width:700px) { .dato-grid { grid-template-columns:1fr; } }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .doc-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .doc-section-title { color:var(--color-hover); border-bottom:1px solid var(--fondo-borde); background:var(--fondo-card-alt); }
+    body:not([data-ui="glass"]) .dato-lbl { color:#9ca3af; }
+    body:not([data-ui="glass"]) .dato-val { color:#1c2b22; }
+    body:not([data-ui="glass"]) .tl-pending { background:#f3f4f6; border-color:#d1d5db; color:#9ca3af; }
+    body:not([data-ui="glass"]) .tl-label { color:#374151; }
+    body:not([data-ui="glass"]) .tl-fecha { color:#9ca3af; }
+    body:not([data-ui="glass"]) .tl-line { background:#e5e7eb; }
+    body:not([data-ui="glass"]) .badge-warning { background:#fff3cd; color:#856404; }
+    body:not([data-ui="glass"]) .badge-info    { background:#d1ecf1; color:#0c5460; }
+    body:not([data-ui="glass"]) .badge-primary { background:#cce5ff; color:#004085; }
+    body:not([data-ui="glass"]) .badge-success { background:#d4edda; color:#155724; }
+    body:not([data-ui="glass"]) .badge-dark    { background:#d6d8d9; color:#1b1e21; }
+    body:not([data-ui="glass"]) .badge-danger  { background:#f8d7da; color:#721c24; }
+
+    /* Glass */
+    body[data-ui="glass"] .doc-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .doc-section-title { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.90) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .dato-lbl { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .dato-val { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .tl-pending { background:rgba(255,255,255,0.06) !important; border-color:rgba(255,255,255,0.20) !important; color:rgba(255,255,255,0.40) !important; }
+    body[data-ui="glass"] .tl-label { color:rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .tl-fecha { color:rgba(255,255,255,0.45) !important; }
+    body[data-ui="glass"] .tl-line { background:rgba(255,255,255,0.10) !important; }
+    body[data-ui="glass"] .tl-line-done { background:rgba(0,234,255,0.50) !important; }
+    body[data-ui="glass"] .badge-warning { background:rgba(251,191,36,0.20) !important; color:#fbbf24 !important; border:1px solid rgba(251,191,36,0.35) !important; }
+    body[data-ui="glass"] .badge-info    { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .badge-primary { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .badge-success { background:rgba(74,222,128,0.20) !important; color:#86efac !important; border:1px solid rgba(74,222,128,0.35) !important; }
+    body[data-ui="glass"] .badge-dark    { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.55) !important; border:1px solid rgba(255,255,255,0.15) !important; }
+    body[data-ui="glass"] .badge-danger  { background:rgba(248,113,113,0.20) !important; color:#fca5a5 !important; border:1px solid rgba(248,113,113,0.35) !important; }
+    body[data-ui="glass"] .btn-volver    { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

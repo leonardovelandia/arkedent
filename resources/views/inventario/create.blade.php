@@ -18,6 +18,26 @@
     .btn-morado:hover { filter:brightness(1.12); }
     .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; border-radius:8px; padding:.55rem 1.2rem; font-size:.9rem; display:inline-flex; align-items:center; gap:.3rem; text-decoration:none; }
     .btn-gris:hover { background:#e5e7eb; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .form-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .form-card-header { background:var(--fondo-card-alt); border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .form-label { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-input { color:#1c2b22; background:#fff; border:1.5px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .form-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .form-card-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-input { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-input option, body[data-ui="glass"] .form-input optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-input:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .form-input::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .btn-back { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-sub  { color:rgba(255,255,255,0.55) !important; }
 </style>
 @endpush
 

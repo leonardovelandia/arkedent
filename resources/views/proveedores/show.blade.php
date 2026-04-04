@@ -30,6 +30,34 @@
     .acc-ver { background:var(--color-muy-claro); color:var(--color-principal); }
     .badge-cat { display:inline-block; font-size:.68rem; font-weight:600; padding:.1rem .45rem; border-radius:50px; background:var(--color-badge-bg); color:var(--color-badge-texto); margin:.1rem; }
     .pagination-wrapper { padding:.75rem 1.25rem; border-top:1px solid var(--fondo-borde); }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .panel-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-header { border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-titulo { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .dato-label { color:#8fa39a; }
+    body:not([data-ui="glass"]) .dato-valor { color:#1c2b22; }
+    body:not([data-ui="glass"]) .stat-mini { background:var(--fondo-card-alt); border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .stat-mini-valor { color:var(--color-principal); }
+    body:not([data-ui="glass"]) .stat-mini-label { color:#8fa39a; }
+    body:not([data-ui="glass"]) .tabla-comp td { color:#374151; border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .panel-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .panel-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .panel-titulo { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .panel-titulo i { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .dato-label { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .dato-valor { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .stat-mini { background:rgba(0,234,255,0.06) !important; border:1px solid rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .stat-mini-valor { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .stat-mini-label { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .tabla-comp th { color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .tabla-comp td { color:rgba(255,255,255,0.88) !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; }
+    body[data-ui="glass"] .tabla-comp tr:hover td { background:rgba(0,234,255,0.08) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
 </style>
 @endpush
 

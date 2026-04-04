@@ -80,6 +80,39 @@
     .cie10-item { padding:.45rem .75rem; cursor:pointer; font-size:.82rem; }
     .cie10-item:hover { background:var(--color-muy-claro); }
     .cie10-code { font-family:monospace; font-weight:700; color:var(--color-principal); margin-right:.4rem; }
+
+    /* Aurora Glass */
+    body[data-ui="glass"] .doc-card { background: rgba(255,255,255,0.08) !important; border: 1px solid rgba(0,234,255,0.35) !important; box-shadow: 0 0 8px rgba(0,234,255,0.18) !important; }
+    body[data-ui="glass"] .doc-section { border-bottom-color: rgba(0,234,255,0.12) !important; }
+    body[data-ui="glass"] .doc-section-header { background: rgba(0,0,0,0.20) !important; color: rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .sec-extraoral { background: rgba(0,234,255,0.04) !important; }
+    body[data-ui="glass"] .sec-intraoral { background: rgba(0,180,220,0.05) !important; }
+    body[data-ui="glass"] .sec-diagnosticos { background: rgba(255,200,0,0.03) !important; }
+    body[data-ui="glass"] .sec-plan { background: rgba(74,222,128,0.04) !important; }
+    body[data-ui="glass"] .form-lbl { color: rgba(0,234,255,0.85) !important; }
+    body[data-ui="glass"] .form-ctrl { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-ctrl::placeholder { color: rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .form-ctrl:focus { background: rgba(255,255,255,0.12) !important; border-color: rgba(0,234,255,0.70) !important; box-shadow: 0 0 0 3px rgba(0,234,255,0.10) !important; }
+    body[data-ui="glass"] .form-ctrl option { background: #052837; }
+    body[data-ui="glass"] .form-ctrl optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .tabla-dinamica thead th { background: rgba(0,0,0,0.25) !important; color: rgba(0,234,255,0.85) !important; border-bottom-color: rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .tabla-dinamica tbody td { border-bottom-color: rgba(0,234,255,0.10) !important; color: rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .tabla-dinamica .inp { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.25) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .tabla-dinamica .inp option { background: #052837; }
+    body[data-ui="glass"] .btn-gris { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.75) !important; }
+    body[data-ui="glass"] .btn-gris:hover { background: rgba(255,255,255,0.14) !important; color: white !important; }
+    body[data-ui="glass"] .pac-info-box { background: rgba(0,234,255,0.06) !important; border-color: rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .cie10-dropdown { background: rgba(5,40,55,0.96) !important; border-color: rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .cie10-item { color: rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .cie10-item:hover { background: rgba(0,234,255,0.10) !important; }
+    /* Plan total box */
+    body[data-ui="glass"] #form-valoracion div[style*="background:#dcfce7"] { background: rgba(74,222,128,0.08) !important; border-color: rgba(74,222,128,0.30) !important; }
+    body[data-ui="glass"] #form-valoracion div[style*="color:#166534"] { color: #86efac !important; }
+    /* Tom Select glass */
+    body[data-ui="glass"] .ts-wrapper.single .ts-control { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .ts-dropdown { background: rgba(5,40,55,0.96) !important; border-color: rgba(0,234,255,0.35) !important; }
+    body[data-ui="glass"] .ts-dropdown .option { color: rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .ts-dropdown .option:hover, body[data-ui="glass"] .ts-dropdown .active { background: rgba(0,234,255,0.12) !important; color: rgba(0,234,255,0.95) !important; }
 </style>
 @endpush
 

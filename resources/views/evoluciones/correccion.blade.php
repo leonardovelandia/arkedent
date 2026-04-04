@@ -40,6 +40,33 @@
     .resumen-dato { display:flex; gap:.5rem; align-items:baseline; margin-bottom:.4rem; }
     .resumen-lbl { font-size:.75rem; font-weight:700; text-transform:uppercase; color:#9ca3af; min-width:110px; }
     .resumen-val { font-size:.88rem; color:#1c2b22; }
+
+    /* ── Classic overrides ── */
+    body:not([data-ui="glass"]) .card-sec      { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .card-sec-head { background:var(--color-muy-claro); border-bottom:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .card-sec-head h6 { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-ctrl     { border:1px solid #d1d5db; color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .valor-actual-box { background:var(--fondo-card-alt); }
+    body:not([data-ui="glass"]) .nota-legal    { background:#f8fafc; border:1px solid #e2e8f0; color:#64748b; }
+
+    /* ── Aurora Glass overrides ── */
+    body[data-ui="glass"] .banner-firmado  { background:rgba(217,119,6,0.12) !important; border-color:rgba(252,211,77,0.40) !important; }
+    body[data-ui="glass"] .banner-24h      { background:rgba(234,88,12,0.12) !important; border-color:rgba(254,215,170,0.40) !important; }
+    body[data-ui="glass"] .banner-firmado .banner-titulo,
+    body[data-ui="glass"] .banner-24h .banner-titulo { color:#fde68a !important; }
+    body[data-ui="glass"] .banner-firmado .banner-texto,
+    body[data-ui="glass"] .banner-24h .banner-texto { color:rgba(255,255,255,0.75) !important; }
+    body[data-ui="glass"] .card-sec      { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 0 8px rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .card-sec-head { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .card-sec-head h6 { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-lbl  { color:rgba(0,234,255,0.85) !important; }
+    body[data-ui="glass"] .form-ctrl { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-ctrl:focus { border-color:rgba(0,234,255,0.70) !important; box-shadow:none !important; }
+    body[data-ui="glass"] .form-ctrl::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .valor-actual-box { background:rgba(0,0,0,0.25) !important; border-color:rgba(0,234,255,0.20) !important; color:rgba(255,255,255,0.70) !important; }
+    body[data-ui="glass"] .nota-legal { background:rgba(0,234,255,0.06) !important; border-color:rgba(0,234,255,0.20) !important; color:rgba(255,255,255,0.65) !important; }
+    body[data-ui="glass"] .resumen-val { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

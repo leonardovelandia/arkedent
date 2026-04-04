@@ -39,6 +39,66 @@
     .modal-lbl { font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#9ca3af; min-width:90px; padding-top:.1rem; }
     .modal-val { font-size:.9rem; color:#1c2b22; font-weight:500; }
     .badge-estado { display:inline-block; padding:.22rem .65rem; border-radius:20px; font-size:.73rem; font-weight:700; white-space:nowrap; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .nav-semana { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .nav-semana-titulo { color:#1c2b22; }
+    body:not([data-ui="glass"]) .col-dia { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .dia-nombre { color:#9ca3af; }
+    body:not([data-ui="glass"]) .dia-num { color:#1c2b22; }
+    body:not([data-ui="glass"]) .modal-agenda-box { background:#fff; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+    body:not([data-ui="glass"]) .modal-lbl { color:#9ca3af; }
+    body:not([data-ui="glass"]) .modal-val { color:#1c2b22; }
+
+    /* Glass */
+    body[data-ui="glass"] .nav-semana { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .nav-semana-titulo { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .col-dia { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 0 8px rgba(0,234,255,0.15) !important; }
+    body[data-ui="glass"] .col-dia.es-hoy { border-color:rgba(0,234,255,0.70) !important; box-shadow:0 0 14px rgba(0,234,255,0.45) !important; }
+    body[data-ui="glass"] .col-dia-head { border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .dia-nombre { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .dia-num { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .sin-citas { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .modal-agenda-box { background:rgba(13,30,50,0.95) !important; backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 20px 60px rgba(0,0,0,.5) !important; }
+    body[data-ui="glass"] .modal-lbl { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .modal-val { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .modal-agenda-close { color:rgba(255,255,255,0.55) !important; }
+
+    /* Clásico — mini-modal cancelar */
+    body:not([data-ui="glass"]) .mini-modal-cancelar { background:#fff; box-shadow:0 20px 60px rgba(0,0,0,.25); }
+    body:not([data-ui="glass"]) .mini-modal-title { color:#1c2b22; }
+    body:not([data-ui="glass"]) .mini-modal-desc  { color:#6b7280; }
+
+    /* Glass — mini-modal cancelar */
+    body[data-ui="glass"] .mini-modal-cancelar { background:rgba(5,40,55,0.90) !important; backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.25) !important; box-shadow:0 20px 60px rgba(0,0,0,.5) !important; }
+    body[data-ui="glass"] .mini-modal-title { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .mini-modal-desc  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .mini-modal-cancelar textarea { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .btn-mini-close   { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-sub  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .modal-agenda-h5 { color:rgba(255,255,255,0.90) !important; }
+
+    /* Glass — título de página */
+    body[data-ui="glass"] h4[style*="color:#1c2b22"] { color:rgba(255,255,255,0.95) !important; text-shadow:0 0 18px rgba(0,234,255,0.40); }
+    body[data-ui="glass"] p[style*="color:#9ca3af"] { color:rgba(255,255,255,0.45) !important; }
+
+    /* Glass — tarjetas de cita por estado */
+    body[data-ui="glass"] .tarjeta-cita { border-color:rgba(255,255,255,0.18) !important; }
+    /* pendiente — amarillo */
+    body[data-ui="glass"] .tarjeta-cita[style*="#FFF3CD"] { background:rgba(251,191,36,0.18) !important; color:#fde68a !important; border-color:rgba(251,191,36,0.40) !important; }
+    /* confirmada — usa CSS vars, fallback cian */
+    body[data-ui="glass"] .tarjeta-cita[style*="var(--color-badge-bg)"] { background:rgba(0,234,255,0.14) !important; color:rgba(0,234,255,0.90) !important; border-color:rgba(0,234,255,0.40) !important; }
+    /* en_proceso — azul */
+    body[data-ui="glass"] .tarjeta-cita[style*="#CCE5FF"] { background:rgba(59,130,246,0.18) !important; color:#93c5fd !important; border-color:rgba(59,130,246,0.40) !important; }
+    /* atendida — verde */
+    body[data-ui="glass"] .tarjeta-cita[style*="#D4EDDA"] { background:rgba(74,222,128,0.18) !important; color:#86efac !important; border-color:rgba(74,222,128,0.40) !important; }
+    /* cancelada — rojo */
+    body[data-ui="glass"] .tarjeta-cita[style*="#F8D7DA"] { background:rgba(248,113,113,0.18) !important; color:#fca5a5 !important; border-color:rgba(248,113,113,0.40) !important; }
+    /* no_asistio — gris */
+    body[data-ui="glass"] .tarjeta-cita[style*="#E2E3E5"] { background:rgba(148,163,184,0.14) !important; color:#cbd5e1 !important; border-color:rgba(148,163,184,0.30) !important; }
+    /* fallback genérico */
+    body[data-ui="glass"] .tarjeta-cita[style*="#f3f4f6"] { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.70) !important; border-color:rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

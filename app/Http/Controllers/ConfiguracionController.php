@@ -53,6 +53,7 @@ class ConfiguracionController extends Controller
             'codigo_habilitacion'             => 'nullable|string|max:50',
             'tipo_prestador'                  => 'nullable|in:consultorio_privado,ips,centro_medico',
             'hora_backup'                     => 'nullable|regex:/^\d{2}:\d{2}$/',
+            'tema_ui'                         => 'nullable|in:clasico,glass',
         ]);
 
         $config = Configuracion::obtener();
@@ -90,6 +91,7 @@ class ConfiguracionController extends Controller
 
         $data['recordatorios_activos']  = $request->boolean('recordatorios_activos');
         $data['tema']                   = $request->input('tema', 'morado-elegante');
+        $data['tema_ui']                = $request->input('tema_ui', 'clasico');
         $data['fuente_principal']       = $request->input('fuente_principal', 'DM Sans');
         $data['fuente_titulos']         = $request->input('fuente_titulos', 'Playfair Display');
 

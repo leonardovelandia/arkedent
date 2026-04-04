@@ -17,25 +17,48 @@
         transition: filter 0.18s; text-decoration: none; cursor: pointer;
     }
     .btn-morado:hover { filter: brightness(1.12); color: #fff; }
-    .btn-gris {
-        background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb;
-        border-radius: 8px; padding: 0.55rem 1.4rem; font-size: 0.875rem;
-        font-weight: 500; display: inline-flex; align-items: center; gap: 0.4rem;
-        transition: background 0.15s; text-decoration: none; cursor: pointer;
-    }
-    .btn-gris:hover { background: #e5e7eb; color: #1f2937; }
-    .seccion-card { background: #fff; border: 1px solid var(--fondo-borde); border-radius: 12px; margin-bottom: 1.25rem; overflow: hidden; box-shadow: 0 8px 28px var(--sombra-principal), 0 2px 8px rgba(0,0,0,0.12); }
-    .seccion-header { background: var(--color-muy-claro); padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--color-muy-claro); display: flex; align-items: center; gap: 0.5rem; }
-    .seccion-header h6 { margin: 0; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-hover); }
-    .seccion-body { padding: 1.25rem; }
-    .form-label-pac { font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 0.3rem; display: block; }
-    .form-control-pac { width: 100%; border: 1px solid var(--color-muy-claro); border-radius: 8px; padding: 0.5rem 0.85rem; font-size: 0.875rem; outline: none; transition: border-color 0.15s, box-shadow 0.15s; background: #fff; color: #1c2b22; }
-    .form-control-pac:focus { border-color: var(--color-principal); box-shadow: 0 0 0 3px var(--sombra-principal); }
-    .form-control-pac.is-invalid { border-color: #dc2626; }
-    .error-msg { font-size: 0.78rem; color: #dc2626; margin-top: 0.3rem; }
-    .foto-preview-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.85rem; }
-    #foto-preview { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-muy-claro); }
-    .avatar-placeholder { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, var(--color-principal), var(--color-claro)); color: #fff; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 3px solid var(--color-muy-claro); }
+    /* Estructura sin color */
+    .btn-gris { border-radius:8px; padding:0.55rem 1.4rem; font-size:0.875rem; font-weight:500; display:inline-flex; align-items:center; gap:0.4rem; transition:background 0.15s; text-decoration:none; cursor:pointer; }
+    .seccion-card { border-radius:12px; margin-bottom:1.25rem; overflow:hidden; }
+    .seccion-header { padding:0.75rem 1.25rem; display:flex; align-items:center; gap:0.5rem; }
+    .seccion-header h6 { margin:0; font-size:0.82rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
+    .seccion-body { padding:1.25rem; }
+    .form-label-pac { font-size:0.8rem; font-weight:600; margin-bottom:0.3rem; display:block; }
+    .form-control-pac { width:100%; border-radius:8px; padding:0.5rem 0.85rem; font-size:0.875rem; outline:none; transition:border-color 0.15s, box-shadow 0.15s; }
+    .form-control-pac.is-invalid { border-color:#dc2626; }
+    .error-msg { font-size:0.78rem; color:#dc2626; margin-top:0.3rem; }
+    .foto-preview-wrap { display:flex; flex-direction:column; align-items:center; gap:0.85rem; }
+    #foto-preview { width:110px; height:110px; border-radius:50%; object-fit:cover; border:3px solid var(--color-muy-claro); }
+    .avatar-placeholder { width:110px; height:110px; border-radius:50%; background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; font-size:1.8rem; font-weight:700; display:flex; align-items:center; justify-content:center; border:3px solid var(--color-muy-claro); }
+    .btn-subir-foto { border-radius:8px; padding:.4rem .85rem; font-size:.82rem; font-weight:500; display:inline-flex; align-items:center; gap:.35rem; cursor:pointer; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+    body:not([data-ui="glass"]) .btn-gris:hover { background:#e5e7eb; color:#1f2937; }
+    body:not([data-ui="glass"]) .seccion-card { background:#fff; border:1px solid var(--fondo-borde); box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,0.12); }
+    body:not([data-ui="glass"]) .seccion-header { background:var(--color-muy-claro); border-bottom:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .seccion-header h6 { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-label-pac { color:#374151; }
+    body:not([data-ui="glass"]) .form-control-pac { border:1px solid var(--color-muy-claro); background:#fff; color:#1c2b22; }
+    body:not([data-ui="glass"]) .form-control-pac:focus { border-color:var(--color-principal); box-shadow:0 0 0 3px var(--sombra-principal); }
+    body:not([data-ui="glass"]) .btn-subir-foto { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .btn-gris:hover { background:rgba(255,255,255,0.13) !important; color:white !important; }
+    body[data-ui="glass"] .seccion-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .seccion-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .seccion-header h6 { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-label-pac { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-control-pac { border:1px solid rgba(0,234,255,0.30) !important; background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-control-pac:focus { border-color:rgba(0,234,255,0.70) !important; box-shadow:none !important; }
+    body[data-ui="glass"] .form-control-pac::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .form-control-pac option,
+    body[data-ui="glass"] .form-control-pac optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .btn-subir-foto { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .error-msg { color: #ff8a8a !important; text-shadow: 0 0 8px rgba(255,100,100,0.40); }
+    body[data-ui="glass"] .form-control-pac.is-invalid { border-color: rgba(255,120,120,0.80) !important; box-shadow: 0 0 0 2px rgba(255,100,100,0.18) !important; }
+    body[data-ui="glass"] span[style*="color:#dc2626"] { color: #ff8a8a !important; }
 </style>
 @endpush
 
@@ -72,7 +95,7 @@
                 @endif
 
                 <div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;">
-                    <label for="foto" style="cursor:pointer;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:8px;padding:.4rem .85rem;font-size:.82rem;font-weight:500;display:inline-flex;align-items:center;gap:.35rem;">
+                    <label for="foto" class="btn-subir-foto" style="cursor:pointer;">
                         <i class="bi bi-upload"></i> Subir foto
                     </label>
                     <button type="button" onclick="abrirCamara()" style="background:linear-gradient(135deg,var(--color-principal),var(--color-claro));color:#fff;border:none;border-radius:8px;padding:.4rem .85rem;font-size:.82rem;font-weight:500;display:inline-flex;align-items:center;gap:.35rem;cursor:pointer;">

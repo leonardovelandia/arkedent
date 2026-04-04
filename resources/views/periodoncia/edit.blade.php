@@ -99,6 +99,33 @@ canvas.pcv { display:block; }
     background: var(--fondo-app);
 }
 .sangrado-cb { width: 12px; height: 12px; cursor: pointer; accent-color: #dc2626; }
+
+/* ── Classic overrides ── */
+body:not([data-ui="glass"]) .periodo-card-body { background:#fff; border:1px solid var(--fondo-borde); border-top:none; }
+body:not([data-ui="glass"]) .form-ctrl-per { background:var(--fondo-app); border:1px solid var(--fondo-borde); color:var(--texto-principal); }
+
+/* ── Aurora Glass overrides ── */
+body[data-ui="glass"] .periodo-card { border:1px solid rgba(0,234,255,0.35) !important; border-radius:10px !important; overflow:hidden !important; }
+body[data-ui="glass"] .periodo-card-header { background:rgba(0,100,120,0.70) !important; }
+body[data-ui="glass"] .periodo-card-body { background:rgba(255,255,255,0.08) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.20) !important; border-top:none !important; }
+body[data-ui="glass"] .form-label-per { color:rgba(0,234,255,0.85) !important; }
+body[data-ui="glass"] .form-ctrl-per  { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+body[data-ui="glass"] .form-ctrl-per:focus { border-color:rgba(0,234,255,0.70) !important; }
+body[data-ui="glass"] .perio-stats-bar { background:rgba(0,0,0,0.20) !important; border-color:rgba(0,234,255,0.20) !important; }
+body[data-ui="glass"] .pl  { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.80) !important; }
+body[data-ui="glass"] .pt  { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.90) !important; }
+body[data-ui="glass"] .pmg { color:rgba(147,197,253,0.95) !important; }
+body[data-ui="glass"] .pps { color:rgba(253,186,116,0.95) !important; }
+body[data-ui="glass"] .psel { background:rgba(255,255,255,0.08) !important; border-color:rgba(0,234,255,0.25) !important; color:rgba(255,255,255,0.90) !important; }
+body[data-ui="glass"] .sl-diente-header,
+body[data-ui="glass"] .sl-grupo-header,
+body[data-ui="glass"] .sl-sup-header,
+body[data-ui="glass"] .sl-codigo-label { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.80) !important; }
+body[data-ui="glass"] .sl-cell { background:rgba(255,255,255,0.06) !important; }
+body[data-ui="glass"] .sl-cell:hover:not(.ausente-sl) { background:rgba(0,234,255,0.12) !important; }
+body[data-ui="glass"] .furcacion-sel,
+body[data-ui="glass"] .movilidad-sel { background:rgba(255,255,255,0.08) !important; border-color:rgba(0,234,255,0.25) !important; color:rgba(255,255,255,0.90) !important; }
+body[data-ui="glass"] .perio-tbl td { border-color:rgba(0,234,255,0.12) !important; }
 </style>
 @endpush
 

@@ -20,6 +20,28 @@
     .accion-btn:hover { filter:brightness(.92); }
     .vacio { padding:2.5rem; text-align:center; color:#8fa39a; }
     .vacio i { font-size:2rem; display:block; margin-bottom:.5rem; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .tabla-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .tabla-header { border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .tabla-titulo { color:var(--color-hover); }
+    body:not([data-ui="glass"]) thead th { color:#8fa39a; border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) tbody td { color:#1c2b22; border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) tbody tr:hover td { background:var(--fondo-app); }
+    body:not([data-ui="glass"]) .badge-esp { background:var(--color-muy-claro); color:var(--color-principal); }
+
+    /* Glass */
+    body[data-ui="glass"] .tabla-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .tabla-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .tabla-titulo { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] thead th { color:rgba(0,234,255,0.70) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; background:rgba(0,0,0,0.20) !important; }
+    body[data-ui="glass"] tbody td { color:rgba(255,255,255,0.88) !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; }
+    body[data-ui="glass"] tbody tr:hover td { background:rgba(0,234,255,0.08) !important; }
+    body[data-ui="glass"] .badge-esp { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border:1px solid rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .vacio { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-sub  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .btn-volver { background:transparent !important; border:1px solid rgba(0,234,255,0.50) !important; color:rgba(0,234,255,0.90) !important; }
 </style>
 @endpush
 

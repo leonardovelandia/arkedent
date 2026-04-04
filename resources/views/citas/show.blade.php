@@ -25,6 +25,30 @@
     .historial-proc { font-size:.85rem; color:#1c2b22; font-weight:500; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
     .acciones-wrap { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.25rem; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .info-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .info-card-titulo { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .dato-lbl { color:#9ca3af; }
+    body:not([data-ui="glass"]) .dato-val { color:#1c2b22; }
+    body:not([data-ui="glass"]) .historial-fecha { color:#6b7280; }
+    body:not([data-ui="glass"]) .historial-proc { color:#1c2b22; }
+    body:not([data-ui="glass"]) .btn-volver { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .info-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .info-card-titulo { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .dato-lbl { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .dato-val { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .historial-fecha { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .historial-proc { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .btn-volver { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .modal-cancelar-inner { background:rgba(5,40,55,0.90) !important; backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.25) !important; box-shadow:0 20px 60px rgba(0,0,0,.5) !important; }
+    body[data-ui="glass"] .modal-cancelar-inner h5 { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .modal-cancelar-inner p  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .modal-cancelar-inner label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .modal-cancelar-inner textarea { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .btn-modal-close { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

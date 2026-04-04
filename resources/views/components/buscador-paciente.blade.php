@@ -62,13 +62,14 @@
         <i class="bi bi-search" style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:.9rem;pointer-events:none;z-index:1;"></i>
         <input type="text"
                id="{{ $uid }}-input"
-               class="{{ $claseCtrl }}"
+               class="bp-search-input {{ $claseCtrl }}"
                placeholder="{{ $placeholder }}"
                autocomplete="off"
                style="width:100%;border:1.5px solid var(--color-muy-claro);border-radius:8px;padding:.42rem .75rem .42rem 2.1rem;font-size:.875rem;color:#1c2b22;background:#fff;outline:none;transition:border-color .15s;">
 
         {{-- Dropdown (se adjunta al body para escapar overflow:hidden) --}}
         <div id="{{ $uid }}-drop"
+             class="bp-drop-menu"
              style="display:none;position:fixed;background:#fff;border:1.5px solid var(--color-principal);border-radius:10px;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);z-index:99999;max-height:260px;overflow-y:auto;min-width:260px;">
             <div id="{{ $uid }}-lista"></div>
             <div id="{{ $uid }}-empty" style="display:none;padding:.85rem 1rem;font-size:.85rem;color:#9ca3af;text-align:center;">
@@ -77,6 +78,31 @@
         </div>
     </div>
 </div>
+
+@push('estilos')
+<style>
+    /* Aurora Glass — buscador-paciente */
+    body[data-ui="glass"] .bp-search-input {
+        background: rgba(255,255,255,0.08) !important;
+        color: rgba(255,255,255,0.90) !important;
+        border-color: rgba(0,234,255,0.30) !important;
+    }
+    body[data-ui="glass"] .bp-search-input::placeholder { color: rgba(255,255,255,0.35) !important; }
+    body[data-ui="glass"] .bp-search-input:focus { background: rgba(255,255,255,0.12) !important; border-color: rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .bp-drop-menu {
+        background: rgba(5,40,55,0.96) !important;
+        border-color: rgba(0,234,255,0.40) !important;
+        box-shadow: 0 8px 28px rgba(0,234,255,0.15) !important;
+    }
+    body[data-ui="glass"] .bp-drop-menu [data-i] {
+        border-bottom-color: rgba(0,234,255,0.12) !important;
+        color: rgba(255,255,255,0.85) !important;
+    }
+    body[data-ui="glass"] .bp-drop-menu [data-i] > div > div:first-child { color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .bp-drop-menu [data-i] > div > div:last-child  { color: rgba(255,255,255,0.45) !important; }
+    body[data-ui="glass"] .bp-drop-menu #{{ $uid }}-empty { color: rgba(255,255,255,0.45) !important; }
+</style>
+@endpush
 
 @push('scripts')
 <script>

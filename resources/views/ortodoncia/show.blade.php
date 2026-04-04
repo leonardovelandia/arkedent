@@ -1,6 +1,31 @@
 @extends('layouts.app')
 @section('titulo', 'Ficha ' . $ficha->numero_ficha)
 
+@push('estilos')
+<style>
+    /* ── Aurora Glass: tabs ── */
+    body[data-ui="glass"] .orto-tab { color:rgba(255,255,255,0.70) !important; }
+    body[data-ui="glass"] .orto-tab.tab-activo,
+    body[data-ui="glass"] .orto-tab[style*="color:var(--color-principal)"] { color:rgba(0,234,255,0.95) !important; border-bottom-color:rgba(0,234,255,0.80) !important; }
+    /* ── Aurora Glass: card-sistema data panels ── */
+    body[data-ui="glass"] .card-sistema h6 { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .card-sistema [style*="background:var(--fondo-card-alt)"],
+    body[data-ui="glass"] .card-sistema [style*="background: var(--fondo-card-alt)"] {
+        background:rgba(0,0,0,0.20) !important;
+        border-color:rgba(0,234,255,0.20) !important;
+    }
+    /* menu estado dropdown */
+    body[data-ui="glass"] #menu-estado {
+        background:rgba(5,40,55,0.92) !important;
+        backdrop-filter:blur(20px) saturate(160%) !important;
+        border:1px solid rgba(0,234,255,0.30) !important;
+        box-shadow:0 8px 24px rgba(0,0,0,.35) !important;
+    }
+    body[data-ui="glass"] #menu-estado div[style*="font-size:.68rem"] { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] #menu-estado button { color:rgba(255,255,255,0.85) !important; }
+</style>
+@endpush
+
 @section('contenido')
 
 {{-- Breadcrumb --}}

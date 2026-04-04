@@ -35,6 +35,30 @@
     #video-camara { width:100%; max-height:320px; display:block; }
     #canvas-captura { display:none; }
     #preview-captura { width:100%; max-height:280px; object-fit:contain; display:none; margin-top:.5rem; border-radius:8px; border:2px solid var(--color-principal); }
+
+    /* ── Classic overrides ── */
+    body:not([data-ui="glass"]) .sec-card   { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .sec-header { background:var(--color-muy-claro); border-bottom:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .sec-header h6 { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-ctrl  { border:1px solid #d1d5db; color:#374151; background:#fff; }
+    body:not([data-ui="glass"]) .btn-gris   { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+    body:not([data-ui="glass"]) .drop-zone  { background:var(--fondo-card-alt); }
+
+    /* ── Aurora Glass overrides ── */
+    body[data-ui="glass"] .sec-card   { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 0 8px rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .sec-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .sec-header h6 { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-lbl  { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-ctrl { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-ctrl:focus { border-color:rgba(0,234,255,0.70) !important; box-shadow:none !important; }
+    body[data-ui="glass"] .form-ctrl::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .drop-zone { background:rgba(255,255,255,0.06) !important; border-color:rgba(0,234,255,0.40) !important; }
+    body[data-ui="glass"] .drop-zone:hover,
+    body[data-ui="glass"] .drop-zone.dragover { background:rgba(0,234,255,0.08) !important; border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .drop-zone-icon { color:rgba(0,234,255,0.80) !important; }
+    body[data-ui="glass"] .preview-item { border-color:rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .preview-item .file-name { background:rgba(0,0,0,0.30) !important; color:rgba(255,255,255,0.60) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

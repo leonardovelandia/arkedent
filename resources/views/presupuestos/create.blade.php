@@ -28,6 +28,34 @@
     .totales-card { background:linear-gradient(135deg,var(--color-muy-claro),var(--fondo-card-alt)); border:1px solid var(--color-claro); border-radius:12px; padding:1.1rem 1.25rem; }
     .total-fila { display:flex; justify-content:space-between; align-items:center; padding:.3rem 0; font-size:.875rem; }
     .total-grande { font-size:1.4rem; font-weight:800; color:var(--color-sidebar-2); border-top:2px solid var(--color-claro); margin-top:.5rem; padding-top:.6rem; }
+
+    /* Aurora Glass */
+    body[data-ui="glass"] .form-card { background: rgba(255,255,255,0.08) !important; border: 1px solid rgba(0,234,255,0.35) !important; box-shadow: 0 0 8px rgba(0,234,255,0.18) !important; }
+    body[data-ui="glass"] .form-label { color: rgba(0,234,255,0.85) !important; }
+    body[data-ui="glass"] .form-input { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-input::placeholder { color: rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .form-input:focus { background: rgba(255,255,255,0.12) !important; border-color: rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .form-select { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-select option { background: #052837; }
+    body[data-ui="glass"] .form-select optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-textarea { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-textarea::placeholder { color: rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .inp-item { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.25) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .inp-item option { background: #052837; }
+    body[data-ui="glass"] .inp-item-readonly { background: rgba(0,234,255,0.05) !important; color: rgba(255,255,255,0.60) !important; }
+    body[data-ui="glass"] .tabla-items th { background: rgba(0,0,0,0.25) !important; color: rgba(0,234,255,0.85) !important; border-bottom-color: rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .tabla-items td { border-bottom-color: rgba(0,234,255,0.10) !important; color: rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .totales-card { background: rgba(0,234,255,0.06) !important; border-color: rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .total-fila span { color: rgba(255,255,255,0.65) !important; }
+    body[data-ui="glass"] .total-grande { color: rgba(0,234,255,0.95) !important; border-top-color: rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .total-grande span:last-child { color: rgba(0,234,255,0.95) !important; }
+    body[data-ui="glass"] .btn-gris { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.75) !important; }
+    /* Inline heading */
+    body[data-ui="glass"] h4[style*="color:#1c2b22"] { color: rgba(255,255,255,0.95) !important; text-shadow: 0 0 15px rgba(0,234,255,0.35); }
+    body[data-ui="glass"] p[style*="color:#9ca3af"] { color: rgba(255,255,255,0.45) !important; }
+    /* Inline totals display values */
+    body[data-ui="glass"] span[id^="display-"] { color: rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] span[id="display-descuento"] { color: rgba(248,113,113,0.85) !important; }
 </style>
 @endpush
 

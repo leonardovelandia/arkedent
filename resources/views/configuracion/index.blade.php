@@ -3,6 +3,7 @@
 
 @push('estilos')
     <style>
+        /* ── Estructura (sin color, ambos temas) ─────────────────── */
         .btn-morado {
             background: var(--gradiente-btn, linear-gradient(135deg, #6B21A8, #7C3AED));
             color: #fff;
@@ -17,18 +18,10 @@
             transition: filter .18s;
             text-decoration: none;
             cursor: pointer;
-           
         }
-
-        .btn-morado:hover {
-            filter: brightness(1.12);
-            color: #fff;
-        }
+        .btn-morado:hover { filter: brightness(1.12); color: #fff; }
 
         .btn-gris {
-            background: #f3f4f6;
-            color: #374151;
-            border: 1px solid #e5e7eb;
             border-radius: 8px;
             padding: .5rem 1.1rem;
             font-size: .875rem;
@@ -41,12 +34,9 @@
         }
 
         .conf-card {
-            background: #fff;
-            border: 1px solid var(--color-muy-claro, #e9d5ff);
             border-radius: 14px;
             padding: 1.5rem;
             margin-bottom: 1.25rem;
-            box-shadow: 0 8px 28px var(--sombra-principal, rgba(107, 33, 168, .15)), 0 2px 8px rgba(0, 0, 0, .12);
         }
 
         .conf-titulo {
@@ -55,8 +45,6 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: .05em;
-            color: var(--color-hover, #581C87);
-            background: var(--color-muy-claro, #F3E8FF);
             border-radius: 8px 8px 0 0;
             padding: .5rem .75rem;
             margin: -1.5rem -1.5rem 1.1rem;
@@ -68,45 +56,28 @@
         .form-label {
             font-size: .82rem;
             font-weight: 700;
-            color: var(--color-hover, #581C87);
             display: block;
             margin-bottom: .3rem;
         }
 
         .form-input {
             width: 100%;
-            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
             border-radius: 8px;
             padding: .5rem .75rem;
             font-size: .875rem;
-            color: #1c2b22;
-            background: #fff;
             outline: none;
             transition: border-color .15s;
         }
 
-        .form-input:focus {
-            border-color: var(--color-principal, #6B21A8);
-        }
-
         .form-select {
             width: 100%;
-            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
             border-radius: 8px;
             padding: .5rem .75rem;
             font-size: .875rem;
-            color: #1c2b22;
-            background: #fff;
             outline: none;
         }
 
-        .form-select:focus {
-            border-color: var(--color-principal, #6B21A8);
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
+        .form-group { margin-bottom: 1rem; }
 
         .form-error {
             font-size: .78rem;
@@ -122,124 +93,60 @@
             font-size: .84rem;
             cursor: pointer;
         }
-
         .dia-check input[type="checkbox"] {
             accent-color: var(--color-principal, #6B21A8);
             width: 16px;
             height: 16px;
         }
 
-        .horario-tabla {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
+        .horario-tabla { width: 100%; border-collapse: collapse; }
         .horario-tabla th {
             padding: .55rem 1rem;
             font-size: .72rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: .06em;
-            color: #64748b;
-            background: #f8fafc;
-            border-bottom: 1px solid #e5e7eb;
             text-align: left;
         }
-
-        .horario-tabla th.col-activo {
-            text-align: center;
-            width: 80px;
-        }
-
-        .horario-tabla td {
-            padding: .45rem .75rem;
-            border-bottom: 1px solid #f1f5f9;
-            vertical-align: middle;
-        }
-
-        .horario-tabla tr:last-child td {
-            border-bottom: none;
-        }
-
-        .horario-tabla tr.dia-inactivo .dia-nombre {
-            color: #9ca3af;
-        }
-
-        .horario-tabla tr.dia-inactivo .form-input-hora {
-            opacity: .35;
-        }
+        .horario-tabla th.col-activo { text-align: center; width: 80px; }
+        .horario-tabla td { padding: .45rem .75rem; vertical-align: middle; }
+        .horario-tabla tr:last-child td { border-bottom: none; }
+        .horario-tabla tr.dia-inactivo .form-input-hora { opacity: .35; }
 
         .form-input-hora {
             width: 130px;
-            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
             border-radius: 8px;
             padding: .4rem .6rem;
             font-size: .875rem;
-            color: #1c2b22;
-            background: #fff;
             outline: none;
             transition: border-color .15s;
-        }
-
-        .form-input-hora:focus {
-            border-color: var(--color-principal, #6B21A8);
-        }
-
-        .horario-tabla tr.dia-inactivo .form-input-hora:focus {
-            border-color: var(--color-muy-claro, #e9d5ff);
         }
 
         .btn-copiar-horario {
             font-size: .72rem;
             padding: 3px 10px;
             border-radius: 5px;
-            border: 1px solid #e5e7eb;
-            background: #f8fafc;
-            color: #64748b;
             cursor: pointer;
             transition: all .15s;
-        }
-
-        .btn-copiar-horario:hover {
-            border-color: var(--color-principal, #6B21A8);
-            color: var(--color-principal, #6B21A8);
         }
 
         .logo-preview {
             max-width: 160px;
             max-height: 80px;
-            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
             border-radius: 8px;
             object-fit: contain;
             padding: 6px;
-            background: var(--fondo-card-alt, #faf8ff);
         }
 
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 42px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
+        .toggle-switch { position: relative; display: inline-block; width: 42px; height: 24px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .toggle-slider {
             position: absolute;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #d1d5db;
+            top: 0; left: 0; right: 0; bottom: 0;
             border-radius: 24px;
             transition: .2s;
         }
-
         .toggle-slider:before {
             position: absolute;
             content: "";
@@ -247,34 +154,183 @@
             width: 18px;
             left: 3px;
             bottom: 3px;
-            background: white;
             border-radius: 50%;
             transition: .2s;
         }
+        .toggle-switch input:checked+.toggle-slider { background: var(--color-principal, #6B21A8); }
+        .toggle-switch input:checked+.toggle-slider:before { transform: translateX(18px); }
 
-        .toggle-switch input:checked+.toggle-slider {
-            background: var(--color-principal, #6B21A8);
-        }
-
-        .toggle-switch input:checked+.toggle-slider:before {
-            transform: translateX(18px);
-        }
-
-        /* Selector de temas */
-        .tema-option {
-            transition: all 0.2s;
-        }
-
+        .tema-option { transition: all 0.2s; }
         .tema-option:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--sombra-principal, rgba(107, 33, 168, 0.2));
+            box-shadow: 0 4px 12px var(--sombra-principal, rgba(107,33,168,0.2));
         }
-
         .tema-option.seleccionado {
             border: 2px solid var(--color-principal);
             box-shadow: 0 0 12px var(--color-principal);
             transform: scale(1.04);
         }
+
+        /* ── Tema clásico ────────────────────────────────────────── */
+        body:not([data-ui="glass"]) .conf-page-titulo { color: #1c2b22; }
+
+        body:not([data-ui="glass"]) .btn-gris {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        body:not([data-ui="glass"]) .conf-card {
+            background: #fff;
+            border: 1px solid var(--color-muy-claro, #e9d5ff);
+            box-shadow: 0 8px 28px var(--sombra-principal, rgba(107,33,168,.15)), 0 2px 8px rgba(0,0,0,.12);
+        }
+
+        body:not([data-ui="glass"]) .conf-titulo {
+            color: var(--color-hover, #581C87);
+            background: var(--color-muy-claro, #F3E8FF);
+        }
+
+        body:not([data-ui="glass"]) .form-label { color: var(--color-hover, #581C87); }
+
+        body:not([data-ui="glass"]) .form-input {
+            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
+            color: #1c2b22;
+            background: #fff;
+        }
+        body:not([data-ui="glass"]) .form-input:focus { border-color: var(--color-principal, #6B21A8); }
+
+        body:not([data-ui="glass"]) .form-select {
+            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
+            color: #1c2b22;
+            background: #fff;
+        }
+        body:not([data-ui="glass"]) .form-select:focus { border-color: var(--color-principal, #6B21A8); }
+
+        body:not([data-ui="glass"]) .horario-tabla th {
+            color: #64748b;
+            background: #f8fafc;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        body:not([data-ui="glass"]) .horario-tabla td { border-bottom: 1px solid #f1f5f9; }
+        body:not([data-ui="glass"]) .horario-tabla tr.dia-inactivo .dia-nombre { color: #9ca3af; }
+
+        body:not([data-ui="glass"]) .form-input-hora {
+            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
+            color: #1c2b22;
+            background: #fff;
+        }
+        body:not([data-ui="glass"]) .form-input-hora:focus { border-color: var(--color-principal, #6B21A8); }
+        body:not([data-ui="glass"]) .horario-tabla tr.dia-inactivo .form-input-hora:focus {
+            border-color: var(--color-muy-claro, #e9d5ff);
+        }
+
+        body:not([data-ui="glass"]) .btn-copiar-horario {
+            border: 1px solid #e5e7eb;
+            background: #f8fafc;
+            color: #64748b;
+        }
+        body:not([data-ui="glass"]) .btn-copiar-horario:hover {
+            border-color: var(--color-principal, #6B21A8);
+            color: var(--color-principal, #6B21A8);
+        }
+
+        body:not([data-ui="glass"]) .logo-preview {
+            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
+            background: var(--fondo-card-alt, #faf8ff);
+        }
+
+        body:not([data-ui="glass"]) .toggle-slider { background: #d1d5db; }
+        body:not([data-ui="glass"]) .toggle-slider:before { background: white; }
+
+        /* ── Tema glass (Aurora) ─────────────────────────────────── */
+        body[data-ui="glass"] .conf-page-titulo { color: white !important; }
+
+        body[data-ui="glass"] .btn-gris {
+            background: rgba(255,255,255,0.08) !important;
+            color: rgba(255,255,255,0.75) !important;
+            border: 1px solid rgba(255,255,255,0.15) !important;
+        }
+        body[data-ui="glass"] .btn-gris:hover {
+            background: rgba(255,255,255,0.13) !important;
+            color: white !important;
+        }
+
+        body[data-ui="glass"] .conf-card {
+            background: rgba(255,255,255,0.10) !important;
+            backdrop-filter: blur(20px) saturate(160%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+            border: 1px solid rgba(0,234,255,0.45) !important;
+            box-shadow: 0 0 8px rgba(0,234,255,0.25) !important;
+        }
+
+        body[data-ui="glass"] .conf-titulo {
+            color: rgba(0,234,255,0.90) !important;
+            background: rgba(0,0,0,0.25) !important;
+            border-bottom: 1px solid rgba(0,234,255,0.20) !important;
+        }
+
+        body[data-ui="glass"] .form-label { color: rgba(0,234,255,0.90) !important; }
+
+        body[data-ui="glass"] .form-input {
+            border: 1.5px solid rgba(0,234,255,0.30) !important;
+            color: rgba(255,255,255,0.90) !important;
+            background: rgba(255,255,255,0.08) !important;
+        }
+        body[data-ui="glass"] .form-input:focus {
+            border-color: rgba(0,234,255,0.70) !important;
+        }
+        body[data-ui="glass"] .form-input::placeholder { color: rgba(255,255,255,0.30) !important; }
+
+        body[data-ui="glass"] .form-select {
+            border: 1.5px solid rgba(0,234,255,0.30) !important;
+            color: rgba(255,255,255,0.90) !important;
+            background: rgba(255,255,255,0.08) !important;
+        }
+        body[data-ui="glass"] .form-select option, body[data-ui="glass"] .form-select optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+        body[data-ui="glass"] .form-select:focus {
+            border-color: rgba(0,234,255,0.70) !important;
+        }
+
+        body[data-ui="glass"] .horario-tabla th {
+            color: rgba(0,234,255,0.90) !important;
+            background: rgba(0,0,0,0.25) !important;
+            border-bottom: 1px solid rgba(0,234,255,0.20) !important;
+        }
+        body[data-ui="glass"] .horario-tabla td {
+            border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+        }
+        body[data-ui="glass"] .horario-tabla tr.dia-inactivo .dia-nombre {
+            color: rgba(255,255,255,0.25) !important;
+        }
+
+        body[data-ui="glass"] .form-input-hora {
+            border: 1.5px solid rgba(0,234,255,0.30) !important;
+            color: rgba(255,255,255,0.90) !important;
+            background: rgba(255,255,255,0.08) !important;
+        }
+        body[data-ui="glass"] .form-input-hora:focus {
+            border-color: rgba(0,234,255,0.70) !important;
+        }
+
+        body[data-ui="glass"] .btn-copiar-horario {
+            border: 1px solid rgba(0,234,255,0.20) !important;
+            background: rgba(255,255,255,0.05) !important;
+            color: rgba(255,255,255,0.55) !important;
+        }
+        body[data-ui="glass"] .btn-copiar-horario:hover {
+            border-color: rgba(0,234,255,0.50) !important;
+            color: rgba(0,234,255,0.90) !important;
+            background: rgba(0,234,255,0.08) !important;
+        }
+
+        body[data-ui="glass"] .logo-preview {
+            border: 1.5px solid rgba(255,255,255,0.15) !important;
+            background: rgba(255,255,255,0.05) !important;
+        }
+
+        body[data-ui="glass"] .toggle-slider { background: rgba(255,255,255,0.2) !important; }
+        body[data-ui="glass"] .toggle-slider:before { background: white !important; }
     </style>
 @endpush
 
@@ -286,7 +342,7 @@
             <i class="bi bi-gear-fill"></i>
         </div>
         <div>
-            <h4 style="font-family:var(--fuente-titulos,'Playfair Display',serif);font-weight:700;color:#1c2b22;margin:0;">
+            <h4 class="conf-page-titulo" style="font-family:var(--fuente-titulos,'Playfair Display',serif);font-weight:700;margin:0;">
                 Configuración General</h4>
             <p style="font-size:.82rem;color:#9ca3af;margin:0;">Datos del consultorio, horarios y preferencias del sistema
             </p>
@@ -976,6 +1032,69 @@
 
 
 
+    {{-- ── ESTILO DE INTERFAZ ─────────────────────────────────────── --}}
+    <div class="conf-card">
+        <div class="conf-titulo"><i class="bi bi-layers"></i> Estilo de Interfaz</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+            {{-- Opción Clásico --}}
+            <label style="cursor:pointer;">
+                <input type="radio" name="tema_ui" value="clasico"
+                    {{ ($config->tema_ui ?? 'clasico') === 'clasico' ? 'checked' : '' }}
+                    style="display:none;" class="radio-tema-ui" form="form-configuracion">
+                <div class="tema-ui-opt {{ ($config->tema_ui ?? 'clasico') === 'clasico' ? 'ui-sel' : '' }}"
+                    style="border-radius:12px;overflow:hidden;border:2px solid {{ ($config->tema_ui ?? 'clasico') === 'clasico' ? 'var(--color-principal)' : '#e5e5e5' }};transition:all .2s;cursor:pointer;">
+                    <div style="height:70px;background:#faf8f4;display:flex;">
+                        <div style="width:45px;background:var(--color-sidebar,#3B0764);"></div>
+                        <div style="flex:1;padding:8px;display:flex;flex-direction:column;gap:4px;">
+                            <div style="height:10px;border-radius:3px;background:var(--color-principal,#6B21A8);width:60%;"></div>
+                            <div style="display:flex;gap:4px;">
+                                <div style="flex:1;height:18px;border-radius:3px;background:white;border:1px solid #ede9e0;"></div>
+                                <div style="flex:1;height:18px;border-radius:3px;background:white;border:1px solid #ede9e0;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding:8px 10px;background:white;border-top:1px solid #f0f0f0;">
+                        <div style="font-size:.75rem;font-weight:700;color:var(--color-principal,#6B21A8);">Clásico</div>
+                        <div style="font-size:.65rem;color:#999;">Colores planos · Actual</div>
+                    </div>
+                </div>
+            </label>
+
+            {{-- Opción Aurora Glass --}}
+            <label style="cursor:pointer;">
+                <input type="radio" name="tema_ui" value="glass"
+                    {{ ($config->tema_ui ?? 'clasico') === 'glass' ? 'checked' : '' }}
+                    style="display:none;" class="radio-tema-ui" form="form-configuracion">
+                <div class="tema-ui-opt {{ ($config->tema_ui ?? 'clasico') === 'glass' ? 'ui-sel' : '' }}"
+                    style="border-radius:12px;overflow:hidden;border:2px solid {{ ($config->tema_ui ?? 'clasico') === 'glass' ? '#7c3aed' : '#e5e5e5' }};transition:all .2s;cursor:pointer;">
+                    <div style="height:70px;background:linear-gradient(135deg,#0f0728,#1a0a4e);display:flex;position:relative;overflow:hidden;">
+                        <div style="position:absolute;width:80px;height:80px;border-radius:50%;background:rgba(124,58,237,.5);filter:blur(20px);top:-20px;left:-20px;"></div>
+                        <div style="position:absolute;width:60px;height:60px;border-radius:50%;background:rgba(6,182,212,.4);filter:blur(15px);top:-10px;right:10px;"></div>
+                        <div style="width:45px;background:rgba(10,5,32,.7);border-right:1px solid rgba(167,139,250,.2);z-index:1;"></div>
+                        <div style="flex:1;padding:8px;display:flex;flex-direction:column;gap:4px;z-index:1;">
+                            <div style="height:10px;border-radius:3px;background:rgba(167,139,250,.6);width:60%;"></div>
+                            <div style="display:flex;gap:4px;">
+                                <div style="flex:1;height:18px;border-radius:3px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"></div>
+                                <div style="flex:1;height:18px;border-radius:3px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding:8px 10px;background:linear-gradient(135deg,#1a0a3e,#0f1a3e);border-top:1px solid rgba(167,139,250,.2);">
+                        <div style="font-size:.75rem;font-weight:700;color:#c4b5fd;">✨ Aurora Glass</div>
+                        <div style="font-size:.65rem;color:#7c6fad;">Moderno · Glassmorphism</div>
+                    </div>
+                </div>
+            </label>
+
+        </div>
+        <p style="font-size:.73rem;color:#9ca3af;margin-top:.75rem;margin-bottom:0;">
+            <i class="bi bi-info-circle"></i>
+            Aurora Glass aplica fondo animado y efecto vidrio a toda la interfaz. Requiere guardar para aplicar.
+        </p>
+    </div>
+
     {{-- ── BACKUP DE DATOS ────────────────────────────────────────── --}}
     <div class="conf-card">
         <div class="conf-titulo">
@@ -1363,5 +1482,22 @@
                 }
             });
         })();
+
+        // ── Selección visual Estilo de Interfaz ──
+        document.querySelectorAll('.radio-tema-ui').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.tema-ui-opt').forEach(function(opt) {
+                    opt.style.border = '2px solid #e5e5e5';
+                    opt.classList.remove('ui-sel');
+                });
+                var opt = this.closest('label').querySelector('.tema-ui-opt');
+                if (opt) {
+                    opt.style.border = this.value === 'glass'
+                        ? '2px solid #7c3aed'
+                        : '2px solid var(--color-principal)';
+                    opt.classList.add('ui-sel');
+                }
+            });
+        });
     </script>
 @endpush

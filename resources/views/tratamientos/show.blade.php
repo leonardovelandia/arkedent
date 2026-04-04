@@ -42,6 +42,31 @@
     .accion-btn:hover { background:var(--color-muy-claro); }
     .accion-btn.verde { color:#166534; border-color:#bbf7d0; }
     .accion-btn.verde:hover { background:#dcfce7; }
+
+    /* ── Classic overrides ── */
+    body:not([data-ui="glass"]) .resumen-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .info-card    { background:#fff; border:1px solid var(--color-muy-claro); }
+
+    /* ── Aurora Glass overrides ── */
+    body[data-ui="glass"] .resumen-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 0 8px rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .resumen-card-label { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .resumen-card-valor { color:rgba(255,255,255,0.95) !important; }
+    body[data-ui="glass"] .info-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 0 8px rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .info-card-titulo { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .tabla-pagos thead th { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .tabla-pagos tbody td { color:rgba(255,255,255,0.80) !important; border-bottom:1px solid rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .badge-activo     { background:rgba(99,40,155,0.30) !important; color:rgba(196,160,255,0.95) !important; }
+    body[data-ui="glass"] .badge-completado { background:rgba(22,101,52,0.25) !important; color:#86efac !important; }
+    body[data-ui="glass"] .badge-cancelado  { background:rgba(255,255,255,0.10) !important; color:rgba(255,255,255,0.60) !important; }
+    body[data-ui="glass"] .badge-efectivo     { background:rgba(22,101,52,0.22) !important; color:#86efac !important; }
+    body[data-ui="glass"] .badge-transferencia { background:rgba(12,84,96,0.22) !important; color:#67e8f9 !important; }
+    body[data-ui="glass"] .badge-tarjeta      { background:rgba(99,40,155,0.25) !important; color:rgba(196,160,255,0.95) !important; }
+    body[data-ui="glass"] .badge-cheque       { background:rgba(124,45,18,0.22) !important; color:#fdba74 !important; }
+    body[data-ui="glass"] .badge-otro         { background:rgba(255,255,255,0.10) !important; color:rgba(255,255,255,0.60) !important; }
+    body[data-ui="glass"] .accion-btn { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.25) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .accion-btn:hover { background:rgba(0,234,255,0.12) !important; }
+    body[data-ui="glass"] .accion-btn.verde { color:#86efac !important; border-color:rgba(134,239,172,0.35) !important; }
+    body[data-ui="glass"] .accion-btn.verde:hover { background:rgba(134,239,172,0.12) !important; }
 </style>
 @endpush
 

@@ -18,6 +18,52 @@
     .badge-otro          { background:#F3F4F6; color:#374151; }
     .tbl-table tr.pago-anulado td { opacity:.55; }
     .tbl-table tr.pago-anulado .recibo-num { text-decoration:line-through; }
+
+    /* Inline text helpers */
+    .pago-pac-nombre { font-weight:600; }
+    .pago-pac-doc    { font-size:.74rem; }
+    .pago-valor      { font-weight:700; white-space:nowrap; }
+    .pago-fecha      { white-space:nowrap; font-size:.83rem; }
+    .pago-cajero     { font-size:.82rem; }
+    body:not([data-ui="glass"]) .pago-pac-nombre { color:#1c2b22; }
+    body:not([data-ui="glass"]) .pago-pac-doc    { color:#9ca3af; }
+    body:not([data-ui="glass"]) .pago-valor      { color:#166534; }
+    body:not([data-ui="glass"]) .pago-fecha      { color:#4b5563; }
+    body:not([data-ui="glass"]) .pago-cajero     { color:#6b7280; }
+
+    /* Clásico – summary cards */
+    body:not([data-ui="glass"]) .resumen-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .resumen-card-valor { color:#1c2b22; }
+    body:not([data-ui="glass"]) .badge-efectivo      { background:#D4EDDA; color:#155724; }
+    body:not([data-ui="glass"]) .badge-transferencia { background:#D1ECF1; color:#0c5460; }
+    body:not([data-ui="glass"]) .badge-tarjeta       { background:#E8D5FF; color:var(--color-sidebar-2); }
+    body:not([data-ui="glass"]) .badge-cheque        { background:#FFE5CC; color:#7C2D12; }
+    body:not([data-ui="glass"]) .badge-otro          { background:#F3F4F6; color:#374151; }
+
+    /* Modal anulación */
+    .modal-anulacion-box { border-radius:14px; padding:1.75rem; width:100%; max-width:420px; margin:1rem; }
+    body:not([data-ui="glass"]) .modal-anulacion-box { background:#fff; box-shadow:0 20px 60px rgba(0,0,0,.3); }
+
+    /* Glass */
+    body[data-ui="glass"] .resumen-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .resumen-card-label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .resumen-card-valor { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .resumen-card-sub   { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .pago-pac-nombre { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .pago-pac-doc    { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .pago-valor      { color:#86efac !important; }
+    body[data-ui="glass"] .pago-fecha      { color:rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .pago-cajero     { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .badge-efectivo      { background:rgba(74,222,128,0.20) !important; color:#86efac !important; border:1px solid rgba(74,222,128,0.35) !important; }
+    body[data-ui="glass"] .badge-transferencia { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .badge-tarjeta       { background:rgba(167,139,250,0.15) !important; color:#c4b5fd !important; border:1px solid rgba(167,139,250,0.30) !important; }
+    body[data-ui="glass"] .badge-cheque        { background:rgba(251,191,36,0.15) !important; color:#fbbf24 !important; border:1px solid rgba(251,191,36,0.30) !important; }
+    body[data-ui="glass"] .badge-otro          { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.55) !important; border:1px solid rgba(255,255,255,0.15) !important; }
+    body[data-ui="glass"] .modal-anulacion-box { background:rgba(13,30,50,0.95) !important; backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 20px 60px rgba(0,0,0,.5) !important; }
+    body[data-ui="glass"] .modal-anulacion-box h5 { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .modal-anulacion-box p  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .modal-anulacion-box label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .modal-anulacion-box textarea { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
 </style>
 @endpush
 
@@ -117,8 +163,8 @@
             @endif
         </td>
         <td>
-            <div style="font-weight:600;color:#1c2b22;">{{ $p->paciente->nombre_completo }}</div>
-            <div style="font-size:.74rem;color:#9ca3af;">{{ $p->paciente->numero_documento }}</div>
+            <div class="pago-pac-nombre">{{ $p->paciente->nombre_completo }}</div>
+            <div class="pago-pac-doc">{{ $p->paciente->numero_documento }}</div>
         </td>
         <td style="max-width:200px;">
             <span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ $p->concepto }}">
@@ -128,7 +174,7 @@
             <span style="font-size:.72rem;color:var(--color-principal);">{{ $p->tratamiento->nombre }}</span>
             @endif
         </td>
-        <td style="font-weight:700;color:#166534;white-space:nowrap;">
+        <td class="pago-valor">
             $ {{ number_format($p->valor, 0, ',', '.') }}
         </td>
         <td>
@@ -143,10 +189,10 @@
             @endphp
             <span class="badge-metodo {{ $badgeClass }}">{{ $p->metodo_pago_label }}</span>
         </td>
-        <td style="white-space:nowrap;color:#4b5563;font-size:.83rem;">
+        <td class="pago-fecha">
             {{ $p->fecha_pago->translatedFormat('d M Y') }}
         </td>
-        <td style="font-size:.82rem;color:#6b7280;">{{ $p->cajero?->name ?? '—' }}</td>
+        <td class="pago-cajero">{{ $p->cajero?->name ?? '—' }}</td>
         <td>
             <div style="display:flex;justify-content:center;gap:.3rem;">
                 <a href="{{ route('pagos.show', $p) }}" class="tbl-btn-accion" title="Ver detalle">
@@ -170,9 +216,9 @@
 
 {{-- Modal anulación --}}
 <div id="modal-anulacion" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
-    <div style="background:#fff;border-radius:14px;padding:1.75rem;width:100%;max-width:420px;margin:1rem;box-shadow:0 20px 60px rgba(0,0,0,.3);">
-        <h5 style="font-family:var(--fuente-titulos);color:#1c2b22;margin:0 0 .3rem;">Anular Pago</h5>
-        <p style="font-size:.84rem;color:#9ca3af;margin:0 0 1rem;">Recibo: <strong id="modal-anulacion-recibo" style="color:var(--color-principal);"></strong></p>
+    <div class="modal-anulacion-box">
+        <h5 style="font-family:var(--fuente-titulos);margin:0 0 .3rem;">Anular Pago</h5>
+        <p style="font-size:.84rem;margin:0 0 1rem;">Recibo: <strong id="modal-anulacion-recibo" style="color:var(--color-principal);"></strong></p>
         <form id="form-anulacion" method="POST">
             @csrf
             <label style="font-size:.82rem;font-weight:700;color:var(--color-hover);display:block;margin-bottom:.3rem;">

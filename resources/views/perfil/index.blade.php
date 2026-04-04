@@ -18,6 +18,24 @@
     .rol-administrador { background:#dbeafe; color:#1d4ed8; }
     .rol-asistente { background:#d1fae5; color:#065f46; }
     .avatar-grande { width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; font-size:1.6rem; font-weight:600; display:flex; align-items:center; justify-content:center; }
+
+    /* ── Classic overrides ── */
+    body:not([data-ui="glass"]) .form-card  { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .seccion-titulo { background:var(--color-muy-claro); color:var(--color-hover); border-bottom:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .form-label { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-input { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+
+    /* ── Aurora Glass overrides ── */
+    body[data-ui="glass"] .form-card  { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .seccion-titulo { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.90) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .form-label  { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-input  { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-input:focus { border-color:rgba(0,234,255,0.70) !important; box-shadow:none !important; }
+    body[data-ui="glass"] .form-input::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .aviso { background:rgba(251,191,36,0.12) !important; border:1px solid rgba(251,191,36,0.35) !important; color:#fde68a !important; }
+    body[data-ui="glass"] .rol-doctora     { background:rgba(0,234,255,0.15) !important; color:rgba(0,234,255,0.95) !important; }
+    body[data-ui="glass"] .rol-administrador { background:rgba(30,64,175,0.22) !important; color:#93c5fd !important; }
+    body[data-ui="glass"] .rol-asistente   { background:rgba(22,101,52,0.22) !important; color:#86efac !important; }
 </style>
 @endpush
 

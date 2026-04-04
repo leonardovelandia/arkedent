@@ -18,6 +18,32 @@
     .rol-card { border:2px solid var(--color-muy-claro); border-radius:10px; padding:.75rem 1rem; cursor:pointer; transition:all .15s; margin-bottom:.5rem; }
     .rol-card:has(input:checked) { border-color:var(--color-principal); background:var(--fondo-card-alt); }
     .rol-card input[type="radio"] { accent-color:var(--color-principal); }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .form-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .seccion-titulo { background:var(--color-muy-claro); color:var(--color-hover); border-bottom:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .form-label { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-input { color:#1c2b22; background:#fff; border:1.5px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .form-select { color:#1c2b22; background:#fff; border:1.5px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .rol-card { border-color:var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .form-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .seccion-titulo { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.90) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .form-label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-input { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-input:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .form-input::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .form-select { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-select option, body[data-ui="glass"] .form-select optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-select:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .rol-card { border-color:rgba(0,234,255,0.30) !important; background:rgba(255,255,255,0.04) !important; }
+    body[data-ui="glass"] .rol-card:has(input:checked) { border-color:rgba(0,234,255,0.70) !important; background:rgba(0,234,255,0.08) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-sub  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .btn-back { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

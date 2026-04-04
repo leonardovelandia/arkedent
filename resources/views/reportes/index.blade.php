@@ -67,6 +67,58 @@
     .periodo-btn { border:none; background:none; border-radius:7px; padding:.35rem .85rem; font-size:.8rem; font-weight:600; color:#6b7280; cursor:pointer; transition:all .15s; }
     .periodo-btn.activo { background:#fff; color:var(--color-principal); box-shadow:0 1px 4px rgba(0,0,0,.1); }
     .periodo-btn:hover:not(.activo) { color:var(--color-principal); }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .metrica-reporte { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-card-header { border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-card-titulo { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .btn-reporte { background:#fff; border:1.5px solid var(--color-muy-claro); color:var(--color-principal); }
+    body:not([data-ui="glass"]) .btn-reporte:hover { background:var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .tabla-reporte th { color:var(--color-principal); border-bottom:2px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .tabla-reporte td { color:#374151; border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .tabla-reporte tr:hover td { background:var(--fondo-card-alt); }
+    body:not([data-ui="glass"]) .badge-efectivo     { background:#dcfce7; color:#166534; }
+    body:not([data-ui="glass"]) .badge-transferencia{ background:#dbeafe; color:#1e40af; }
+    body:not([data-ui="glass"]) .badge-tarjeta      { background:var(--color-muy-claro); color:var(--color-principal); }
+    body:not([data-ui="glass"]) .badge-otro         { background:#f3f4f6; color:#374151; }
+
+    /* Glass */
+    body[data-ui="glass"] .metrica-reporte { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .metrica-valor   { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .metrica-valor.naranja { color:#fbbf24 !important; }
+    body[data-ui="glass"] .metrica-valor.rojo    { color:#fca5a5 !important; }
+    body[data-ui="glass"] .metrica-valor.verde   { color:#86efac !important; }
+    body[data-ui="glass"] .metrica-label   { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .icono-morado    { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .icono-verde     { background:rgba(74,222,128,0.15) !important; color:#86efac !important; }
+    body[data-ui="glass"] .icono-naranja   { background:rgba(251,191,36,0.15) !important; color:#fbbf24 !important; }
+    body[data-ui="glass"] .icono-azul      { background:rgba(0,234,255,0.10) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .icono-rojo      { background:rgba(248,113,113,0.15) !important; color:#fca5a5 !important; }
+    body[data-ui="glass"] .panel-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .panel-card-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .panel-card-titulo { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .panel-card-titulo i { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .btn-reporte { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .btn-reporte:hover { background:rgba(0,234,255,0.12) !important; border-color:rgba(0,234,255,0.55) !important; }
+    body[data-ui="glass"] .btn-reporte.rojo { color:#fca5a5 !important; border-color:rgba(248,113,113,0.30) !important; }
+    body[data-ui="glass"] .btn-reporte.rojo:hover { background:rgba(248,113,113,0.10) !important; border-color:rgba(248,113,113,0.50) !important; }
+    body[data-ui="glass"] .tabla-reporte th { color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .tabla-reporte td { color:rgba(255,255,255,0.88) !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; }
+    body[data-ui="glass"] .tabla-reporte tr:hover td { background:rgba(0,234,255,0.08) !important; }
+    body[data-ui="glass"] .barra-progreso-custom { background:rgba(255,255,255,0.10) !important; }
+    body[data-ui="glass"] .periodo-selector { background:rgba(255,255,255,0.06) !important; border:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .periodo-btn { color:rgba(255,255,255,0.45) !important; }
+    body[data-ui="glass"] .periodo-btn.activo { background:rgba(0,234,255,0.15) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .periodo-btn:hover:not(.activo) { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .badge-efectivo     { background:rgba(74,222,128,0.20) !important; color:#86efac !important; border:1px solid rgba(74,222,128,0.35) !important; }
+    body[data-ui="glass"] .badge-transferencia{ background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .badge-tarjeta      { background:rgba(167,139,250,0.15) !important; color:#c4b5fd !important; border:1px solid rgba(167,139,250,0.30) !important; }
+    body[data-ui="glass"] .badge-otro         { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.55) !important; border:1px solid rgba(255,255,255,0.15) !important; }
+    body[data-ui="glass"] .cambio-positivo { color:#86efac !important; }
+    body[data-ui="glass"] .cambio-negativo { color:#fca5a5 !important; }
+    body[data-ui="glass"] .cambio-neutro   { color:rgba(255,255,255,0.45) !important; }
+    body[data-ui="glass"] .reporte-header h4 { color:rgba(255,255,255,0.90) !important; }
 </style>
 @endpush
 

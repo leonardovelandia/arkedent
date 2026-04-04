@@ -13,9 +13,29 @@
     .tabla-fila td { padding:.6rem .9rem; border-bottom:1px solid var(--fondo-borde); font-size:.875rem; vertical-align:middle; }
     .tabla-fila:hover td { background:var(--fondo-card-alt); }
     .badge-estado { padding:.2rem .65rem; border-radius:20px; font-size:.7rem; font-weight:700; display:inline-flex; align-items:center; gap:.25rem; }
-    .por-vencer { background:#fff7ed; border:1px solid #fed7aa; border-radius:6px; padding:.15rem .45rem; font-size:.7rem; font-weight:600; color:#c2410c; }
     #tabla-container { min-height:100px; transition:opacity .15s; }
     #tabla-container.cargando { opacity:.4; pointer-events:none; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .form-input  { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .form-input:focus  { border-color:var(--color-principal); }
+    body:not([data-ui="glass"]) .form-select { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .form-select:focus { border-color:var(--color-principal); }
+    body:not([data-ui="glass"]) .tabla-header th { background:var(--color-muy-claro); color:var(--color-hover); border-bottom:2px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .tabla-fila td { border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .tabla-fila:hover td { background:var(--fondo-card-alt); }
+    body:not([data-ui="glass"]) .por-vencer { background:#fff7ed; border:1px solid #fed7aa; color:#c2410c; }
+
+    /* Glass */
+    body[data-ui="glass"] .form-input  { border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; background:rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .form-input:focus  { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .form-select { border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; background:rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .form-select:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .tabla-header th { background:rgba(0,0,0,0.30) !important; color:rgba(255,255,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .tabla-fila td { color:rgba(255,255,255,0.88) !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; }
+    body[data-ui="glass"] .tabla-fila:hover td { background:rgba(0,234,255,0.08) !important; }
+    body[data-ui="glass"] .por-vencer { background:rgba(251,191,36,0.15) !important; border:1px solid rgba(251,191,36,0.35) !important; color:#fbbf24 !important; }
+    body[data-ui="glass"] .badge-estado { border:1px solid rgba(255,255,255,0.15) !important; }
 </style>
 @endpush
 

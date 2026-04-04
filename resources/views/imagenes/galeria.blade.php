@@ -35,6 +35,25 @@
     .lb-next { right:1.5rem; }
     .lb-close { position:absolute; top:1rem; right:1.25rem; background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer; opacity:.8; }
     .lb-close:hover { opacity:1; }
+
+    /* ── Classic overrides ── */
+    body:not([data-ui="glass"]) .img-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .gal-tab { color:#6b7280; }
+    body:not([data-ui="glass"]) .gal-tab.activo { color:var(--color-principal); border-bottom-color:var(--color-principal); }
+
+    /* ── Aurora Glass overrides ── */
+    body[data-ui="glass"] .gal-tab { color:rgba(255,255,255,0.60) !important; }
+    body[data-ui="glass"] .gal-tab:hover { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .gal-tab.activo { color:rgba(0,234,255,0.95) !important; border-bottom-color:rgba(0,234,255,0.80) !important; }
+    body[data-ui="glass"] .img-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.30) !important; box-shadow:0 0 8px rgba(0,234,255,0.15) !important; }
+    body[data-ui="glass"] .img-info { color:rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .img-info div { color:rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .num-badge { background:rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.95) !important; }
+    body[data-ui="glass"] .img-thumb-placeholder { background:rgba(0,234,255,0.10) !important; color:rgba(0,234,255,0.60) !important; }
+    body[data-ui="glass"] .gal-tabs { border-bottom-color: rgba(0,234,255,0.25) !important; }
+    /* Empty state */
+    body[data-ui="glass"] div[style*="background:#fff"][style*="border-radius:12px"] { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.75) !important; }
+    body[data-ui="glass"] div[style*="background:#fff"][style*="border-radius:12px"] p { color: rgba(255,255,255,0.65) !important; }
 </style>
 @endpush
 

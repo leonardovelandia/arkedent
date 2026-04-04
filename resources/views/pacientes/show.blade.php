@@ -26,15 +26,14 @@
         display: inline-flex; align-items: center; gap: 0.35rem;
         transition: background 0.15s; text-decoration: none;
     }
-    .btn-outline-morado:hover { background: var(--color-muy-claro); color: var(--color-hover); }
+    body:not([data-ui="glass"]) .btn-outline-morado:hover { background:var(--color-muy-claro); color:var(--color-hover); }
+    body[data-ui="glass"] .btn-outline-morado:hover { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border-color:rgba(0,234,255,0.50) !important; }
 
-    .btn-gris {
-        background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb;
-        border-radius: 8px; padding: 0.45rem 1rem; font-size: 0.875rem; font-weight: 500;
-        display: inline-flex; align-items: center; gap: 0.35rem;
-        transition: background 0.15s; text-decoration: none;
-    }
-    .btn-gris:hover { background: #e5e7eb; color: #1f2937; }
+    .btn-gris { border-radius:8px; padding:0.45rem 1rem; font-size:0.875rem; font-weight:500; display:inline-flex; align-items:center; gap:0.35rem; transition:background 0.15s; text-decoration:none; }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+    body:not([data-ui="glass"]) .btn-gris:hover { background:#e5e7eb; color:#1f2937; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.75) !important; border:1px solid rgba(255,255,255,0.15) !important; }
+    body[data-ui="glass"] .btn-gris:hover { background:rgba(255,255,255,0.13) !important; color:white !important; }
 
     /* Header del paciente */
     .pac-header-card {
@@ -94,48 +93,46 @@
     }
 
     /* Tabs */
-    .pac-tabs {
-        display: flex;
-        gap: 0.25rem;
-        border-bottom: 2px solid var(--color-muy-claro);
-        margin-bottom: 1.25rem;
-    }
+    .pac-tabs { display:flex; gap:0.25rem; margin-bottom:1.25rem; }
     .pac-tab {
-        padding: 0.6rem 1.1rem;
-        font-size: 0.855rem;
-        font-weight: 500;
-        color: #6b7280;
-        cursor: pointer;
-        border: none;
-        background: none;
-        border-bottom: 2px solid transparent;
-        margin-bottom: -2px;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        transition: color 0.15s, border-color 0.15s;
-        white-space: nowrap;
+        padding:0.6rem 1.1rem; font-size:0.855rem; font-weight:500;
+        cursor:pointer; border:none; background:none;
+        border-bottom:2px solid transparent; margin-bottom:-2px;
+        display:flex; align-items:center; gap:0.4rem;
+        transition:color 0.15s, border-color 0.15s; white-space:nowrap;
     }
-    .pac-tab:hover { color: var(--color-principal); }
-    .pac-tab.activo { color: var(--color-principal); border-bottom-color: var(--color-principal); font-weight: 600; }
-
-    .tab-panel { display: none; }
-    .tab-panel.activo { display: block; }
+    .tab-panel { display:none; }
+    .tab-panel.activo { display:block; }
 
     /* Datos */
-    .dato-grupo { margin-bottom: 1.1rem; }
-    .dato-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; margin-bottom: 0.2rem; }
-    .dato-valor { font-size: 0.9rem; color: #1c2b22; font-weight: 500; }
+    .dato-grupo { margin-bottom:1.1rem; }
+    .dato-label { font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.2rem; }
+    .dato-valor { font-size:0.9rem; font-weight:500; }
+    .seccion-vacia { text-align:center; padding:2.5rem 1rem; }
+    .seccion-vacia i { font-size:2rem; color:var(--color-acento-activo); display:block; margin-bottom:0.6rem; }
+    .card-sistema { border-radius:12px; padding:1.25rem 1.5rem; }
 
-    /* Sección vacía (próximas citas, etc.) */
-    .seccion-vacia {
-        text-align: center;
-        padding: 2.5rem 1rem;
-        color: #9ca3af;
-    }
-    .seccion-vacia i { font-size: 2rem; color: var(--color-acento-activo); display: block; margin-bottom: 0.6rem; }
+    /* Clásico */
+    body:not([data-ui="glass"]) .pac-tabs { border-bottom:2px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .pac-tab { color:#6b7280; }
+    body:not([data-ui="glass"]) .pac-tab:hover { color:var(--color-principal); }
+    body:not([data-ui="glass"]) .pac-tab.activo { color:var(--color-principal); border-bottom-color:var(--color-principal); font-weight:600; }
+    body:not([data-ui="glass"]) .dato-label { color:#9ca3af; }
+    body:not([data-ui="glass"]) .dato-valor { color:#1c2b22; }
+    body:not([data-ui="glass"]) .seccion-vacia { color:#9ca3af; }
+    body:not([data-ui="glass"]) .card-sistema { background:#fff; border:1px solid var(--fondo-borde); box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,0.12); }
 
-    .card-sistema { background: #fff; border: 1px solid var(--fondo-borde); border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: 0 8px 28px var(--sombra-principal), 0 2px 8px rgba(0,0,0,0.12); }
+    /* Glass */
+    body[data-ui="glass"] .pac-tabs { border-bottom:2px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .pac-tab { color:rgba(255,255,255,0.45) !important; }
+    body[data-ui="glass"] .pac-tab:hover { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .pac-tab.activo { color:rgba(0,234,255,0.90) !important; border-bottom-color:rgba(0,234,255,0.70) !important; font-weight:600; }
+    body[data-ui="glass"] .dato-label { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .dato-valor { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .seccion-vacia { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .card-sistema { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .btn-gris:hover { background:rgba(255,255,255,0.13) !important; color:white !important; }
 </style>
 @endpush
 

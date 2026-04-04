@@ -39,6 +39,64 @@
         #sel-paciente-ts-wrapper .ts-dropdown-content {
             max-height: 220px !important;
         }
+
+    /* Aurora Glass */
+    body[data-ui="glass"] #sel-paciente-ts-wrapper .ts-control {
+        background: rgba(255,255,255,0.08) !important;
+        border-color: rgba(0,234,255,0.30) !important;
+        color: rgba(255,255,255,0.88) !important;
+    }
+    body[data-ui="glass"] #sel-paciente-ts-wrapper .ts-dropdown {
+        background: rgba(5,40,55,0.96) !important;
+        border-color: rgba(0,234,255,0.35) !important;
+        box-shadow: 0 8px 24px rgba(0,234,255,0.15) !important;
+    }
+    body[data-ui="glass"] #sel-paciente-ts-wrapper .ts-dropdown .option { color: rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] #sel-paciente-ts-wrapper .ts-dropdown .option.active,
+    body[data-ui="glass"] #sel-paciente-ts-wrapper .ts-dropdown .option:hover { background: rgba(0,234,255,0.12) !important; color: rgba(0,234,255,0.95) !important; }
+    /* Doctor / date / evolucion selects */
+    body[data-ui="glass"] select[name="user_id"],
+    body[data-ui="glass"] select[name="evolucion_id"],
+    body[data-ui="glass"] input[name="fecha"],
+    body[data-ui="glass"] input[name="diagnostico"],
+    body[data-ui="glass"] textarea[name="indicaciones_generales"] {
+        background: rgba(255,255,255,0.08) !important;
+        border-color: rgba(0,234,255,0.30) !important;
+        color: rgba(255,255,255,0.88) !important;
+    }
+    body[data-ui="glass"] select[name="user_id"] option,
+    body[data-ui="glass"] select[name="evolucion_id"] option { background: #052837; }
+    body[data-ui="glass"] select[name="user_id"] optgroup,
+    body[data-ui="glass"] select[name="evolucion_id"] optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    /* Medicament row inputs (JS-rendered with background:white) */
+    body[data-ui="glass"] #lista-medicamentos input[type="text"],
+    body[data-ui="glass"] #lista-medicamentos input[type="number"] {
+        background: rgba(255,255,255,0.08) !important;
+        border-color: rgba(0,234,255,0.25) !important;
+        color: rgba(255,255,255,0.88) !important;
+    }
+    body[data-ui="glass"] #lista-medicamentos > div[id^="med-"] {
+        background: rgba(255,255,255,0.06) !important;
+        border-color: rgba(0,234,255,0.25) !important;
+    }
+    /* Plantilla buttons */
+    body[data-ui="glass"] button[onclick*="usarPlantilla"] {
+        background: rgba(255,255,255,0.08) !important;
+        border-color: rgba(0,234,255,0.25) !important;
+        color: rgba(255,255,255,0.70) !important;
+    }
+    body[data-ui="glass"] button[onclick*="usarPlantilla"]:hover { background: rgba(0,234,255,0.12) !important; color: rgba(0,234,255,0.90) !important; }
+    /* Cancel button inline */
+    body[data-ui="glass"] a[href*="recetas"][style*="background:#f8fafc"] {
+        background: rgba(255,255,255,0.08) !important;
+        border-color: rgba(255,255,255,0.15) !important;
+        color: rgba(255,255,255,0.75) !important;
+    }
+    body[data-ui="glass"] button[style*="background:#f1f5f9"] {
+        background: rgba(255,255,255,0.08) !important;
+        border-color: rgba(255,255,255,0.15) !important;
+        color: rgba(255,255,255,0.75) !important;
+    }
     </style>
 @endpush
 

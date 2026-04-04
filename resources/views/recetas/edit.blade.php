@@ -1,6 +1,40 @@
 @extends('layouts.app')
 @section('titulo', 'Editar Receta — ' . $receta->numero_receta)
 
+@push('estilos')
+<style>
+    /* ── Aurora Glass overrides for card-sistema inline elements ── */
+    body[data-ui="glass"] .card-sistema select,
+    body[data-ui="glass"] .card-sistema input[type="text"],
+    body[data-ui="glass"] .card-sistema input[type="date"],
+    body[data-ui="glass"] .card-sistema textarea {
+        background:rgba(255,255,255,0.08) !important;
+        border:1px solid rgba(0,234,255,0.30) !important;
+        color:rgba(255,255,255,0.90) !important;
+    }
+    body[data-ui="glass"] .card-sistema select:focus,
+    body[data-ui="glass"] .card-sistema input:focus,
+    body[data-ui="glass"] .card-sistema textarea:focus {
+        border-color:rgba(0,234,255,0.70) !important;
+        outline:none !important;
+    }
+    body[data-ui="glass"] .card-sistema label,
+    body[data-ui="glass"] .card-sistema > label { color:rgba(0,234,255,0.85) !important; }
+    body[data-ui="glass"] .card-sistema h5 { color:rgba(0,234,255,0.90) !important; border-bottom-color:rgba(0,234,255,0.20) !important; }
+    /* Medicamento row items (rendered via JS inline styles) */
+    body[data-ui="glass"] #lista-medicamentos [style*="background:var(--fondo-app)"] {
+        background:rgba(255,255,255,0.06) !important;
+        border-color:rgba(0,234,255,0.20) !important;
+    }
+    /* Plantilla buttons */
+    body[data-ui="glass"] .card-sistema [style*="background:var(--fondo-app)"][style*="border-radius:20px"] {
+        background:rgba(255,255,255,0.08) !important;
+        border-color:rgba(0,234,255,0.25) !important;
+        color:rgba(255,255,255,0.70) !important;
+    }
+</style>
+@endpush
+
 @section('contenido')
 
 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">

@@ -275,3 +275,170 @@
     .tbl-table thead th,
     .tbl-table tbody td { padding: 0.6rem 0.65rem; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   TEMA AURORA GLASS — Overrides cyan/teal
+   Todos los selectores usan body[data-ui="glass"] para no
+   afectar el tema clásico.
+══════════════════════════════════════════════════════════════ */
+
+/* Tarjeta contenedora */
+body[data-ui="glass"] .tbl-card {
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(0,234,255,0.45) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 0 8px rgba(0,234,255,0.25) !important;
+    backdrop-filter: blur(20px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+}
+
+/* Toolbar */
+body[data-ui="glass"] .tbl-toolbar {
+    background: rgba(0,0,0,0.20) !important;
+    border-bottom: 1px solid rgba(0,234,255,0.15) !important;
+}
+
+/* Input de búsqueda */
+body[data-ui="glass"] .tbl-buscar-input {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1.5px solid rgba(0,234,255,0.30) !important;
+    color: rgba(255,255,255,0.90) !important;
+}
+body[data-ui="glass"] .tbl-buscar-input:focus {
+    border-color: rgba(0,234,255,0.70) !important;
+    box-shadow: 0 0 0 3px rgba(0,234,255,0.10) !important;
+}
+body[data-ui="glass"] .tbl-buscar-input::placeholder {
+    color: rgba(255,255,255,0.30) !important;
+}
+body[data-ui="glass"] .tbl-lupa {
+    color: rgba(0,234,255,0.60) !important;
+}
+body[data-ui="glass"] .tbl-clear-btn {
+    color: rgba(255,255,255,0.40) !important;
+}
+body[data-ui="glass"] .tbl-clear-btn:hover {
+    color: rgba(0,234,255,0.90) !important;
+}
+
+/* Selects de filtro */
+body[data-ui="glass"] .tbl-filtro-select,
+body[data-ui="glass"] .tbl-filtro-date {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1.5px solid rgba(0,234,255,0.30) !important;
+    color: rgba(255,255,255,0.90) !important;
+}
+body[data-ui="glass"] .tbl-filtro-select:focus,
+body[data-ui="glass"] .tbl-filtro-date:focus {
+    border-color: rgba(0,234,255,0.70) !important;
+}
+body[data-ui="glass"] .tbl-filtro-select option {
+    background: #052837 !important;
+    color: white !important;
+}
+
+/* Por página */
+body[data-ui="glass"] .tbl-perpage-wrap {
+    color: rgba(255,255,255,0.55) !important;
+}
+body[data-ui="glass"] .tbl-perpage-select {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1.5px solid rgba(0,234,255,0.25) !important;
+    color: rgba(255,255,255,0.90) !important;
+}
+body[data-ui="glass"] .tbl-perpage-select option {
+    background: #052837 !important;
+    color: white !important;
+}
+
+/* Barra de info */
+body[data-ui="glass"] .tbl-infobar {
+    background: rgba(0,0,0,0.15) !important;
+    border-bottom: 1px solid rgba(0,234,255,0.10) !important;
+    color: rgba(255,255,255,0.55) !important;
+}
+body[data-ui="glass"] .tbl-infobar strong {
+    color: rgba(0,234,255,0.90) !important;
+}
+body[data-ui="glass"] .tbl-limpiar-todo {
+    color: rgba(255,255,255,0.40) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+}
+body[data-ui="glass"] .tbl-limpiar-todo:hover {
+    background: rgba(0,234,255,0.10) !important;
+    color: rgba(0,234,255,0.90) !important;
+    border-color: rgba(0,234,255,0.35) !important;
+}
+
+/* Tabla thead */
+body[data-ui="glass"] .tbl-table thead th {
+    background: rgba(0,0,0,0.30) !important;
+    color: white !important;
+    border-bottom: 2px solid rgba(0,234,255,0.40) !important;
+    letter-spacing: 0.05em;
+}
+
+/* Tabla tbody */
+body[data-ui="glass"] .tbl-table tbody td {
+    color: rgba(255,255,255,0.88) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+}
+body[data-ui="glass"] .tbl-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+body[data-ui="glass"] .tbl-table tbody tr:hover {
+    background: rgba(0,234,255,0.08) !important;
+}
+
+/* Paginación */
+body[data-ui="glass"] .tbl-paginacion {
+    background: rgba(0,0,0,0.15) !important;
+    border-top: 1px solid rgba(0,234,255,0.15) !important;
+}
+
+/* Estado vacío */
+body[data-ui="glass"] .tbl-vacio {
+    color: rgba(255,255,255,0.35) !important;
+}
+body[data-ui="glass"] .tbl-vacio-titulo {
+    color: rgba(255,255,255,0.65) !important;
+}
+body[data-ui="glass"] .tbl-vacio-sub {
+    color: rgba(255,255,255,0.35) !important;
+}
+
+/* Botones de acción */
+body[data-ui="glass"] .tbl-btn-accion {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1.5px solid rgba(0,234,255,0.25) !important;
+    color: rgba(0,234,255,0.80) !important;
+}
+body[data-ui="glass"] .tbl-btn-accion:hover {
+    background: rgba(0,234,255,0.12) !important;
+    color: rgba(0,234,255,0.95) !important;
+    border-color: rgba(0,234,255,0.55) !important;
+}
+body[data-ui="glass"] .tbl-btn-accion.warn {
+    color: #fbbf24 !important;
+    border-color: rgba(251,191,36,0.35) !important;
+}
+body[data-ui="glass"] .tbl-btn-accion.warn:hover {
+    background: rgba(251,191,36,0.12) !important;
+    color: #fde68a !important;
+}
+body[data-ui="glass"] .tbl-btn-accion.danger {
+    color: #fca5a5 !important;
+    border-color: rgba(248,113,113,0.35) !important;
+}
+body[data-ui="glass"] .tbl-btn-accion.danger:hover {
+    background: rgba(248,113,113,0.12) !important;
+    color: #fecaca !important;
+}
+body[data-ui="glass"] .tbl-btn-accion.success {
+    color: #86efac !important;
+    border-color: rgba(74,222,128,0.35) !important;
+}
+body[data-ui="glass"] .tbl-btn-accion.success:hover {
+    background: rgba(74,222,128,0.12) !important;
+    color: #bbf7d0 !important;
+}

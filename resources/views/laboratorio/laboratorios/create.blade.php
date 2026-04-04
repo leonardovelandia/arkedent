@@ -22,6 +22,24 @@
     .check-item { display:flex; align-items:center; gap:.5rem; }
     .check-item label { font-size:.875rem; color:#374151; font-weight:400; text-transform:none; letter-spacing:0; cursor:pointer; }
     @media(max-width:700px) { .form-grid-2, .form-grid-3 { grid-template-columns:1fr; } }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .form-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .form-group label { color:#374151; }
+    body:not([data-ui="glass"]) .form-control { border:1px solid #e5e7eb; background:#fff; }
+    body:not([data-ui="glass"]) .check-item label { color:#374151; }
+
+    /* Glass */
+    body[data-ui="glass"] .form-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .form-group label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-control { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-control:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .form-control::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .check-item label { color:rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-sub  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .btn-volver { background:transparent !important; border:1px solid rgba(0,234,255,0.50) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .btn-gris   { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

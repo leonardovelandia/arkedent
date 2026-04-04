@@ -15,10 +15,33 @@
     .form-group { margin-bottom:1rem; }
     .form-error { font-size:.78rem; color:#dc2626; margin-top:.25rem; }
 
-    .resumen-card { background:linear-gradient(135deg,var(--color-muy-claro),var(--fondo-card-alt)); border:1px solid var(--color-claro); border-radius:12px; padding:1.1rem 1.25rem; margin-bottom:1rem; }
+    .resumen-card { border-radius:12px; padding:1.1rem 1.25rem; margin-bottom:1rem; }
     .resumen-row { display:flex; justify-content:space-between; align-items:center; padding:.3rem 0; font-size:.875rem; }
-    .resumen-total { font-size:1.1rem; font-weight:800; color:var(--color-sidebar-2); border-top:1px solid var(--color-claro); margin-top:.4rem; padding-top:.5rem; }
     .saldo-hint { font-size:.8rem; margin-top:.3rem; font-weight:600; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .form-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .form-label { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-input { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .form-input:focus { border-color:var(--color-principal); }
+    body:not([data-ui="glass"]) .form-select { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .form-select:focus { border-color:var(--color-principal); }
+    body:not([data-ui="glass"]) .resumen-card { background:linear-gradient(135deg,var(--color-muy-claro),var(--fondo-card-alt)); border:1px solid var(--color-claro); }
+    body:not([data-ui="glass"]) .resumen-total { color:var(--color-sidebar-2); border-top:1px solid var(--color-claro); }
+
+    /* Glass */
+    body[data-ui="glass"] .form-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .form-label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .form-input { border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; background:rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .form-input:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .form-input::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .form-select { border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; background:rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .form-select option, body[data-ui="glass"] .form-select optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .form-select:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .resumen-card { background:rgba(0,234,255,0.06) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .resumen-row { color:rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .resumen-total { color:rgba(0,234,255,0.90) !important; border-top:1px solid rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .saldo-hint { color:rgba(248,113,113,0.90) !important; }
 </style>
 @endpush
 

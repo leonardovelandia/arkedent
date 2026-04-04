@@ -18,6 +18,27 @@
 .sondaje-mini { border-collapse:collapse;font-size:.7rem;width:100%; }
 .sondaje-mini th,.sondaje-mini td { border:1px solid var(--fondo-borde);padding:.18rem .25rem;text-align:center; }
 .sondaje-mini thead th { background:var(--fondo-card-alt);font-weight:700;font-size:.62rem;text-transform:uppercase;color:var(--texto-secundario); }
+
+/* ── Classic overrides ── */
+body:not([data-ui="glass"]) .ctrl-card-body { background:#fff; border:1px solid var(--fondo-borde); border-top:none; }
+body:not([data-ui="glass"]) .form-ctrl { background:var(--fondo-app); border:1px solid var(--fondo-borde); color:var(--texto-principal); }
+
+/* ── Aurora Glass overrides ── */
+body[data-ui="glass"] .ctrl-card-header { background:rgba(0,100,120,0.70) !important; }
+body[data-ui="glass"] .ctrl-card-body { background:rgba(255,255,255,0.08) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.20) !important; border-top:none !important; }
+body[data-ui="glass"] .form-label-ctrl { color:rgba(0,234,255,0.85) !important; }
+body[data-ui="glass"] .form-ctrl { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+body[data-ui="glass"] .form-ctrl:focus { border-color:rgba(0,234,255,0.70) !important; }
+body[data-ui="glass"] .zona-btn { background:rgba(255,255,255,0.08) !important; border-color:rgba(0,234,255,0.25) !important; color:rgba(255,255,255,0.70) !important; }
+body[data-ui="glass"] .zona-btn.activo { background:rgba(0,234,255,0.20) !important; color:rgba(0,234,255,0.95) !important; border-color:rgba(0,234,255,0.50) !important; }
+body[data-ui="glass"] .sondaje-input-ctrl { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; }
+body[data-ui="glass"] .sondaje-input-ctrl.s1 { background:rgba(22,101,52,0.25) !important; color:#86efac !important; }
+body[data-ui="glass"] .sondaje-input-ctrl.s2 { background:rgba(133,77,14,0.25) !important; color:#fde68a !important; }
+body[data-ui="glass"] .sondaje-input-ctrl.s3 { background:rgba(154,52,18,0.25) !important; color:#fdba74 !important; }
+body[data-ui="glass"] .sondaje-input-ctrl.s4 { background:rgba(127,29,29,0.25) !important; color:#fca5a5 !important; }
+body[data-ui="glass"] .sondaje-mini thead th { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.80) !important; }
+body[data-ui="glass"] .sondaje-mini th,
+body[data-ui="glass"] .sondaje-mini td { border-color:rgba(0,234,255,0.15) !important; color:rgba(255,255,255,0.80) !important; }
 </style>
 @endpush
 

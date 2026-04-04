@@ -1,6 +1,34 @@
 @extends('layouts.app')
 @section('titulo', 'Editar Control — Sesión #' . $control->numero_sesion)
 
+@push('estilos')
+<style>
+    /* ── Aurora Glass overrides for inline-style elements ── */
+    body[data-ui="glass"] .card-sistema select,
+    body[data-ui="glass"] .card-sistema input[type="text"],
+    body[data-ui="glass"] .card-sistema input[type="date"],
+    body[data-ui="glass"] .card-sistema textarea {
+        background:rgba(255,255,255,0.08) !important;
+        border:1px solid rgba(0,234,255,0.30) !important;
+        color:rgba(255,255,255,0.90) !important;
+    }
+    body[data-ui="glass"] .card-sistema select:focus,
+    body[data-ui="glass"] .card-sistema input:focus,
+    body[data-ui="glass"] .card-sistema textarea:focus {
+        border-color:rgba(0,234,255,0.70) !important;
+        outline:none !important;
+    }
+    body[data-ui="glass"] .card-sistema label { color:rgba(0,234,255,0.85) !important; }
+    body[data-ui="glass"] .card-sistema h5,
+    body[data-ui="glass"] .card-sistema h6    { color:rgba(0,234,255,0.90) !important; border-bottom-color:rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .card-sistema [style*="background:var(--fondo-card-alt)"],
+    body[data-ui="glass"] .card-sistema [style*="background: var(--fondo-card-alt)"] {
+        background:rgba(0,0,0,0.20) !important;
+        border-color:rgba(0,234,255,0.20) !important;
+    }
+</style>
+@endpush
+
 @section('contenido')
 
 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">

@@ -20,6 +20,66 @@
     @media(max-width:540px) { .form-row { grid-template-columns:1fr; } }
 
     .plantilla-chip { display:flex; align-items:center; gap:.5rem; padding:.35rem .75rem; border-radius:8px; background:var(--color-muy-claro); border:1px solid var(--color-muy-claro); font-size:.83rem; color:var(--color-hover); font-weight:600; margin-bottom:.5rem; }
+
+    /* Clásico – form-card */
+    body:not([data-ui="glass"]) .form-card { background:#fff; border:1px solid var(--color-muy-claro); box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
+    body:not([data-ui="glass"]) .form-card h5 { color:var(--color-hover); border-bottom:2px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .campo-ctrl { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .campo-ctrl:focus { border-color:var(--color-principal); }
+
+    /* Inline text colors — classic helpers */
+    .cita-pac-nombre { font-weight:600; }
+    .cita-pac-doc    { font-size:.74rem; }
+    .cita-fecha      { white-space:nowrap; }
+    .cita-doctor     { font-size:.82rem; }
+    body:not([data-ui="glass"]) .cita-pac-nombre { color:#1c2b22; }
+    body:not([data-ui="glass"]) .cita-pac-doc    { color:#9ca3af; }
+    body:not([data-ui="glass"]) .cita-fecha      { color:#4b5563; }
+    body:not([data-ui="glass"]) .cita-doctor     { color:#6b7280; }
+
+    /* Modal cancelar */
+    .modal-cancelar-box { border-radius:14px; padding:1.75rem; width:100%; max-width:440px; position:relative; }
+    body:not([data-ui="glass"]) .modal-cancelar-box { background:#fff; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+
+    /* Glass */
+    body[data-ui="glass"] .form-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .form-card h5 { color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .campo-ctrl { border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; background:rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .campo-ctrl:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .campo-ctrl::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .cita-pac-nombre { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .cita-pac-doc    { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .cita-fecha      { color:rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .cita-doctor     { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .modal-cancelar-box { background:rgba(13,30,50,0.92) !important; backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 20px 60px rgba(0,0,0,.5) !important; }
+    body[data-ui="glass"] .modal-cancelar-box h5 { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .modal-cancelar-box p  { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .modal-cancelar-box label { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .modal-cancelar-box textarea { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+
+    /* Glass — inline badge/button helpers */
+    body[data-ui="glass"] .cita-num-badge { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.95) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .btn-cancelar-close { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .btn-cancelar-submit { background:linear-gradient(135deg,rgba(220,38,38,0.8),rgba(185,28,28,0.8)) !important; }
+
+    /* Estado menu base styles */
+    .estado-menu { display:none; position:absolute; top:calc(100% + 4px); left:0; background:#fff; border:1px solid #e5e7eb; border-radius:10px; box-shadow:0 4px 20px rgba(0,0,0,.12); z-index:9999; min-width:160px; overflow:hidden; }
+    .estado-menu button { display:block; width:100%; text-align:left; padding:.42rem .85rem; border:none; background:none; font-size:.8rem; cursor:pointer; color:#374151; }
+    .estado-menu button:hover { background:#f3f4f6; }
+    .estado-menu .em-activo { font-weight:700; color:var(--color-principal); }
+    .estado-menu.open { display:block; }
+    /* Cita número badge */
+    .cita-num-badge { font-family:monospace; font-weight:700; background:#dcfce7; color:#166534; padding:.15rem .5rem; border-radius:6px; font-size:.82rem; display:inline-block; }
+
+    /* Glass — estado button override (overrides inline PHP colors) */
+    body[data-ui="glass"] button[onclick*="toggleEstadoMenu"] { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; border:1px solid rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .estado-menu { background:rgba(5,40,55,0.96) !important; border-color:rgba(0,234,255,0.25) !important; box-shadow:0 8px 24px rgba(0,234,255,0.15) !important; }
+    body[data-ui="glass"] .estado-menu button { color:rgba(255,255,255,0.78) !important; }
+    body[data-ui="glass"] .estado-menu button:hover { background:rgba(0,234,255,0.10) !important; color:rgba(0,234,255,0.95) !important; }
+    body[data-ui="glass"] .estado-menu .em-activo { color:rgba(0,234,255,0.95) !important; background:rgba(0,234,255,0.08) !important; }
+    body[data-ui="glass"] .cita-num-badge { background:rgba(74,222,128,0.15) !important; color:#86efac !important; border:1px solid rgba(74,222,128,0.30) !important; }
+    /* Número cita inline badge */
+    body[data-ui="glass"] span[style*="background:#dcfce7"] { background:rgba(74,222,128,0.15) !important; color:#86efac !important; border:1px solid rgba(74,222,128,0.25) !important; }
 </style>
 @endpush
 
@@ -90,16 +150,16 @@
     @php $color = $colores[$cita->estado] ?? ['bg'=>'#f3f4f6','texto'=>'#374151']; @endphp
     <tr>
         <td>
-            <div style="font-weight:600;color:#1c2b22;">{{ $cita->paciente->nombre_completo }}</div>
-            <div style="font-size:.74rem;color:#9ca3af;">{{ $cita->paciente->numero_documento }}</div>
+            <div class="cita-pac-nombre">{{ $cita->paciente->nombre_completo }}</div>
+            <div class="cita-pac-doc" style="font-size:.74rem;">{{ $cita->paciente->numero_documento }}</div>
         </td>
         <td>
             <span style="font-family:monospace;font-weight:700;color:#166534;background:#dcfce7;padding:.15rem .5rem;border-radius:6px;font-size:.82rem;">
                 {{ $cita->numero_cita ?? ('#'.$cita->id) }}
             </span>
         </td>
-        <td style="white-space:nowrap;color:#4b5563;">{{ $cita->fecha->translatedFormat('d M Y') }}</td>
-        <td style="white-space:nowrap;color:#4b5563;">
+        <td class="cita-fecha">{{ $cita->fecha->translatedFormat('d M Y') }}</td>
+        <td class="cita-fecha">
             {{ $cita->hora_inicio }}
             @if($cita->hora_fin) <span style="color:#9ca3af;">– {{ $cita->hora_fin }}</span> @endif
         </td>
@@ -127,7 +187,7 @@
                 </div>
             </div>
         </td>
-        <td style="font-size:.82rem;color:#6b7280;">{{ $cita->doctor ? $cita->doctor->name : '—' }}</td>
+        <td class="cita-doctor">{{ $cita->doctor ? $cita->doctor->name : '—' }}</td>
         <td>
             <div style="display:flex;justify-content:center;gap:.3rem;">
                 <a href="{{ route('citas.show', $cita) }}" class="tbl-btn-accion" title="Ver detalle">
@@ -159,14 +219,14 @@
 
 {{-- Modal Cancelar --}}
 <div id="modal-cancelar" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);align-items:center;justify-content:center;">
-    <div style="background:#fff;border-radius:14px;width:100%;max-width:440px;padding:1.75rem;box-shadow:0 20px 60px rgba(0,0,0,.2);position:relative;">
+    <div class="modal-cancelar-box">
         <button onclick="cerrarModalCancelar()" style="position:absolute;top:.75rem;right:.75rem;background:none;border:none;font-size:1.2rem;color:#9ca3af;cursor:pointer;">✕</button>
-        <h5 style="font-weight:700;color:#1c2b22;margin-bottom:.35rem;"><i class="bi bi-x-circle" style="color:#dc2626;"></i> Cancelar cita</h5>
-        <p style="font-size:.85rem;color:#6b7280;margin-bottom:1rem;">Indica el motivo de cancelación.</p>
+        <h5 style="font-weight:700;margin-bottom:.35rem;"><i class="bi bi-x-circle" style="color:#dc2626;"></i> Cancelar cita</h5>
+        <p style="font-size:.85rem;margin-bottom:1rem;">Indica el motivo de cancelación.</p>
         <form id="form-cancelar" method="POST">
             @csrf
             <div style="margin-bottom:1rem;">
-                <label style="font-size:.8rem;font-weight:600;color:#374151;display:block;margin-bottom:.3rem;">Motivo <span style="color:#dc2626;">*</span></label>
+                <label style="font-size:.8rem;font-weight:600;display:block;margin-bottom:.3rem;">Motivo <span style="color:#dc2626;">*</span></label>
                 <textarea name="motivo_cancelacion" rows="3" required style="width:100%;border:1px solid var(--color-muy-claro);border-radius:8px;padding:.5rem .75rem;font-size:.875rem;outline:none;resize:vertical;font-family:inherit;" placeholder="Ej: Paciente llamó para reagendar…"></textarea>
             </div>
             <div style="display:flex;gap:.5rem;justify-content:flex-end;">
@@ -183,10 +243,7 @@
 
 @push('scripts')
 <style>
-    .estado-menu { position:absolute; top:calc(100% + 5px); left:0; background:#fff; border:1.5px solid var(--color-muy-claro); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.18); z-index:200; min-width:140px; overflow:hidden; display:none; }
-    .estado-menu button { display:block; width:100%; text-align:left; padding:.42rem .85rem; font-size:.8rem; border:none; background:none; cursor:pointer; color:#374151; }
-    .estado-menu button:hover { background:var(--color-muy-claro); }
-    .estado-menu button.em-activo { font-weight:700; color:var(--color-principal); }
+    /* estado-menu styles are now in @push('estilos') above */
 </style>
 <script>
 // Modal cancelar

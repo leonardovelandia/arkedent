@@ -66,6 +66,7 @@ class Configuracion extends Model
         'hora_envio_recordatorio',
         'activo',
         'hora_backup',
+        'tema_ui',
         // Datos del profesional (Res. 1995/1999)
         'nombre_doctor',
         'tarjeta_profesional',

@@ -41,6 +41,30 @@
 
     .pac-info-box { background:var(--fondo-card-alt); border:1px solid var(--color-muy-claro); border-radius:10px; padding:.85rem 1rem; display:flex; align-items:center; gap:.75rem; }
     .pac-avatar-sm { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; font-size:.9rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+    /* Aurora Glass */
+    body[data-ui="glass"] .sec-card { background: rgba(255,255,255,0.08) !important; border: 1px solid rgba(0,234,255,0.35) !important; box-shadow: 0 0 8px rgba(0,234,255,0.18) !important; }
+    body[data-ui="glass"] .sec-header { background: rgba(0,0,0,0.25) !important; border-bottom-color: rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .sec-header h6 { color: rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .lbl { color: rgba(0,234,255,0.85) !important; }
+    body[data-ui="glass"] .ctrl { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .ctrl option, body[data-ui="glass"] .ctrl optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .ctrl::placeholder { color: rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .ctrl:focus { background: rgba(255,255,255,0.12) !important; border-color: rgba(0,234,255,0.70) !important; box-shadow: 0 0 0 3px rgba(0,234,255,0.10) !important; }
+    body[data-ui="glass"] .ctrl[readonly] { background: rgba(0,234,255,0.06) !important; color: rgba(0,234,255,0.85) !important; }
+    body[data-ui="glass"] .mat-tabla thead th { background: rgba(0,0,0,0.25) !important; color: rgba(0,234,255,0.85) !important; border-bottom-color: rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .mat-tabla tbody td { border-bottom-color: rgba(0,234,255,0.10) !important; color: rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .mat-input { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.25) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .mat-select { background: rgba(255,255,255,0.08) !important; border-color: rgba(0,234,255,0.25) !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .mat-select option { background: #052837; }
+    body[data-ui="glass"] .mat-select optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .btn-gris { background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.15) !important; color: rgba(255,255,255,0.75) !important; }
+    body[data-ui="glass"] .btn-gris:hover { background: rgba(255,255,255,0.14) !important; color: white !important; }
+    body[data-ui="glass"] .btn-add-mat { color: rgba(0,234,255,0.85) !important; border-color: rgba(0,234,255,0.35) !important; }
+    body[data-ui="glass"] .btn-add-mat:hover { background: rgba(0,234,255,0.10) !important; }
+    body[data-ui="glass"] .pac-info-box { background: rgba(0,234,255,0.05) !important; border-color: rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .pac-info-box div[style*="color:#1c2b22"] { color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .pac-info-box div[style*="color:#6b7280"] { color: rgba(255,255,255,0.50) !important; }
 </style>
 @endpush
 

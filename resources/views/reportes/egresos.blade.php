@@ -41,6 +41,39 @@
     .barra-progreso-custom { height:6px; background:#fde8e8; border-radius:50px; overflow:hidden; margin-top:.3rem; }
     .barra-progreso-fill   { height:100%; background:#DC3545; border-radius:50px; }
     .pagination-wrapper    { padding:.75rem 1.25rem; border-top:1px solid var(--fondo-borde); display:flex; justify-content:flex-end; }
+
+    /* ── Classic overrides ── */
+    body:not([data-ui="glass"]) .filtros-card   { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .form-label     { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .form-input     { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .metrica-reporte { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-card     { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .panel-card-header { border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .btn-gris       { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* ── Aurora Glass overrides ── */
+    body[data-ui="glass"] .filtros-card  { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(248,113,113,0.40) !important; box-shadow:0 0 8px rgba(248,113,113,0.20) !important; }
+    body[data-ui="glass"] .form-label    { color:rgba(252,165,165,0.90) !important; }
+    body[data-ui="glass"] .form-input    { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(248,113,113,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .form-input:focus { border-color:rgba(248,113,113,0.70) !important; }
+    body[data-ui="glass"] .form-input::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .metrica-reporte { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(248,113,113,0.35) !important; box-shadow:0 0 8px rgba(248,113,113,0.18) !important; }
+    body[data-ui="glass"] .metrica-label  { color:rgba(252,165,165,0.75) !important; }
+    body[data-ui="glass"] .metrica-valor  { color:#fca5a5 !important; }
+    body[data-ui="glass"] .metrica-sub    { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .panel-card     { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(248,113,113,0.35) !important; box-shadow:0 0 8px rgba(248,113,113,0.18) !important; }
+    body[data-ui="glass"] .panel-card-header  { background:rgba(0,0,0,0.20) !important; border-bottom:1px solid rgba(248,113,113,0.20) !important; }
+    body[data-ui="glass"] .panel-card-titulo  { color:rgba(252,165,165,0.90) !important; }
+    body[data-ui="glass"] .tabla-reporte th   { color:#fca5a5 !important; border-bottom:2px solid rgba(252,165,165,0.25) !important; }
+    body[data-ui="glass"] .tabla-reporte td   { color:rgba(255,255,255,0.80) !important; border-bottom:1px solid rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .tabla-reporte tr:hover td  { background:rgba(248,113,113,0.08) !important; }
+    body[data-ui="glass"] .tabla-reporte tfoot td     { color:#fca5a5 !important; border-top:2px solid rgba(252,165,165,0.25) !important; }
+    body[data-ui="glass"] .barra-progreso-custom { background:rgba(248,113,113,0.18) !important; }
+    body[data-ui="glass"] .btn-gris  { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .btn-rojo  { filter:brightness(1.15) !important; }
+    body[data-ui="glass"] .btn-verde { filter:brightness(1.15) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-sub  { color:rgba(255,255,255,0.55) !important; }
 </style>
 @endpush
 

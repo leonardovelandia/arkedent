@@ -39,6 +39,33 @@
 
     .empty-state { text-align:center; padding:3rem 1rem; color:#9ca3af; }
     .empty-state i { font-size:2.5rem; color:var(--color-acento-activo); display:block; margin-bottom:.75rem; }
+
+    /* ── Classic overrides ── */
+    body:not([data-ui="glass"]) .search-input  { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .select-filtro { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .tabla-wrap    { background:#fff; border:1px solid var(--color-muy-claro); }
+
+    /* ── Aurora Glass overrides ── */
+    body[data-ui="glass"] .search-label  { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .search-input  { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .search-input::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .search-input:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .search-input-wrap i { color:rgba(0,234,255,0.60) !important; }
+    body[data-ui="glass"] .select-filtro { background:rgba(255,255,255,0.08) !important; border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .select-filtro:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .tabla-wrap { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.35) !important; box-shadow:0 0 8px rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .tabla-trat thead th { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .tabla-trat tbody td { color:rgba(255,255,255,0.80) !important; border-bottom:1px solid rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .tabla-trat tbody tr:hover { background:rgba(0,234,255,0.06) !important; }
+    body[data-ui="glass"] .badge-activo     { background:rgba(99,40,155,0.30) !important; color:rgba(196,160,255,0.95) !important; }
+    body[data-ui="glass"] .badge-completado { background:rgba(22,101,52,0.25) !important; color:#86efac !important; }
+    body[data-ui="glass"] .badge-cancelado  { background:rgba(255,255,255,0.10) !important; color:rgba(255,255,255,0.60) !important; }
+    body[data-ui="glass"] .accion-btn { background:rgba(255,255,255,0.08) !important; border:1px solid rgba(0,234,255,0.25) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .accion-btn:hover { background:rgba(0,234,255,0.12) !important; }
+    body[data-ui="glass"] .accion-btn.verde { color:#86efac !important; border-color:rgba(134,239,172,0.35) !important; }
+    body[data-ui="glass"] .accion-btn.verde:hover { background:rgba(134,239,172,0.12) !important; }
+    body[data-ui="glass"] .page-title-main { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .page-title-sub  { color:rgba(255,255,255,0.55) !important; }
 </style>
 @endpush
 

@@ -19,6 +19,24 @@
     .ctrl.is-invalid { border-color:#dc2626; }
     .err { font-size:.78rem; color:#dc2626; margin-top:.3rem; }
 
+    /* Clásico */
+    body:not([data-ui="glass"]) .sec-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .sec-header { background:var(--color-muy-claro); border-bottom:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .sec-header h6 { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .lbl { color:#374151; }
+    body:not([data-ui="glass"]) .ctrl { background:#fff; color:#1c2b22; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .sec-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .sec-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .sec-header h6 { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .lbl { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .ctrl { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.90) !important; border:1px solid rgba(0,234,255,0.30) !important; }
+    body[data-ui="glass"] .ctrl option, body[data-ui="glass"] .ctrl optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.88) !important; }
+    body[data-ui="glass"] .ctrl:focus { border-color:rgba(0,234,255,0.70) !important; box-shadow:none !important; }
+    body[data-ui="glass"] .ctrl::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
 </style>
 @endpush
 

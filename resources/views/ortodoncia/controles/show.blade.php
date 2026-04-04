@@ -1,6 +1,25 @@
 @extends('layouts.app')
 @section('titulo', 'Control ' . $control->numero_control)
 
+@push('estilos')
+<style>
+    /* ── Aurora Glass overrides for card-sistema inline elements ── */
+    body[data-ui="glass"] .card-sistema h6 { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .card-sistema p  { color:rgba(255,255,255,0.80) !important; }
+    body[data-ui="glass"] .card-sistema [style*="background:var(--fondo-card-alt)"],
+    body[data-ui="glass"] .card-sistema [style*="background: var(--fondo-card-alt)"] {
+        background:rgba(0,0,0,0.20) !important;
+        border-color:rgba(0,234,255,0.20) !important;
+    }
+    body[data-ui="glass"] .card-sistema [style*="background:#fffbeb"],
+    body[data-ui="glass"] .card-sistema [style*="background: #fffbeb"] {
+        background:rgba(251,191,36,0.10) !important;
+        border-color:rgba(251,191,36,0.30) !important;
+        color:rgba(255,255,255,0.85) !important;
+    }
+</style>
+@endpush
+
 @section('contenido')
 
 <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">

@@ -20,6 +20,27 @@
     .rol-administrador { background:#dbeafe; color:#1d4ed8; }
     .rol-asistente { background:#d1fae5; color:#065f46; }
     .avatar-grande { width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; font-size:1.6rem; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .doc-card { background:#fff; border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .doc-seccion { border-bottom:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .seccion-titulo { background:var(--color-muy-claro); color:var(--color-hover); }
+    body:not([data-ui="glass"]) .campo-label { color:#9ca3af; }
+    body:not([data-ui="glass"]) .campo-valor { color:#1c2b22; }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+    body:not([data-ui="glass"]) .btn-rojo { background:#fef2f2; color:#dc2626; border:1px solid #fecaca; }
+
+    /* Glass */
+    body[data-ui="glass"] .doc-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .doc-seccion { border-bottom:1px solid rgba(0,234,255,0.15) !important; }
+    body[data-ui="glass"] .seccion-titulo { background:rgba(0,0,0,0.25) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .campo-label { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .campo-valor { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .btn-rojo { background:rgba(248,113,113,0.15) !important; color:#fca5a5 !important; border:1px solid rgba(248,113,113,0.30) !important; }
+    body[data-ui="glass"] .rol-doctora { background:rgba(0,234,255,0.12) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .rol-administrador { background:rgba(0,234,255,0.10) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .rol-asistente { background:rgba(74,222,128,0.15) !important; color:#86efac !important; }
 </style>
 @endpush
 

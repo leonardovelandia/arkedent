@@ -49,6 +49,39 @@
 
     .evol-vacia { text-align:center; padding:2rem; color:#9ca3af; }
     .evol-vacia i { font-size:2rem; color:var(--color-acento-activo); display:block; margin-bottom:.5rem; }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .sec-card { background:#fff; border:1px solid var(--fondo-borde); }
+    body:not([data-ui="glass"]) .sec-header { background:var(--color-muy-claro); border-bottom:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .sec-header h6 { color:var(--color-hover); }
+    body:not([data-ui="glass"]) .dato-lbl { color:#9ca3af; }
+    body:not([data-ui="glass"]) .dato-val { color:#1c2b22; }
+    body:not([data-ui="glass"]) .dato-vacio { color:#d1d5db; }
+    body:not([data-ui="glass"]) .vital-box { background:var(--fondo-card-alt); border:1px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .vital-val { color:var(--color-principal); }
+    body:not([data-ui="glass"]) .vital-lbl { color:#9ca3af; }
+    body:not([data-ui="glass"]) .btn-gris { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+
+    /* Glass */
+    body[data-ui="glass"] .sec-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .sec-header { background:rgba(0,0,0,0.25) !important; border-bottom:1px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .sec-header h6 { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .dato-lbl { color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .dato-val { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .dato-vacio { color:rgba(255,255,255,0.25) !important; }
+    body[data-ui="glass"] .vital-box { background:rgba(0,234,255,0.06) !important; border:1px solid rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .vital-val { color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .vital-lbl { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .evol-vacia { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .btn-gris { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.85) !important; border:1px solid rgba(255,255,255,0.20) !important; }
+    body[data-ui="glass"] .diente-ro { background:rgba(255,255,255,0.08) !important; border-color:rgba(255,255,255,0.20) !important; color:rgba(255,255,255,0.70) !important; }
+    body[data-ui="glass"] .diente-ro.caries { background:rgba(251,191,36,0.15) !important; border-color:rgba(251,191,36,0.50) !important; color:#fbbf24 !important; }
+    body[data-ui="glass"] .diente-ro.extraccion, body[data-ui="glass"] .diente-ro.extraido { background:rgba(248,113,113,0.15) !important; border-color:rgba(248,113,113,0.50) !important; color:#fca5a5 !important; }
+    body[data-ui="glass"] .diente-ro.corona { background:rgba(0,234,255,0.12) !important; border-color:rgba(0,234,255,0.40) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .diente-ro.tratado { background:rgba(74,222,128,0.15) !important; border-color:rgba(74,222,128,0.40) !important; color:#86efac !important; }
+    body[data-ui="glass"] .odonto-separador { background:rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .odonto-linea-media { border-top-color:rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .odonto-label { color:rgba(0,234,255,0.70) !important; }
 </style>
 @endpush
 

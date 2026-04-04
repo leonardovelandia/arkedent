@@ -3,23 +3,57 @@
 
 @push('estilos')
 <style>
-    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
+    .btn-morado { background:linear-gradient(135deg,var(--color-principal),var(--color-claro)); color:#fff; border:none; border-radius:8px; padding:.5rem 1.1rem; font-size:.875rem; font-weight:500; display:inline-flex; align-items:center; gap:.4rem; transition:filter .18s; text-decoration:none; cursor:pointer; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
     .btn-morado:hover { filter:brightness(1.12); color:#fff; }
 
-    .form-card { background:#fff; border:1px solid var(--color-muy-claro); border-radius:14px; padding:1.75rem; box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); max-width:820px; margin:0 auto; }
-    .form-card h5 { font-weight:700; color:var(--color-hover); font-size:1rem; margin-bottom:1.25rem; padding-bottom:.6rem; border-bottom:2px solid var(--color-muy-claro); }
-
+    /* Estructura sin color */
+    .form-card { border-radius:14px; padding:1.75rem; max-width:820px; margin:0 auto; }
+    .form-card h5 { font-weight:700; font-size:1rem; margin-bottom:1.25rem; padding-bottom:.6rem; }
     .campo-wrap { margin-bottom:1.1rem; }
     .campo-lbl { font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--color-principal); display:block; margin-bottom:.3rem; }
-    .campo-ctrl { width:100%; border:1.5px solid var(--color-muy-claro); border-radius:8px; padding:.45rem .8rem; font-size:.9rem; color:#1c2b22; background:#fff; outline:none; transition:border-color .15s; font-family:inherit; }
-    .campo-ctrl:focus { border-color:var(--color-principal); }
+    .campo-ctrl { width:100%; border-radius:8px; padding:.45rem .8rem; font-size:.9rem; outline:none; transition:border-color .15s; font-family:inherit; }
     .campo-ctrl.is-invalid { border-color:#dc2626; }
     .campo-error { font-size:.75rem; color:#dc2626; margin-top:.2rem; display:block; }
-
     .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
     @media(max-width:540px) { .form-row { grid-template-columns:1fr; } }
 
-    .plantilla-chip { display:flex; align-items:center; gap:.5rem; padding:.35rem .75rem; border-radius:8px; background:var(--color-muy-claro); border:1px solid var(--color-muy-claro); font-size:.83rem; color:var(--color-hover); font-weight:600; margin-bottom:.5rem; }
+    /* Badges tabla */
+    .badge-pac-activo, .badge-pac-inactivo, .badge-aut-firmada, .badge-aut-pendiente, .badge-aut-sin {
+        border-radius:20px; padding:.2rem .65rem; font-size:.74rem; font-weight:600; white-space:nowrap;
+        display:inline-flex; align-items:center; gap:.25rem;
+    }
+
+    /* Clásico */
+    body:not([data-ui="glass"]) .form-card { background:#fff; border:1px solid var(--color-muy-claro); box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12); }
+    body:not([data-ui="glass"]) .form-card h5 { color:var(--color-hover); border-bottom:2px solid var(--color-muy-claro); }
+    body:not([data-ui="glass"]) .campo-ctrl { border:1.5px solid var(--color-muy-claro); color:#1c2b22; background:#fff; }
+    body:not([data-ui="glass"]) .campo-ctrl:focus { border-color:var(--color-principal); }
+    body:not([data-ui="glass"]) .plantilla-chip { background:var(--color-muy-claro); border:1px solid var(--color-muy-claro); color:var(--color-hover); }
+    body:not([data-ui="glass"]) .pac-fila-nombre { color:#1c2b22; }
+    body:not([data-ui="glass"]) .pac-fila-email  { color:#6b7280; }
+    body:not([data-ui="glass"]) .pac-fila-doc-tipo { color:#6b7280; }
+    body:not([data-ui="glass"]) .badge-pac-activo   { background:#dcfce7; color:#166534; }
+    body:not([data-ui="glass"]) .badge-pac-inactivo { background:#fee2e2; color:#991b1b; }
+    body:not([data-ui="glass"]) .badge-aut-firmada  { background:#d1fae5; color:#065f46; }
+    body:not([data-ui="glass"]) .badge-aut-pendiente{ background:#fef3c7; color:#92400e; }
+    body:not([data-ui="glass"]) .badge-aut-sin      { background:#f3f4f6; color:#6b7280; }
+
+    /* Glass */
+    body[data-ui="glass"] .form-card { background:rgba(255,255,255,0.10) !important; backdrop-filter:blur(20px) saturate(160%) !important; -webkit-backdrop-filter:blur(20px) saturate(160%) !important; border:1px solid rgba(0,234,255,0.45) !important; box-shadow:0 0 8px rgba(0,234,255,0.25) !important; }
+    body[data-ui="glass"] .form-card:hover { box-shadow:0 0 14px rgba(0,234,255,0.45) !important; }
+    body[data-ui="glass"] .form-card h5 { color:rgba(0,234,255,0.90) !important; border-bottom:2px solid rgba(0,234,255,0.20) !important; }
+    body[data-ui="glass"] .campo-ctrl { border:1.5px solid rgba(0,234,255,0.30) !important; color:rgba(255,255,255,0.90) !important; background:rgba(255,255,255,0.08) !important; }
+    body[data-ui="glass"] .campo-ctrl:focus { border-color:rgba(0,234,255,0.70) !important; }
+    body[data-ui="glass"] .campo-ctrl::placeholder { color:rgba(255,255,255,0.30) !important; }
+    body[data-ui="glass"] .plantilla-chip { background:rgba(0,234,255,0.08) !important; border:1px solid rgba(0,234,255,0.30) !important; color:rgba(0,234,255,0.90) !important; }
+    body[data-ui="glass"] .pac-fila-nombre  { color:rgba(255,255,255,0.90) !important; }
+    body[data-ui="glass"] .pac-fila-email   { color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .pac-fila-doc-tipo{ color:rgba(255,255,255,0.55) !important; }
+    body[data-ui="glass"] .badge-pac-activo   { background:rgba(74,222,128,0.20) !important; color:#86efac !important; border:1px solid rgba(74,222,128,0.35) !important; }
+    body[data-ui="glass"] .badge-pac-inactivo { background:rgba(248,113,113,0.20) !important; color:#fca5a5 !important; border:1px solid rgba(248,113,113,0.35) !important; }
+    body[data-ui="glass"] .badge-aut-firmada  { background:rgba(74,222,128,0.20) !important; color:#86efac !important; border:1px solid rgba(74,222,128,0.35) !important; }
+    body[data-ui="glass"] .badge-aut-pendiente{ background:rgba(251,191,36,0.20) !important; color:#fbbf24 !important; border:1px solid rgba(251,191,36,0.35) !important; }
+    body[data-ui="glass"] .badge-aut-sin      { background:rgba(255,255,255,0.08) !important; color:rgba(255,255,255,0.55) !important; border:1px solid rgba(255,255,255,0.15) !important; }
 </style>
 @endpush
 
@@ -103,15 +137,15 @@
                     </span>
                 @endif
                 <div style="min-width:0;">
-                    <div style="font-weight:600;color:#1c2b22;white-space:nowrap;">{{ $p->nombre_completo }}</div>
-                    <div style="font-size:.77rem;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">{{ $p->email ?? '—' }}</div>
+                    <div class="pac-fila-nombre" style="font-weight:600;white-space:nowrap;">{{ $p->nombre_completo }}</div>
+                    <div class="pac-fila-email" style="font-size:.77rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">{{ $p->email ?? '—' }}</div>
                 </div>
             </div>
         </td>
 
         {{-- Documento --}}
         <td>
-            <span style="font-size:.75rem;color:#6b7280;font-weight:600;display:block;">{{ $p->tipo_documento }}</span>
+            <span class="pac-fila-doc-tipo" style="font-size:.75rem;font-weight:600;display:block;">{{ $p->tipo_documento }}</span>
             <span style="font-weight:500;">{{ $p->numero_documento }}</span>
         </td>
 
@@ -131,11 +165,11 @@
         {{-- Estado --}}
         <td>
             @if($p->activo)
-                <span style="background:#dcfce7;color:#166534;border-radius:20px;padding:.2rem .65rem;font-size:.74rem;font-weight:600;white-space:nowrap;">
+                <span class="badge-pac-activo">
                     <i class="bi bi-circle-fill" style="font-size:.45rem;vertical-align:middle;"></i> Activo
                 </span>
             @else
-                <span style="background:#fee2e2;color:#991b1b;border-radius:20px;padding:.2rem .65rem;font-size:.74rem;font-weight:600;white-space:nowrap;">
+                <span class="badge-pac-inactivo">
                     <i class="bi bi-circle-fill" style="font-size:.45rem;vertical-align:middle;"></i> Inactivo
                 </span>
             @endif
@@ -145,15 +179,15 @@
         <td>
             @php $aut = $p->autorizacionDatos; @endphp
             @if($aut && $aut->firmado)
-                <span style="background:#d1fae5;color:#065f46;font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:20px;white-space:nowrap;display:inline-flex;align-items:center;gap:.25rem;">
+                <span class="badge-aut-firmada">
                     <i class="bi bi-patch-check-fill"></i> Firmada
                 </span>
             @elseif($aut)
-                <span style="background:#fef3c7;color:#92400e;font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:20px;white-space:nowrap;display:inline-flex;align-items:center;gap:.25rem;">
+                <span class="badge-aut-pendiente">
                     <i class="bi bi-pen"></i> Falta firmar
                 </span>
             @else
-                <span style="background:#f3f4f6;color:#6b7280;font-size:.72rem;font-weight:700;padding:.2rem .55rem;border-radius:20px;white-space:nowrap;display:inline-flex;align-items:center;gap:.25rem;">
+                <span class="badge-aut-sin">
                     <i class="bi bi-file-earmark-x"></i> Sin autorización
                 </span>
             @endif
