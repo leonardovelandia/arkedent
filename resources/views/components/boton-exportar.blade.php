@@ -58,7 +58,7 @@
                     Formato de exportación
                 </div>
                 <div style="display:flex;gap:.75rem;">
-                    @foreach([['excel','bi-file-earmark-excel','#16a34a','Excel'],['csv','bi-filetype-csv','#0284c7','CSV']] as $fmt)
+                    @foreach([['excel','bi-file-earmark-excel','#16a34a','Excel'],['csv','bi-filetype-csv','#0284c7','CSV'],['pdf','bi-file-earmark-pdf','#dc2626','PDF']] as $fmt)
                     <label style="flex:1;cursor:pointer;">
                         <input type="radio" name="formato_{{ $modulo }}" value="{{ $fmt[0] }}"
                                style="display:none;" class="radio-formato-{{ $modulo }}"

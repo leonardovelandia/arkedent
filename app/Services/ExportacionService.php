@@ -59,13 +59,15 @@ class ExportacionService
         ]);
 
         foreach ($headers as $i => $header) {
-            $sheet->setCellValueByColumnAndRow($i + 1, 1, $header);
-            $sheet->getColumnDimensionByColumn($i + 1)->setAutoSize(true);
+            $col = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($i + 1);
+            $sheet->setCellValue("{$col}1", $header);
+            $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
         foreach ($datos as $rowIndex => $fila) {
             foreach (array_values($fila) as $colIndex => $valor) {
-                $sheet->setCellValueByColumnAndRow($colIndex + 1, $rowIndex + 2, $valor ?? '');
+                $col = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex + 1);
+                $sheet->setCellValue("{$col}" . ($rowIndex + 2), $valor ?? '');
             }
         }
 

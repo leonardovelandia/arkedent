@@ -221,6 +221,57 @@
     background: #fff;
 }
 
+/* Bootstrap 5 pagination dentro del componente */
+.tbl-paginacion .pagination {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.25rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.tbl-paginacion .page-item { display: inline-flex; }
+.tbl-paginacion .page-item.disabled .page-link,
+.tbl-paginacion .page-item.disabled span {
+    color: #9ca3af;
+    border-color: var(--fondo-borde, #e5e7eb);
+    background: #f9fafb;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.tbl-paginacion .page-link,
+.tbl-paginacion .page-item span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.55rem;
+    border: 1.5px solid var(--color-muy-claro, #e9d5ff);
+    border-radius: 7px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-principal, #6b21a8);
+    background: #fff;
+    text-decoration: none;
+    transition: background 0.14s, color 0.14s, border-color 0.14s;
+    line-height: 1;
+}
+.tbl-paginacion .page-link:hover {
+    background: var(--color-muy-claro, #f3e8ff);
+    border-color: var(--color-principal, #6b21a8);
+    color: var(--color-hover, #581c87);
+}
+.tbl-paginacion .page-item.active .page-link,
+.tbl-paginacion .page-item.active span {
+    background: var(--color-principal, #6b21a8);
+    border-color: var(--color-principal, #6b21a8);
+    color: #fff;
+    font-weight: 700;
+}
+
 /* ── Efecto carga ────────────────────────────────────────────── */
 .tbl-cargando {
     opacity: 0.5;
@@ -394,6 +445,29 @@ body[data-ui="glass"] .tbl-table tbody tr:hover {
 body[data-ui="glass"] .tbl-paginacion {
     background: rgba(0,0,0,0.15) !important;
     border-top: 1px solid rgba(0,234,255,0.15) !important;
+}
+body[data-ui="glass"] .tbl-paginacion .page-link,
+body[data-ui="glass"] .tbl-paginacion .page-item span {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(0,234,255,0.25) !important;
+    color: rgba(0,234,255,0.80) !important;
+}
+body[data-ui="glass"] .tbl-paginacion .page-link:hover {
+    background: rgba(0,234,255,0.14) !important;
+    border-color: rgba(0,234,255,0.55) !important;
+    color: rgba(0,234,255,0.95) !important;
+}
+body[data-ui="glass"] .tbl-paginacion .page-item.active .page-link,
+body[data-ui="glass"] .tbl-paginacion .page-item.active span {
+    background: rgba(0,234,255,0.22) !important;
+    border-color: rgba(0,234,255,0.60) !important;
+    color: rgba(0,234,255,1) !important;
+}
+body[data-ui="glass"] .tbl-paginacion .page-item.disabled .page-link,
+body[data-ui="glass"] .tbl-paginacion .page-item.disabled span {
+    background: rgba(255,255,255,0.03) !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: rgba(255,255,255,0.25) !important;
 }
 
 /* Estado vacío */
