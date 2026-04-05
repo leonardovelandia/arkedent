@@ -83,7 +83,12 @@
         <h1 class="page-titulo">Inventario</h1>
         <p class="page-subtitulo">Control de materiales e insumos del consultorio</p>
     </div>
-    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+        <x-boton-exportar
+            modulo="inventario"
+            ruta="{{ route('exportar.inventario') }}"
+            :tieneSensibles="false"
+        />
         <a href="{{ route('inventario-categorias.index') }}" class="btn-morado" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
             <i class="bi bi-tags"></i> Categorías
         </a>

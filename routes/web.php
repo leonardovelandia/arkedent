@@ -315,6 +315,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('libro-contable/ajuste', [\App\Http\Controllers\LibroContableController::class, 'ajuste'])->name('libro-contable.ajuste');
     });
 
+    // ── Módulo: Exportación de datos ──────────────────────
+    Route::prefix('exportar')->name('exportar.')->group(function () {
+        Route::post('/pacientes',          [\App\Http\Controllers\ExportacionController::class, 'pacientes'])->name('pacientes');
+        Route::post('/historias-clinicas', [\App\Http\Controllers\ExportacionController::class, 'historiasClinicas'])->name('historias');
+        Route::post('/evoluciones',        [\App\Http\Controllers\ExportacionController::class, 'evoluciones'])->name('evoluciones');
+        Route::post('/citas',              [\App\Http\Controllers\ExportacionController::class, 'citas'])->name('citas');
+        Route::post('/pagos',              [\App\Http\Controllers\ExportacionController::class, 'pagos'])->name('pagos');
+        Route::post('/consentimientos',    [\App\Http\Controllers\ExportacionController::class, 'consentimientos'])->name('consentimientos');
+        Route::post('/inventario',         [\App\Http\Controllers\ExportacionController::class, 'inventario'])->name('inventario');
+    });
+
     // ── Módulo: Egresos (solo admin/doctora) ──────────────
     Route::middleware(['role:administrador|doctora', 'modulo:egresos'])->group(function () {
         Route::resource('egresos', \App\Http\Controllers\EgresoController::class);

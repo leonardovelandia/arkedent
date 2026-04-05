@@ -96,7 +96,14 @@
         <h1 class="page-titulo">Citas</h1>
         <p class="page-subtitulo">Gestión de citas y agenda</p>
     </div>
-    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+        <x-boton-exportar
+            modulo="citas"
+            ruta="{{ route('exportar.citas') }}"
+            :tieneSensibles="true"
+            labelSensibles="Incluir nombre del paciente y observaciones de la cita"
+            advertenciaSensibles="Incluye datos personales del paciente vinculados a la cita."
+        />
         <a href="{{ route('citas.agenda') }}" class="btn-morado" style="background:transparent;color:var(--color-principal);border:1px solid var(--color-principal);">
             <i class="bi bi-calendar3-week"></i> Ver Agenda
         </a>

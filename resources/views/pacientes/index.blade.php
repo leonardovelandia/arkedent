@@ -77,9 +77,18 @@
         <h1 class="page-titulo">Pacientes</h1>
         <p class="page-subtitulo">Gestión del registro de pacientes del consultorio</p>
     </div>
-    <a href="{{ route('pacientes.create') }}" class="btn-morado">
-        <i class="bi bi-person-plus-fill"></i> Nuevo Paciente
-    </a>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+        <x-boton-exportar
+            modulo="pacientes"
+            ruta="{{ route('exportar.pacientes') }}"
+            :tieneSensibles="true"
+            labelSensibles="Incluir datos sensibles (dirección, fecha nacimiento, acudiente)"
+            advertenciaSensibles="Incluye datos de contacto e identificación personal protegidos por la Ley 1581 de 2012."
+        />
+        <a href="{{ route('pacientes.create') }}" class="btn-morado">
+            <i class="bi bi-person-plus-fill"></i> Nuevo Paciente
+        </a>
+    </div>
 </div>
 
 {{-- Tabla reutilizable --}}

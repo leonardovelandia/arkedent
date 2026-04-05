@@ -80,9 +80,18 @@
         <h1 class="page-titulo">Historia Clínica</h1>
         <p class="page-subtitulo">Registro de historias clínicas de pacientes</p>
     </div>
-    <a href="{{ route('historias.create') }}" class="btn-morado">
-        <i class="bi bi-journal-plus"></i> Nueva Historia
-    </a>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+        <x-boton-exportar
+            modulo="historias_clinicas"
+            ruta="{{ route('exportar.historias') }}"
+            :tieneSensibles="true"
+            labelSensibles="Incluir historia clínica completa (DATOS MÉDICOS SENSIBLES)"
+            advertenciaSensibles="Incluye antecedentes médicos, diagnósticos, alergias y medicamentos. Información protegida por la Resolución 1995 de 1999."
+        />
+        <a href="{{ route('historias.create') }}" class="btn-morado">
+            <i class="bi bi-journal-plus"></i> Nueva Historia
+        </a>
+    </div>
 </div>
 
 <x-tabla-listado

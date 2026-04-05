@@ -91,9 +91,18 @@
         <h1 class="page-titulo">Evoluciones</h1>
         <p class="page-subtitulo">Registro de evoluciones clínicas por sesión</p>
     </div>
-    <a href="{{ route('evoluciones.create') }}" class="btn-morado">
-        <i class="bi bi-clipboard2-plus"></i> Nueva Evolución
-    </a>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+        <x-boton-exportar
+            modulo="evoluciones"
+            ruta="{{ route('exportar.evoluciones') }}"
+            :tieneSensibles="true"
+            labelSensibles="Incluir diagnósticos, observaciones e indicaciones clínicas"
+            advertenciaSensibles="Incluye información clínica del acto médico protegida por la Resolución 1995 de 1999."
+        />
+        <a href="{{ route('evoluciones.create') }}" class="btn-morado">
+            <i class="bi bi-clipboard2-plus"></i> Nueva Evolución
+        </a>
+    </div>
 </div>
 
 @if($pacienteFiltro)

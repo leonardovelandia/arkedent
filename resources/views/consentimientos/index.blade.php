@@ -41,7 +41,14 @@
         <h1 class="page-titulo"><i class="bi bi-file-earmark-check me-2"></i>Consentimientos Informados</h1>
         <p class="page-subtitulo">Gestión de consentimientos y firmas</p>
     </div>
-    <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+        <x-boton-exportar
+            modulo="consentimientos"
+            ruta="{{ route('exportar.consentimientos') }}"
+            :tieneSensibles="false"
+            :todoSensible="true"
+            advertenciaSensibles="Está exportando documentos legales firmados con datos personales, IP y tokens de verificación."
+        />
         <a href="{{ route('plantillas-consentimiento.index') }}"
            style="background:#fff;color:var(--color-principal);border:1.5px solid var(--color-principal);border-radius:8px;padding:.5rem 1.1rem;font-size:.875rem;font-weight:500;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
             <i class="bi bi-collection"></i> Plantillas

@@ -85,9 +85,18 @@
         <h1 class="page-titulo">Abonos y Pagos</h1>
         <p class="page-subtitulo">Registro de pagos y recibos</p>
     </div>
-    <a href="{{ route('pagos.create') }}" class="btn-morado">
-        <i class="bi bi-plus-circle"></i> Registrar Pago
-    </a>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+        <x-boton-exportar
+            modulo="pagos"
+            ruta="{{ route('exportar.pagos') }}"
+            :tieneSensibles="true"
+            labelSensibles="Incluir nombre del paciente, detalle del tratamiento e historial completo"
+            advertenciaSensibles="Incluye información financiera y datos personales del paciente."
+        />
+        <a href="{{ route('pagos.create') }}" class="btn-morado">
+            <i class="bi bi-plus-circle"></i> Registrar Pago
+        </a>
+    </div>
 </div>
 
 
