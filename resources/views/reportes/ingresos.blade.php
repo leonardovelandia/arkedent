@@ -130,7 +130,14 @@
             </div>
             <div class="filtros-acciones">
                 <a href="{{ route('reportes.ingresos') }}" class="btn-gris"><i class="bi bi-x"></i> Limpiar</a>
-                <a id="btn-csv" href="{{ route('reportes.exportar-ingresos', request()->query()) }}" class="btn-verde"><i class="bi bi-download"></i> CSV</a>
+               
+                <x-boton-exportar
+                    modulo="reporte_ingresos"
+                    ruta="{{ route('exportar.reporte-ingresos') }}"
+                    :tieneSensibles="true"
+                    labelSensibles="Incluir nombre del paciente y documento"
+                    advertenciaSensibles="Se exportarán datos de identificación del paciente."
+                />
             </div>
         </div>
     </form>

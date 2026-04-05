@@ -62,7 +62,7 @@
     <link href="{{ asset('css/tabla-sistema.css') }}" rel="stylesheet">
 
     {{-- Bootstrap Icons --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-icons.min.css') }}" rel="stylesheet">
 
     <style>
         /* ── Variables del sistema ── */
@@ -613,6 +613,123 @@
             align-items: center;
             gap: 0.6rem;
         }
+
+        /* ── Fallback paginación Bootstrap 5 (por si CDN no carga) ── */
+        ul.pagination {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 0.2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-item {
+            display: inline-flex;
+        }
+
+        .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2rem;
+            height: 2rem;
+            padding: 0 0.55rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--color-principal, #6b21a8);
+            background: #fff;
+            border: 1.5px solid var(--color-muy-claro, #e9d5ff);
+            border-radius: 7px;
+            text-decoration: none;
+            transition: background 0.14s, color 0.14s, border-color 0.14s;
+            cursor: pointer;
+        }
+
+        .page-link:hover {
+            background: var(--color-muy-claro, #f3e8ff);
+            border-color: var(--color-principal, #6b21a8);
+            color: var(--color-hover, #581c87);
+        }
+
+        .page-item.active .page-link {
+            background: var(--color-principal, #6b21a8);
+            border-color: var(--color-principal, #6b21a8);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .page-item.disabled .page-link,
+        .page-item.disabled span {
+            color: #9ca3af;
+            background: #f9fafb;
+            border-color: #e5e7eb;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* ── Fallback dropdown Bootstrap 5 (por si CDN no carga) ── */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 4px);
+            z-index: 1050;
+            min-width: 180px;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+            padding: 0.4rem 0;
+            list-style: none;
+            margin: 0;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 0.45rem 1rem;
+            font-size: 0.85rem;
+            color: #374151;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            white-space: nowrap;
+            transition: background 0.12s;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background: var(--color-muy-claro, #f3e8ff);
+            color: var(--color-hover, #581c87);
+        }
+
+        .dropdown-item.text-danger {
+            color: #dc2626;
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: #fee2e2;
+        }
+
+        .dropdown-divider {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 0.3rem 0;
+        }
     </style>
 
     {{-- Flatpickr time picker --}}
@@ -696,174 +813,682 @@
 
 <body data-tema="{{ $config->tema ?? 'morado-elegante' }}" data-ui="{{ $config->tema_ui ?? 'clasico' }}">
 
-@if(($config->tema_ui ?? 'clasico') === 'glass')
-<style>
-    body { background: #0d4f6e !important; color: white !important; }
-    /* Sobreescribir variables CSS del tema clásico para que var(--color-principal) etc.
+    @if (($config->tema_ui ?? 'clasico') === 'glass')
+        <style>
+            body {
+                background: #0d4f6e !important;
+                color: white !important;
+            }
+
+            /* Sobreescribir variables CSS del tema clásico para que var(--color-principal) etc.
        resuelvan a cyan en todo el sistema sin tocar el PHP */
-    body[data-ui="glass"] {
-        --color-principal:    rgba(0,234,255,0.90) !important;
-        --color-hover:        rgba(0,210,240,1.00) !important;
-        --color-claro:        rgba(0,180,200,0.90) !important;
-        --color-muy-claro:    rgba(0,234,255,0.10) !important;
-        --color-acento-activo: rgba(0,234,255,0.80) !important;
-        --sombra-principal:   rgba(0,234,255,0.15) !important;
-        --fondo-borde:        rgba(0,234,255,0.20) !important;
-        --gradiente-btn:      linear-gradient(135deg, rgba(0,180,200,0.8), rgba(0,120,160,0.8)) !important;
-        --fondo-app:          rgba(255,255,255,0.06) !important;
-        --fondo-card-alt:     rgba(0,234,255,0.05) !important;
-        --texto-principal:    rgba(255,255,255,0.90) !important;
-        --texto-secundario:   rgba(255,255,255,0.55) !important;
-        --input-bg:           rgba(255,255,255,0.08) !important;
-        --input-border:       rgba(0,234,255,0.30) !important;
-    }
-    body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    background:
-        radial-gradient(ellipse 80% 60% at 10% 20%,  rgba(6,182,212,0.35)  0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 90% 10%,  rgba(20,184,166,0.30) 0%, transparent 55%),
-        radial-gradient(ellipse 70% 55% at 80% 85%,  rgba(14,165,233,0.30) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 20% 80%,  rgba(6,182,212,0.25)  0%, transparent 55%),
-        radial-gradient(ellipse 90% 70% at 50% 50%,  rgba(8,60,90,0.6)     0%, transparent 100%);
-    pointer-events: none;
-}
-    .aurora-layer { position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden; }
-    .aurora-orb   { position:absolute;border-radius:50%;filter:blur(80px);opacity:0.6; }
-    .orb-1{width:600px;height:600px;background:radial-gradient(circle,rgba(6,182,212,.5),transparent 70%);top:-150px;left:-100px;animation:af0 22s ease-in-out infinite;}
-    .orb-2{width:500px;height:500px;background:radial-gradient(circle,rgba(20,184,166,.4),transparent 70%);top:-80px;right:-80px;animation:af1 29s 3s ease-in-out infinite;}
-    .orb-3{width:700px;height:700px;background:radial-gradient(circle,rgba(14,165,233,.4),transparent 70%);bottom:-200px;left:30%;animation:af2 25s 6s ease-in-out infinite;}
-    .orb-4{width:400px;height:400px;background:radial-gradient(circle,rgba(103,232,249,.25),transparent 70%);top:40%;right:-100px;animation:af0 36s 2s ease-in-out infinite;}
-    .orb-5{width:350px;height:350px;background:radial-gradient(circle,rgba(6,182,212,.35),transparent 70%);bottom:10%;left:-80px;animation:af1 32s 4s ease-in-out infinite;}
-    @keyframes af0{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,-40px) scale(1.1)}66%{transform:translate(-40px,30px) scale(0.95)}}
-    @keyframes af1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-50px,50px) scale(1.08)}66%{transform:translate(70px,-30px) scale(0.92)}}
-    @keyframes af2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,60px) scale(1.12)}66%{transform:translate(-60px,-40px) scale(0.9)}}
-    .hex-bg{position:fixed;inset:0;z-index:1;pointer-events:none;}
-    .hex-bg svg{width:100%;height:100%;}
-    /* Sidebar glass */
-    #sidebar { background: rgba(3,25,38,0.82) !important; backdrop-filter: blur(24px) saturate(160%) !important; -webkit-backdrop-filter: blur(24px) saturate(160%) !important; border-right: 1px solid rgba(0,234,255,0.15) !important; }
-    .nav-seccion-titulo { color: rgba(0,234,255,0.45) !important; }
-    .nav-item-sidebar { color: rgba(255,255,255,0.70) !important; }
-    .nav-item-sidebar:hover { background: rgba(0,234,255,0.08) !important; color: white !important; }
-    .nav-item-sidebar.activo { background: rgba(0,234,255,0.12) !important; color: white !important; }
-    .nav-item-sidebar.activo::before { background: rgba(0,234,255,0.90) !important; box-shadow: 0 0 8px rgba(0,234,255,0.60) !important; }
-    .nav-item-icono { color: rgba(0,234,255,0.70) !important; }
-    .nav-item-sidebar.activo .nav-item-icono, .nav-item-sidebar:hover .nav-item-icono { color: rgba(0,234,255,0.95) !important; }
-    .sidebar-logo-nombre { text-shadow: 0 0 20px rgba(0,234,255,0.50) !important; }
-    .sidebar-logo-sub { color: rgba(255,255,255,0.35) !important; }
-    .perfil-avatar { background: rgba(0,234,255,0.12) !important; border: 1px solid rgba(0,234,255,0.30) !important; color: rgba(0,234,255,0.95) !important; }
-    .perfil-nombre { color: white !important; }
-    .perfil-rol { color: rgba(255,255,255,0.35) !important; }
-    .btn-logout-sidebar { color: rgba(255,255,255,0.30) !important; }
-    .btn-logout-sidebar:hover { color: rgba(248,113,113,0.80) !important; }
-    /* Navbar glass */
-    #navbar-top { background: rgba(3,25,38,0.75) !important; backdrop-filter: blur(20px) saturate(160%) !important; -webkit-backdrop-filter: blur(20px) saturate(160%) !important; border-bottom: 1px solid rgba(0,234,255,0.15) !important; }
-    .navbar-titulo { color: white !important; text-shadow: 0 0 20px rgba(0,234,255,0.40); }
-    .navbar-titulo span { color: rgba(255,255,255,0.35) !important; }
-    .btn-navbar-accion { background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(0,234,255,0.15) !important; color: rgba(255,255,255,0.60) !important; }
-    .btn-navbar-accion:hover { background: rgba(0,234,255,0.12) !important; border-color: rgba(0,234,255,0.40) !important; color: rgba(0,234,255,0.95) !important; }
-    .navbar-usuario { background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(0,234,255,0.15) !important; }
-    .navbar-usuario:hover { background: rgba(0,234,255,0.10) !important; border-color: rgba(0,234,255,0.35) !important; }
-    .navbar-usuario-nombre { color: rgba(255,255,255,0.85) !important; }
-    .navbar-avatar { background: linear-gradient(135deg,rgba(0,180,200,.7),rgba(0,120,160,.7)) !important; border: 1px solid rgba(0,234,255,0.40) !important; }
-    /* Dropdown glass */
-    .dropdown-menu { background: rgba(3,25,38,0.95) !important; backdrop-filter: blur(20px) !important; border: 1px solid rgba(0,234,255,0.25) !important; border-radius: 12px !important; }
-    .dropdown-item { color: rgba(255,255,255,0.75) !important; }
-    .dropdown-item:hover { background: rgba(0,234,255,0.10) !important; color: white !important; }
-    .dropdown-item.text-danger { color: #fca5a5 !important; }
-    .dropdown-divider { border-color: rgba(0,234,255,0.10) !important; }
-    /* Contenido */
-    #contenido-principal { position: relative; z-index: 2; }
-    .page-titulo { color: white !important; text-shadow: 0 0 20px rgba(0,234,255,0.40); }
-    .page-subtitulo { color: rgba(255,255,255,0.50) !important; }
-    /* Glass cards */
-    .glass-card, .card-sistema, .card { background: rgba(255,255,255,0.10) !important; backdrop-filter: blur(20px) saturate(160%) !important; -webkit-backdrop-filter: blur(20px) saturate(160%) !important; border: 1px solid rgba(0,234,255,0.45) !important; border-radius: 16px !important; box-shadow: 0 0 8px rgba(0,234,255,0.25) !important; color: white !important; }
-    .glass-card:hover, .card-sistema:hover, .card:hover { box-shadow: 0 0 14px rgba(0,234,255,0.45) !important; }
-    .card-body { color: white !important; }
-    .panel-card-header, .panel-header, .tabla-header { background: rgba(0,0,0,0.25) !important; border-bottom: 1px solid rgba(0,234,255,0.20) !important; }
-    .panel-card-titulo, .info-card-titulo, .panel-titulo, .tabla-titulo, .seccion-titulo { color: rgba(0,234,255,0.90) !important; background: transparent !important; }
-    /* Textos */
-    .text-muted { color: rgba(255,255,255,0.45) !important; }
-    label { color: rgba(255,255,255,0.75) !important; }
-    small { color: rgba(255,255,255,0.45) !important; }
-    /* Inputs */
-    .form-control, .form-select { background: rgba(255,255,255,0.08) !important; border: 1px solid rgba(0,234,255,0.30) !important; border-radius: 10px !important; color: white !important; }
-    .form-control::placeholder { color: rgba(255,255,255,0.3) !important; }
-    .form-control:focus, .form-select:focus { background: rgba(255,255,255,0.12) !important; border-color: rgba(0,234,255,0.70) !important; box-shadow: 0 0 0 3px rgba(0,234,255,0.12) !important; color: white !important; }
-    .form-select option { background: #052837; color: white; }
-    /* Fix universal: todos los <select> del sistema en glass mode */
-    select option, select optgroup { background: #0a2535 !important; color: rgba(255,255,255,0.90) !important; }
-    select option:hover, select option:checked { background: rgba(0,234,255,0.25) !important; }
-    /* Botones */
-    .btn-primary { background: linear-gradient(135deg,rgba(0,180,200,.8),rgba(0,120,160,.8)) !important; border: 1px solid rgba(0,234,255,0.50) !important; color: white !important; }
-    .btn-secondary { background: rgba(255,255,255,0.08) !important; border: 1px solid rgba(255,255,255,0.20) !important; color: rgba(255,255,255,0.85) !important; }
-    .btn-danger { background: rgba(248,113,113,0.2) !important; border: 1px solid rgba(248,113,113,0.4) !important; color: #fca5a5 !important; }
-    .btn-success { background: rgba(74,222,128,0.2) !important; border: 1px solid rgba(74,222,128,0.4) !important; color: #86efac !important; }
-    .btn-outline-primary { background: transparent !important; border: 1px solid rgba(0,234,255,0.50) !important; color: rgba(0,234,255,0.90) !important; }
-    /* Tablas */
-    .table { color: rgba(255,255,255,0.88) !important; border-color: rgba(255,255,255,0.06) !important; }
-    .table thead th { background: rgba(0,0,0,0.30) !important; color: white !important; border-bottom: 1px solid rgba(0,234,255,0.30) !important; border-color: rgba(0,234,255,0.20) !important; }
-    .table tbody tr { color: rgba(255,255,255,0.88) !important; border-color: rgba(255,255,255,0.06) !important; }
-    .table tbody tr:hover { background: rgba(0,234,255,0.08) !important; }
-    .table td, .table th { border-color: rgba(255,255,255,0.06) !important; }
-    /* Badges */
-    .bg-success  { background: rgba(74,222,128,0.20)  !important; color: #86efac !important; border: 1px solid rgba(74,222,128,0.35)  !important; }
-    .bg-danger   { background: rgba(248,113,113,0.20) !important; color: #fca5a5 !important; border: 1px solid rgba(248,113,113,0.35) !important; }
-    .bg-warning  { background: rgba(251,191,36,0.20)  !important; color: #fbbf24 !important; border: 1px solid rgba(251,191,36,0.35)  !important; }
-    .bg-info     { background: rgba(0,234,255,0.15)   !important; color: rgba(0,234,255,0.95) !important; border: 1px solid rgba(0,234,255,0.35) !important; }
-    .bg-primary  { background: rgba(0,234,255,0.12)   !important; color: rgba(0,234,255,0.95) !important; border: 1px solid rgba(0,234,255,0.30) !important; }
-    .bg-secondary{ background: rgba(148,163,184,0.20) !important; color: #cbd5e1 !important; border: 1px solid rgba(148,163,184,0.35) !important; }
-    /* Alertas flash */
-    .alert-success { background: rgba(74,222,128,0.12)  !important; border: 1px solid rgba(74,222,128,0.35)  !important; color: #86efac !important; }
-    .alert-danger  { background: rgba(248,113,113,0.12) !important; border: 1px solid rgba(248,113,113,0.35) !important; color: #fca5a5 !important; }
-    .alert-warning { background: rgba(251,191,36,0.12)  !important; border: 1px solid rgba(251,191,36,0.35)  !important; color: #fbbf24 !important; }
-    /* Errores de validación — color contrastante en glass (aplica a todo el sistema) */
-    .error-msg, .err, .campo-error, .form-error, .invalid-feedback { color: #ff8a8a !important; text-shadow: 0 0 8px rgba(255,100,100,0.35); }
-    .is-invalid, .error-field { border-color: rgba(255,120,120,0.80) !important; box-shadow: 0 0 0 2px rgba(255,100,100,0.15) !important; }
-    span[style*="color:#dc2626"] { color: #ff8a8a !important; }
-    /* Alertas flash con inline styles (override universal) */
-    .alerta-flash { background: rgba(0,234,255,0.08) !important; border-color: rgba(0,234,255,0.30) !important; color: rgba(255,255,255,0.88) !important; }
-    .alerta-flash[style*="background:#f0fdf4"],.alerta-flash[style*="background:#dcfce7"] { background: rgba(74,222,128,0.10) !important; border-color: rgba(74,222,128,0.30) !important; color: #86efac !important; }
-    .alerta-flash[style*="background:#fef2f2"],.alerta-flash[style*="background:#fee2e2"] { background: rgba(248,113,113,0.10) !important; border-color: rgba(248,113,113,0.30) !important; color: #fca5a5 !important; }
-    .alerta-flash[style*="background:#fffbeb"],.alerta-flash[style*="background:#fef9c3"] { background: rgba(251,191,36,0.10) !important; border-color: rgba(251,191,36,0.30) !important; color: #fbbf24 !important; }
-    /* Pagination */
-    .page-link { background: rgba(255,255,255,0.08) !important; border: 1px solid rgba(0,234,255,0.25) !important; color: rgba(255,255,255,0.75) !important; border-radius: 8px !important; }
-    .page-link:hover { background: rgba(0,234,255,0.15) !important; color: white !important; border-color: rgba(0,234,255,0.50) !important; }
-    .page-item.active .page-link { background: rgba(0,234,255,0.25) !important; border-color: rgba(0,234,255,0.60) !important; color: white !important; }
-    /* Modales */
-    .modal-content { background: rgba(5,40,55,0.90) !important; backdrop-filter: blur(32px) saturate(180%) !important; border: 1px solid rgba(0,234,255,0.25) !important; border-radius: 20px !important; color: white !important; }
-    .modal-header { background: rgba(0,0,0,0.25) !important; border-bottom: 1px solid rgba(0,234,255,0.20) !important; }
-    .modal-title { color: rgba(0,234,255,0.90) !important; }
-    .modal-footer { border-top: 1px solid rgba(0,234,255,0.15) !important; }
-    .btn-close { filter: invert(1) !important; opacity: 0.6 !important; }
-    .notif-dot { border: 1.5px solid rgba(5,40,55,0.8) !important; }
-</style>
-<div class="aurora-layer">
-    <div class="aurora-orb orb-1"></div>
-    <div class="aurora-orb orb-2"></div>
-    <div class="aurora-orb orb-3"></div>
-    <div class="aurora-orb orb-4"></div>
-    <div class="aurora-orb orb-5"></div>
-</div>
-<div class="hex-bg">
-    <svg id="hexSvg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <g id="hexGroup"></g>
-    </svg>
-</div>
-<script>
-(function(){
-    const R=70,W=R*2,H=Math.sqrt(3)*R,COLS=13,ROWS=9,colStep=W*0.75,rowStep=H;
-    const vis=[1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0];
-    function hpts(cx,cy,r){let s=[];for(let i=0;i<6;i++){const a=Math.PI/180*60*i;s.push(`${(cx+r*Math.cos(a)).toFixed(1)},${(cy+r*Math.sin(a)).toFixed(1)}`);}return s.join(' ');}
-    const g=document.getElementById('hexGroup');
-    let idx=0;
-    for(let row=0;row<ROWS;row++){for(let col=0;col<COLS;col++){if(!vis[idx++])continue;const cx=col*colStep+R,cy=row*rowStep+H/2+(col%2===1?H/2:0);const p=document.createElementNS('http://www.w3.org/2000/svg','polygon');p.setAttribute('points',hpts(cx,cy,R-1));p.setAttribute('fill','none');p.setAttribute('stroke','rgba(255,255,255,0.08)');p.setAttribute('stroke-width','0.8');g.appendChild(p);}}
-})();
-</script>
-@endif
-{{-- ── FIN AURORA GLASS ── --}}
+            body[data-ui="glass"] {
+                --color-principal: rgba(0, 234, 255, 0.90) !important;
+                --color-hover: rgba(0, 210, 240, 1.00) !important;
+                --color-claro: rgba(0, 180, 200, 0.90) !important;
+                --color-muy-claro: rgba(0, 234, 255, 0.10) !important;
+                --color-acento-activo: rgba(0, 234, 255, 0.80) !important;
+                --sombra-principal: rgba(0, 234, 255, 0.15) !important;
+                --fondo-borde: rgba(0, 234, 255, 0.20) !important;
+                --gradiente-btn: linear-gradient(135deg, rgba(0, 180, 200, 0.8), rgba(0, 120, 160, 0.8)) !important;
+                --fondo-app: rgba(255, 255, 255, 0.06) !important;
+                --fondo-card-alt: rgba(0, 234, 255, 0.05) !important;
+                --texto-principal: rgba(255, 255, 255, 0.90) !important;
+                --texto-secundario: rgba(255, 255, 255, 0.55) !important;
+                --input-bg: rgba(255, 255, 255, 0.08) !important;
+                --input-border: rgba(0, 234, 255, 0.30) !important;
+            }
+
+            body::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                background:
+                    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(6, 182, 212, 0.35) 0%, transparent 60%),
+                    radial-gradient(ellipse 60% 50% at 90% 10%, rgba(20, 184, 166, 0.30) 0%, transparent 55%),
+                    radial-gradient(ellipse 70% 55% at 80% 85%, rgba(14, 165, 233, 0.30) 0%, transparent 60%),
+                    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(6, 182, 212, 0.25) 0%, transparent 55%),
+                    radial-gradient(ellipse 90% 70% at 50% 50%, rgba(8, 60, 90, 0.6) 0%, transparent 100%);
+                pointer-events: none;
+            }
+
+            .aurora-layer {
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                pointer-events: none;
+                overflow: hidden;
+            }
+
+            .aurora-orb {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(80px);
+                opacity: 0.6;
+            }
+
+            .orb-1 {
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(circle, rgba(6, 182, 212, .5), transparent 70%);
+                top: -150px;
+                left: -100px;
+                animation: af0 22s ease-in-out infinite;
+            }
+
+            .orb-2 {
+                width: 500px;
+                height: 500px;
+                background: radial-gradient(circle, rgba(20, 184, 166, .4), transparent 70%);
+                top: -80px;
+                right: -80px;
+                animation: af1 29s 3s ease-in-out infinite;
+            }
+
+            .orb-3 {
+                width: 700px;
+                height: 700px;
+                background: radial-gradient(circle, rgba(14, 165, 233, .4), transparent 70%);
+                bottom: -200px;
+                left: 30%;
+                animation: af2 25s 6s ease-in-out infinite;
+            }
+
+            .orb-4 {
+                width: 400px;
+                height: 400px;
+                background: radial-gradient(circle, rgba(103, 232, 249, .25), transparent 70%);
+                top: 40%;
+                right: -100px;
+                animation: af0 36s 2s ease-in-out infinite;
+            }
+
+            .orb-5 {
+                width: 350px;
+                height: 350px;
+                background: radial-gradient(circle, rgba(6, 182, 212, .35), transparent 70%);
+                bottom: 10%;
+                left: -80px;
+                animation: af1 32s 4s ease-in-out infinite;
+            }
+
+            @keyframes af0 {
+
+                0%,
+                100% {
+                    transform: translate(0, 0) scale(1)
+                }
+
+                33% {
+                    transform: translate(60px, -40px) scale(1.1)
+                }
+
+                66% {
+                    transform: translate(-40px, 30px) scale(0.95)
+                }
+            }
+
+            @keyframes af1 {
+
+                0%,
+                100% {
+                    transform: translate(0, 0) scale(1)
+                }
+
+                33% {
+                    transform: translate(-50px, 50px) scale(1.08)
+                }
+
+                66% {
+                    transform: translate(70px, -30px) scale(0.92)
+                }
+            }
+
+            @keyframes af2 {
+
+                0%,
+                100% {
+                    transform: translate(0, 0) scale(1)
+                }
+
+                33% {
+                    transform: translate(40px, 60px) scale(1.12)
+                }
+
+                66% {
+                    transform: translate(-60px, -40px) scale(0.9)
+                }
+            }
+
+            .hex-bg {
+                position: fixed;
+                inset: 0;
+                z-index: 1;
+                pointer-events: none;
+            }
+
+            .hex-bg svg {
+                width: 100%;
+                height: 100%;
+            }
+
+            /* Sidebar glass */
+            #sidebar {
+                background: rgba(3, 25, 38, 0.82) !important;
+                backdrop-filter: blur(24px) saturate(160%) !important;
+                -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+                border-right: 1px solid rgba(0, 234, 255, 0.15) !important;
+            }
+
+            .nav-seccion-titulo {
+                color: rgba(0, 234, 255, 0.45) !important;
+            }
+
+            .nav-item-sidebar {
+                color: rgba(255, 255, 255, 0.70) !important;
+            }
+
+            .nav-item-sidebar:hover {
+                background: rgba(0, 234, 255, 0.08) !important;
+                color: white !important;
+            }
+
+            .nav-item-sidebar.activo {
+                background: rgba(0, 234, 255, 0.12) !important;
+                color: white !important;
+            }
+
+            .nav-item-sidebar.activo::before {
+                background: rgba(0, 234, 255, 0.90) !important;
+                box-shadow: 0 0 8px rgba(0, 234, 255, 0.60) !important;
+            }
+
+            .nav-item-icono {
+                color: rgba(0, 234, 255, 0.70) !important;
+            }
+
+            .nav-item-sidebar.activo .nav-item-icono,
+            .nav-item-sidebar:hover .nav-item-icono {
+                color: rgba(0, 234, 255, 0.95) !important;
+            }
+
+            .sidebar-logo-nombre {
+                text-shadow: 0 0 20px rgba(0, 234, 255, 0.50) !important;
+            }
+
+            .sidebar-logo-sub {
+                color: rgba(255, 255, 255, 0.35) !important;
+            }
+
+            .perfil-avatar {
+                background: rgba(0, 234, 255, 0.12) !important;
+                border: 1px solid rgba(0, 234, 255, 0.30) !important;
+                color: rgba(0, 234, 255, 0.95) !important;
+            }
+
+            .perfil-nombre {
+                color: white !important;
+            }
+
+            .perfil-rol {
+                color: rgba(255, 255, 255, 0.35) !important;
+            }
+
+            .btn-logout-sidebar {
+                color: rgba(255, 255, 255, 0.30) !important;
+            }
+
+            .btn-logout-sidebar:hover {
+                color: rgba(248, 113, 113, 0.80) !important;
+            }
+
+            /* Navbar glass */
+            #navbar-top {
+                background: rgba(3, 25, 38, 0.75) !important;
+                backdrop-filter: blur(20px) saturate(160%) !important;
+                -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+                border-bottom: 1px solid rgba(0, 234, 255, 0.15) !important;
+            }
+
+            .navbar-titulo {
+                color: white !important;
+                text-shadow: 0 0 20px rgba(0, 234, 255, 0.40);
+            }
+
+            .navbar-titulo span {
+                color: rgba(255, 255, 255, 0.35) !important;
+            }
+
+            .btn-navbar-accion {
+                background: rgba(255, 255, 255, 0.06) !important;
+                border: 1px solid rgba(0, 234, 255, 0.15) !important;
+                color: rgba(255, 255, 255, 0.60) !important;
+            }
+
+            .btn-navbar-accion:hover {
+                background: rgba(0, 234, 255, 0.12) !important;
+                border-color: rgba(0, 234, 255, 0.40) !important;
+                color: rgba(0, 234, 255, 0.95) !important;
+            }
+
+            .navbar-usuario {
+                background: rgba(255, 255, 255, 0.05) !important;
+                border: 1px solid rgba(0, 234, 255, 0.15) !important;
+            }
+
+            .navbar-usuario:hover {
+                background: rgba(0, 234, 255, 0.10) !important;
+                border-color: rgba(0, 234, 255, 0.35) !important;
+            }
+
+            .navbar-usuario-nombre {
+                color: rgba(255, 255, 255, 0.85) !important;
+            }
+
+            .navbar-avatar {
+                background: linear-gradient(135deg, rgba(0, 180, 200, .7), rgba(0, 120, 160, .7)) !important;
+                border: 1px solid rgba(0, 234, 255, 0.40) !important;
+            }
+
+            /* Dropdown glass */
+            .dropdown-menu {
+                background: rgba(3, 25, 38, 0.95) !important;
+                backdrop-filter: blur(20px) !important;
+                border: 1px solid rgba(0, 234, 255, 0.25) !important;
+                border-radius: 12px !important;
+            }
+
+            .dropdown-item {
+                color: rgba(255, 255, 255, 0.75) !important;
+            }
+
+            .dropdown-item:hover {
+                background: rgba(0, 234, 255, 0.10) !important;
+                color: white !important;
+            }
+
+            .dropdown-item.text-danger {
+                color: #fca5a5 !important;
+            }
+
+            .dropdown-divider {
+                border-color: rgba(0, 234, 255, 0.10) !important;
+            }
+
+            /* Contenido */
+            #contenido-principal {
+                position: relative;
+                z-index: 2;
+            }
+
+            .page-titulo {
+                color: white !important;
+                text-shadow: 0 0 20px rgba(0, 234, 255, 0.40);
+            }
+
+            .page-subtitulo {
+                color: rgba(255, 255, 255, 0.50) !important;
+            }
+
+            /* Glass cards */
+            .glass-card,
+            .card-sistema,
+            .card {
+                background: rgba(255, 255, 255, 0.10) !important;
+                backdrop-filter: blur(20px) saturate(160%) !important;
+                -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+                border: 1px solid rgba(0, 234, 255, 0.45) !important;
+                border-radius: 16px !important;
+                box-shadow: 0 0 8px rgba(0, 234, 255, 0.25) !important;
+                color: white !important;
+            }
+
+            .glass-card:hover,
+            .card-sistema:hover,
+            .card:hover {
+                box-shadow: 0 0 14px rgba(0, 234, 255, 0.45) !important;
+            }
+
+            .card-body {
+                color: white !important;
+            }
+
+            .panel-card-header,
+            .panel-header,
+            .tabla-header {
+                background: rgba(0, 0, 0, 0.25) !important;
+                border-bottom: 1px solid rgba(0, 234, 255, 0.20) !important;
+            }
+
+            .panel-card-titulo,
+            .info-card-titulo,
+            .panel-titulo,
+            .tabla-titulo,
+            .seccion-titulo {
+                color: rgba(0, 234, 255, 0.90) !important;
+                background: transparent !important;
+            }
+
+            /* Textos */
+            .text-muted {
+                color: rgba(255, 255, 255, 0.45) !important;
+            }
+
+            label {
+                color: rgba(255, 255, 255, 0.75) !important;
+            }
+
+            small {
+                color: rgba(255, 255, 255, 0.45) !important;
+            }
+
+            /* Inputs */
+            .form-control,
+            .form-select {
+                background: rgba(255, 255, 255, 0.08) !important;
+                border: 1px solid rgba(0, 234, 255, 0.30) !important;
+                border-radius: 10px !important;
+                color: white !important;
+            }
+
+            .form-control::placeholder {
+                color: rgba(255, 255, 255, 0.3) !important;
+            }
+
+            .form-control:focus,
+            .form-select:focus {
+                background: rgba(255, 255, 255, 0.12) !important;
+                border-color: rgba(0, 234, 255, 0.70) !important;
+                box-shadow: 0 0 0 3px rgba(0, 234, 255, 0.12) !important;
+                color: white !important;
+            }
+
+            .form-select option {
+                background: #052837;
+                color: white;
+            }
+
+            /* Fix universal: todos los <select> del sistema en glass mode */
+            select option,
+            select optgroup {
+                background: #0a2535 !important;
+                color: rgba(255, 255, 255, 0.90) !important;
+            }
+
+            select option:hover,
+            select option:checked {
+                background: rgba(0, 234, 255, 0.25) !important;
+            }
+
+            /* Botones */
+            .btn-primary {
+                background: linear-gradient(135deg, rgba(0, 180, 200, .8), rgba(0, 120, 160, .8)) !important;
+                border: 1px solid rgba(0, 234, 255, 0.50) !important;
+                color: white !important;
+            }
+
+            .btn-secondary {
+                background: rgba(255, 255, 255, 0.08) !important;
+                border: 1px solid rgba(255, 255, 255, 0.20) !important;
+                color: rgba(255, 255, 255, 0.85) !important;
+            }
+
+            .btn-danger {
+                background: rgba(248, 113, 113, 0.2) !important;
+                border: 1px solid rgba(248, 113, 113, 0.4) !important;
+                color: #fca5a5 !important;
+            }
+
+            .btn-success {
+                background: rgba(74, 222, 128, 0.2) !important;
+                border: 1px solid rgba(74, 222, 128, 0.4) !important;
+                color: #86efac !important;
+            }
+
+            .btn-outline-primary {
+                background: transparent !important;
+                border: 1px solid rgba(0, 234, 255, 0.50) !important;
+                color: rgba(0, 234, 255, 0.90) !important;
+            }
+
+            /* Tablas */
+            .table {
+                color: rgba(255, 255, 255, 0.88) !important;
+                border-color: rgba(255, 255, 255, 0.06) !important;
+            }
+
+            .table thead th {
+                background: rgba(0, 0, 0, 0.30) !important;
+                color: white !important;
+                border-bottom: 1px solid rgba(0, 234, 255, 0.30) !important;
+                border-color: rgba(0, 234, 255, 0.20) !important;
+            }
+
+            .table tbody tr {
+                color: rgba(255, 255, 255, 0.88) !important;
+                border-color: rgba(255, 255, 255, 0.06) !important;
+            }
+
+            .table tbody tr:hover {
+                background: rgba(0, 234, 255, 0.08) !important;
+            }
+
+            .table td,
+            .table th {
+                border-color: rgba(255, 255, 255, 0.06) !important;
+            }
+
+            /* Badges */
+            .bg-success {
+                background: rgba(74, 222, 128, 0.20) !important;
+                color: #86efac !important;
+                border: 1px solid rgba(74, 222, 128, 0.35) !important;
+            }
+
+            .bg-danger {
+                background: rgba(248, 113, 113, 0.20) !important;
+                color: #fca5a5 !important;
+                border: 1px solid rgba(248, 113, 113, 0.35) !important;
+            }
+
+            .bg-warning {
+                background: rgba(251, 191, 36, 0.20) !important;
+                color: #fbbf24 !important;
+                border: 1px solid rgba(251, 191, 36, 0.35) !important;
+            }
+
+            .bg-info {
+                background: rgba(0, 234, 255, 0.15) !important;
+                color: rgba(0, 234, 255, 0.95) !important;
+                border: 1px solid rgba(0, 234, 255, 0.35) !important;
+            }
+
+            .bg-primary {
+                background: rgba(0, 234, 255, 0.12) !important;
+                color: rgba(0, 234, 255, 0.95) !important;
+                border: 1px solid rgba(0, 234, 255, 0.30) !important;
+            }
+
+            .bg-secondary {
+                background: rgba(148, 163, 184, 0.20) !important;
+                color: #cbd5e1 !important;
+                border: 1px solid rgba(148, 163, 184, 0.35) !important;
+            }
+
+            /* Alertas flash */
+            .alert-success {
+                background: rgba(74, 222, 128, 0.12) !important;
+                border: 1px solid rgba(74, 222, 128, 0.35) !important;
+                color: #86efac !important;
+            }
+
+            .alert-danger {
+                background: rgba(248, 113, 113, 0.12) !important;
+                border: 1px solid rgba(248, 113, 113, 0.35) !important;
+                color: #fca5a5 !important;
+            }
+
+            .alert-warning {
+                background: rgba(251, 191, 36, 0.12) !important;
+                border: 1px solid rgba(251, 191, 36, 0.35) !important;
+                color: #fbbf24 !important;
+            }
+
+            /* Errores de validación — color contrastante en glass (aplica a todo el sistema) */
+            .error-msg,
+            .err,
+            .campo-error,
+            .form-error,
+            .invalid-feedback {
+                color: #ff8a8a !important;
+                text-shadow: 0 0 8px rgba(255, 100, 100, 0.35);
+            }
+
+            .is-invalid,
+            .error-field {
+                border-color: rgba(255, 120, 120, 0.80) !important;
+                box-shadow: 0 0 0 2px rgba(255, 100, 100, 0.15) !important;
+            }
+
+            span[style*="color:#dc2626"] {
+                color: #ff8a8a !important;
+            }
+
+            /* Alertas flash con inline styles (override universal) */
+            .alerta-flash {
+                background: rgba(0, 234, 255, 0.08) !important;
+                border-color: rgba(0, 234, 255, 0.30) !important;
+                color: rgba(255, 255, 255, 0.88) !important;
+            }
+
+            .alerta-flash[style*="background:#f0fdf4"],
+            .alerta-flash[style*="background:#dcfce7"] {
+                background: rgba(74, 222, 128, 0.10) !important;
+                border-color: rgba(74, 222, 128, 0.30) !important;
+                color: #86efac !important;
+            }
+
+            .alerta-flash[style*="background:#fef2f2"],
+            .alerta-flash[style*="background:#fee2e2"] {
+                background: rgba(248, 113, 113, 0.10) !important;
+                border-color: rgba(248, 113, 113, 0.30) !important;
+                color: #fca5a5 !important;
+            }
+
+            .alerta-flash[style*="background:#fffbeb"],
+            .alerta-flash[style*="background:#fef9c3"] {
+                background: rgba(251, 191, 36, 0.10) !important;
+                border-color: rgba(251, 191, 36, 0.30) !important;
+                color: #fbbf24 !important;
+            }
+
+            /* Pagination */
+            .page-link {
+                background: rgba(255, 255, 255, 0.08) !important;
+                border: 1px solid rgba(0, 234, 255, 0.25) !important;
+                color: rgba(255, 255, 255, 0.75) !important;
+                border-radius: 8px !important;
+            }
+
+            .page-link:hover {
+                background: rgba(0, 234, 255, 0.15) !important;
+                color: white !important;
+                border-color: rgba(0, 234, 255, 0.50) !important;
+            }
+
+            .page-item.active .page-link {
+                background: rgba(0, 234, 255, 0.25) !important;
+                border-color: rgba(0, 234, 255, 0.60) !important;
+                color: white !important;
+            }
+
+            /* Modales */
+            .modal-content {
+                background: rgba(5, 40, 55, 0.90) !important;
+                backdrop-filter: blur(32px) saturate(180%) !important;
+                border: 1px solid rgba(0, 234, 255, 0.25) !important;
+                border-radius: 20px !important;
+                color: white !important;
+            }
+
+            .modal-header {
+                background: rgba(0, 0, 0, 0.25) !important;
+                border-bottom: 1px solid rgba(0, 234, 255, 0.20) !important;
+            }
+
+            .modal-title {
+                color: rgba(0, 234, 255, 0.90) !important;
+            }
+
+            .modal-footer {
+                border-top: 1px solid rgba(0, 234, 255, 0.15) !important;
+            }
+
+            .btn-close {
+                filter: invert(1) !important;
+                opacity: 0.6 !important;
+            }
+
+            .notif-dot {
+                border: 1.5px solid rgba(5, 40, 55, 0.8) !important;
+            }
+        </style>
+        <div class="aurora-layer">
+            <div class="aurora-orb orb-1"></div>
+            <div class="aurora-orb orb-2"></div>
+            <div class="aurora-orb orb-3"></div>
+            <div class="aurora-orb orb-4"></div>
+            <div class="aurora-orb orb-5"></div>
+        </div>
+        <div class="hex-bg">
+            <svg id="hexSvg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="hexGroup"></g>
+            </svg>
+        </div>
+        <script>
+            (function() {
+                const R = 70,
+                    W = R * 2,
+                    H = Math.sqrt(3) * R,
+                    COLS = 13,
+                    ROWS = 9,
+                    colStep = W * 0.75,
+                    rowStep = H;
+                const vis = [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
+                    0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
+                    1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0
+                ];
+
+                function hpts(cx, cy, r) {
+                    let s = [];
+                    for (let i = 0; i < 6; i++) {
+                        const a = Math.PI / 180 * 60 * i;
+                        s.push(`${(cx+r*Math.cos(a)).toFixed(1)},${(cy+r*Math.sin(a)).toFixed(1)}`);
+                    }
+                    return s.join(' ');
+                }
+                const g = document.getElementById('hexGroup');
+                let idx = 0;
+                for (let row = 0; row < ROWS; row++) {
+                    for (let col = 0; col < COLS; col++) {
+                        if (!vis[idx++]) continue;
+                        const cx = col * colStep + R,
+                            cy = row * rowStep + H / 2 + (col % 2 === 1 ? H / 2 : 0);
+                        const p = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                        p.setAttribute('points', hpts(cx, cy, R - 1));
+                        p.setAttribute('fill', 'none');
+                        p.setAttribute('stroke', 'rgba(255,255,255,0.08)');
+                        p.setAttribute('stroke-width', '0.8');
+                        g.appendChild(p);
+                    }
+                }
+            })();
+        </script>
+    @endif
+    {{-- ── FIN AURORA GLASS ── --}}
 
     {{-- ─── Formulario oculto para logout ─── --}}
     <form id="form-logout" action="{{ route('logout') }}" method="POST" style="display:none;">
@@ -1226,20 +1851,6 @@
         {{-- Acciones del navbar --}}
         <div class="navbar-acciones">
 
-            {{-- Botón de búsqueda global --}}
-            <a href="{{ route('pacientes.index') }}" class="btn-navbar-accion" title="Buscar paciente">
-                <i class="bi bi-search"></i>
-            </a>
-
-            {{-- Notificaciones --}}
-            <button class="btn-navbar-accion" title="Notificaciones">
-                <i class="bi bi-bell"></i>
-                {{-- Punto rojo si hay notificaciones --}}
-                @if (auth()->user()->unreadNotifications()->count() > 0)
-                    <span class="notif-dot"></span>
-                @endif
-            </button>
-
             {{-- Usuario --}}
             <div class="dropdown">
                 <div class="navbar-usuario" data-bs-toggle="dropdown">
@@ -1508,49 +2119,49 @@
 
     {{-- Auto-wrap tablas de listado con scroll vertical --}}
     <script>
-    (function () {
-        // Clases excluidas: tablas de formulario / edición / pequeñas internas
-        var EXCLUIR = [
-            'tabla-items', 'tabla-dinamica', 'tabla-det', 'tabla-preview',
-            'horario-tabla', 'tabla-fila', 'tabla-search', 'tabla-wrap',
-            'tabla-container',
-        ];
+        (function() {
+            // Clases excluidas: tablas de formulario / edición / pequeñas internas
+            var EXCLUIR = [
+                'tabla-items', 'tabla-dinamica', 'tabla-det', 'tabla-preview',
+                'horario-tabla', 'tabla-fila', 'tabla-search', 'tabla-wrap',
+                'tabla-container',
+            ];
 
-        function necesitaScroll(tabla) {
-            if (tabla.closest('.tabla-scroll-auto')) return false;         // ya envuelta
-            if (tabla.hasAttribute('data-no-scroll')) return false;        // marcada explícita
-            var cls = tabla.className || '';
-            for (var i = 0; i < EXCLUIR.length; i++) {
-                if (cls.indexOf(EXCLUIR[i]) !== -1) return false;
-            }
-            // Solo envolver si tiene clase tabla-*
-            return /\btabla-/.test(cls);
-        }
-
-        function envolver(tabla) {
-            var padre = tabla.parentNode;
-            // Si el padre ya es overflow-x:auto, reusar añadiendo max-height
-            if (padre && padre.tagName !== 'BODY') {
-                var st = padre.getAttribute('style') || '';
-                if (st.indexOf('overflow-x') !== -1 || st.indexOf('overflow-y') !== -1) {
-                    padre.classList.add('tabla-scroll-auto');
-                    padre.style.removeProperty('overflow-x');
-                    padre.style.removeProperty('overflow-y');
-                    return;
+            function necesitaScroll(tabla) {
+                if (tabla.closest('.tabla-scroll-auto')) return false; // ya envuelta
+                if (tabla.hasAttribute('data-no-scroll')) return false; // marcada explícita
+                var cls = tabla.className || '';
+                for (var i = 0; i < EXCLUIR.length; i++) {
+                    if (cls.indexOf(EXCLUIR[i]) !== -1) return false;
                 }
+                // Solo envolver si tiene clase tabla-*
+                return /\btabla-/.test(cls);
             }
-            var div = document.createElement('div');
-            div.className = 'tabla-scroll-auto';
-            padre.insertBefore(div, tabla);
-            div.appendChild(tabla);
-        }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('table').forEach(function (tabla) {
-                if (necesitaScroll(tabla)) envolver(tabla);
+            function envolver(tabla) {
+                var padre = tabla.parentNode;
+                // Si el padre ya es overflow-x:auto, reusar añadiendo max-height
+                if (padre && padre.tagName !== 'BODY') {
+                    var st = padre.getAttribute('style') || '';
+                    if (st.indexOf('overflow-x') !== -1 || st.indexOf('overflow-y') !== -1) {
+                        padre.classList.add('tabla-scroll-auto');
+                        padre.style.removeProperty('overflow-x');
+                        padre.style.removeProperty('overflow-y');
+                        return;
+                    }
+                }
+                var div = document.createElement('div');
+                div.className = 'tabla-scroll-auto';
+                padre.insertBefore(div, tabla);
+                div.appendChild(tabla);
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('table').forEach(function(tabla) {
+                    if (necesitaScroll(tabla)) envolver(tabla);
+                });
             });
-        });
-    }());
+        }());
     </script>
 
     <script>
@@ -1567,7 +2178,8 @@
             }
         })();
     </script>
-
+    @stack('modales')
+    @stack('scripts')
 </body>
 
 </html>

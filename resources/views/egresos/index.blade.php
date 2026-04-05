@@ -43,6 +43,11 @@
            style="display:inline-flex;align-items:center;gap:.4rem;background:#DC3545;color:#fff;border:none;border-radius:8px;padding:.5rem 1rem;font-size:.85rem;font-weight:600;text-decoration:none;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
             <i class="bi bi-plus-lg"></i> Registrar Egreso
         </a>
+        <x-boton-exportar
+            modulo="egresos"
+            ruta="{{ route('exportar.egresos') }}"
+            :tieneSensibles="false"
+        />
     </div>
 </div>
 

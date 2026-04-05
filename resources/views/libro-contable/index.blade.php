@@ -56,18 +56,21 @@
         <div style="display:flex; flex-direction:column; gap:.25rem;">
             <label style="font-size:.75rem; font-weight:600; color:var(--color-principal);">Desde</label>
             <input type="date" name="desde" value="{{ $desde->format('Y-m-d') }}"
+                   onchange="this.form.submit()"
                    style="border:1.5px solid #e0d9f7; border-radius:8px; padding:.4rem .75rem; font-size:.85rem;">
         </div>
 
         <div style="display:flex; flex-direction:column; gap:.25rem;">
             <label style="font-size:.75rem; font-weight:600; color:var(--color-principal);">Hasta</label>
             <input type="date" name="hasta" value="{{ $hasta->format('Y-m-d') }}"
+                   onchange="this.form.submit()"
                    style="border:1.5px solid #e0d9f7; border-radius:8px; padding:.4rem .75rem; font-size:.85rem;">
         </div>
 
         <div style="display:flex; flex-direction:column; gap:.25rem;">
             <label style="font-size:.75rem; font-weight:600; color:var(--color-principal);">Tipo</label>
-            <select name="tipo" style="border:1.5px solid #e0d9f7; border-radius:8px; padding:.4rem .75rem; font-size:.85rem;">
+            <select name="tipo" onchange="this.form.submit()"
+                    style="border:1.5px solid #e0d9f7; border-radius:8px; padding:.4rem .75rem; font-size:.85rem;">
                 <option value="">Todos</option>
                 <option value="ingreso" {{ $tipo === 'ingreso' ? 'selected' : '' }}>Solo Ingresos</option>
                 <option value="egreso"  {{ $tipo === 'egreso'  ? 'selected' : '' }}>Solo Egresos</option>
@@ -76,14 +79,10 @@
 
         <label style="display:flex; align-items:center; gap:.4rem; font-size:.82rem; cursor:pointer; padding-bottom:.15rem;">
             <input type="checkbox" name="incluir_excluidos" value="1"
+                   onchange="this.form.submit()"
                    {{ request()->boolean('incluir_excluidos') ? 'checked' : '' }}>
             Mostrar excluidos
         </label>
-
-        <button type="submit"
-                style="background:var(--color-principal); color:white; border:none; border-radius:8px; padding:.45rem 1rem; font-size:.85rem; font-weight:600; cursor:pointer;">
-            <i class="bi bi-search"></i> Filtrar
-        </button>
 
         <a href="{{ route('libro-contable.index') }}"
            style="background:var(--color-muy-claro); color:var(--color-principal); border-radius:8px; padding:.45rem .85rem; font-size:.85rem; font-weight:600; text-decoration:none;">
@@ -91,10 +90,11 @@
         </a>
 
         <div style="margin-left:auto; display:flex; gap:.5rem; flex-wrap:wrap;">
-            <a href="{{ route('libro-contable.exportar', request()->only('desde','hasta','tipo')) }}"
-               style="background:#28a745; color:white; border-radius:8px; padding:.45rem 1rem; font-size:.82rem; font-weight:600; text-decoration:none;">
-                <i class="bi bi-file-earmark-spreadsheet"></i> Exportar CSV
-            </a>
+            <x-boton-exportar
+                modulo="libro_caja"
+                ruta="{{ route('exportar.libro-caja') }}"
+                :tieneSensibles="false"
+            />
             <button type="button" onclick="document.getElementById('modal-ajuste').style.display='flex'"
                     style="background:#0d6efd; color:white; border:none; border-radius:8px; padding:.45rem 1rem; font-size:.82rem; font-weight:600; cursor:pointer;">
                 <i class="bi bi-plus-circle"></i> Ajuste Manual

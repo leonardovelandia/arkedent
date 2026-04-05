@@ -49,10 +49,13 @@
                 style="background:var(--color-principal); color:white; border:none; border-radius:8px; padding:.45rem 1rem; font-size:.85rem; font-weight:600; cursor:pointer;">
             <i class="bi bi-arrow-clockwise"></i> Ver
         </button>
-        <a href="{{ route('libro-contable.exportar', ['desde' => $fecha->startOfMonth()->format('Y-m-d'), 'hasta' => $fecha->copy()->endOfMonth()->format('Y-m-d')]) }}"
-           style="background:#28a745; color:white; border-radius:8px; padding:.45rem 1rem; font-size:.82rem; font-weight:600; text-decoration:none; margin-left:auto;">
-            <i class="bi bi-file-earmark-spreadsheet"></i> Exportar CSV
-        </a>
+        <div style="margin-left:auto;">
+            <x-boton-exportar
+                modulo="estado_resultados"
+                ruta="{{ route('exportar.estado-resultados') }}"
+                :tieneSensibles="false"
+            />
+        </div>
     </form>
 </div>
 

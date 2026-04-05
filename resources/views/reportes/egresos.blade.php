@@ -96,15 +96,15 @@
         <div class="filtros-grid">
             <div>
                 <label class="form-label">Desde</label>
-                <input type="date" name="desde" class="form-input" value="{{ $desde->format('Y-m-d') }}">
+                <input type="date" name="desde" class="form-input" value="{{ $desde->format('Y-m-d') }}" onchange="this.form.submit()">
             </div>
             <div>
                 <label class="form-label">Hasta</label>
-                <input type="date" name="hasta" class="form-input" value="{{ $hasta->format('Y-m-d') }}">
+                <input type="date" name="hasta" class="form-input" value="{{ $hasta->format('Y-m-d') }}" onchange="this.form.submit()">
             </div>
             <div>
                 <label class="form-label">Categoría</label>
-                <select name="categoria_id" class="form-input">
+                <select name="categoria_id" class="form-input" onchange="this.form.submit()">
                     <option value="">Todas</option>
                     @foreach($categorias as $cat)
                     <option value="{{ $cat->id }}" {{ $categoriaId == $cat->id ? 'selected' : '' }}>{{ $cat->nombre }}</option>
@@ -112,8 +112,12 @@
                 </select>
             </div>
             <div style="display:flex;gap:.4rem;align-items:flex-end;">
-                <button type="submit" class="btn-rojo"><i class="bi bi-search"></i> Filtrar</button>
                 <a href="{{ route('reportes.egresos') }}" class="btn-gris"><i class="bi bi-x"></i></a>
+                <x-boton-exportar
+                    modulo="reporte_egresos"
+                    ruta="{{ route('exportar.egresos') }}"
+                    :tieneSensibles="false"
+                />
             </div>
         </div>
     </form>

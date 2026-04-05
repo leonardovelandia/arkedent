@@ -182,6 +182,11 @@
 
         if (buscar) {
             mostrarClear();
+            // Restaurar foco si la página se recargó por búsqueda
+            if (buscar.value) {
+                buscar.focus();
+                var v = buscar.value; buscar.value = ''; buscar.value = v; // cursor al final
+            }
             buscar.addEventListener('input', function () {
                 mostrarClear();
                 doSubmit(380);

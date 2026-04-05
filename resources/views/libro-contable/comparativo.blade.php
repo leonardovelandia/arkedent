@@ -56,10 +56,11 @@
         <h6 style="font-family:var(--fuente-titulos); color:var(--color-principal); margin:0;">
             <i class="bi bi-bar-chart-grouped"></i> Ingresos, Egresos y Utilidad — Últimos 12 Meses
         </h6>
-        <a href="{{ route('libro-contable.exportar', ['desde' => now()->subMonths(11)->startOfMonth()->format('Y-m-d'), 'hasta' => now()->endOfMonth()->format('Y-m-d')]) }}"
-           style="background:#28a745; color:white; border-radius:8px; padding:.35rem .85rem; font-size:.78rem; font-weight:600; text-decoration:none;box-shadow:0 8px 28px var(--sombra-principal),0 2px 8px rgba(0,0,0,.12);">
-            <i class="bi bi-download"></i> Exportar CSV
-        </a>
+        <x-boton-exportar
+            modulo="comparativo_12_meses"
+            ruta="{{ route('exportar.comparativo') }}"
+            :tieneSensibles="false"
+        />
     </div>
     <canvas id="graficaComparativo" style="max-height:320px;"></canvas>
 </div>

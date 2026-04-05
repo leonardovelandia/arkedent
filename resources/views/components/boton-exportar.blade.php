@@ -7,26 +7,26 @@
     'todoSensible'         => false,
 ])
 
-<div class="exportar-wrapper" style="position:relative; display:inline-block;">
-    <button
-        type="button"
-        onclick="abrirModalExportar('{{ $modulo }}')"
-        style="
-            display:inline-flex; align-items:center; gap:.4rem;
-            padding:.45rem 1rem;
-            background:#16a34a; color:white; border:none; border-radius:8px;
-            font-size:.82rem; font-weight:600; cursor:pointer;
-            font-family:var(--fuente-principal); transition:background .2s;
-            box-shadow:0 4px 12px rgba(22,163,74,.30);
-        "
-        onmouseover="this.style.background='#15803d'"
-        onmouseout="this.style.background='#16a34a'"
-    >
-        <i class="bi bi-download"></i> Exportar
-    </button>
-</div>
+{{-- ═══ SOLO el botón se renderiza donde pongas el componente ═══ --}}
+<button
+    type="button"
+    onclick="abrirModalExportar('{{ $modulo }}')"
+    style="
+        display:inline-flex; align-items:center; gap:.4rem;
+        padding:.45rem 1rem;
+        background:#16a34a; color:white; border:none; border-radius:8px;
+        font-size:.82rem; font-weight:600; cursor:pointer;
+        font-family:var(--fuente-principal); transition:background .2s;
+        box-shadow:0 4px 12px rgba(22,163,74,.30);
+    "
+    onmouseover="this.style.background='#15803d'"
+    onmouseout="this.style.background='#16a34a'"
+>
+    <i class="bi bi-download"></i> Exportar
+</button>
 
-{{-- Modal --}}
+{{-- ═══ MODAL → fuera del flujo, al final del body ═══ --}}
+@push('modales')
 <div id="modal-exportar-{{ $modulo }}"
      style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;"
      onclick="if(event.target===this)cerrarModalExportar('{{ $modulo }}')">
@@ -128,66 +128,85 @@
         </div>
     </div>
 </div>
+@endpush
 
+{{-- ═══ SCRIPTS → una sola vez ═══ --}}
+@once
+@push('scripts')
 <script>
 function abrirModalExportar(m) {
-    const modal = document.getElementById('modal-exportar-' + m);
+    var modal = document.getElementById('modal-exportar-' + m);
     if (modal) { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
 }
 function cerrarModalExportar(m) {
-    const modal = document.getElementById('modal-exportar-' + m);
+    var modal = document.getElementById('modal-exportar-' + m);
     if (!modal) return;
     modal.style.display = 'none';
     document.body.style.overflow = '';
-    document.querySelectorAll('.radio-formato-' + m).forEach(r => r.checked = false);
-    document.querySelectorAll('[id^="btn-formato-' + m + '-"]').forEach(b => {
+    document.querySelectorAll('.radio-formato-' + m).forEach(function(r) { r.checked = false; });
+    document.querySelectorAll('[id^="btn-formato-' + m + '-"]').forEach(function(b) {
         b.style.border = '2px solid #e5e7eb';
         b.querySelector('i').style.color = '#9ca3af';
         b.querySelector('span').style.color = '#6b7280';
     });
-    const cs = document.getElementById('check-sensibles-' + m);
+    var cs = document.getElementById('check-sensibles-' + m);
     if (cs) cs.checked = false;
-    const adv = document.getElementById('advertencia-sensibles-' + m);
+    var adv = document.getElementById('advertencia-sensibles-' + m);
     if (adv) adv.style.display = 'none';
-    const si = document.getElementById('input-sensibles-' + m);
+    var si = document.getElementById('input-sensibles-' + m);
     if (si) si.value = '0';
-    const btn = document.getElementById('btn-confirmar-exportar-' + m);
+    var btn = document.getElementById('btn-confirmar-exportar-' + m);
     if (btn) { btn.disabled = true; btn.style.background = '#9ca3af'; btn.style.cursor = 'not-allowed'; }
-    const fe = document.getElementById('filtros-extra-' + m);
+    var fe = document.getElementById('filtros-extra-' + m);
     if (fe) fe.innerHTML = '';
 }
 function seleccionarFormato(m, formato, color) {
-    document.querySelectorAll('[id^="btn-formato-' + m + '-"]').forEach(b => {
+    document.querySelectorAll('[id^="btn-formato-' + m + '-"]').forEach(function(b) {
         b.style.border = '2px solid #e5e7eb';
         b.querySelector('i').style.color = '#9ca3af';
         b.querySelector('span').style.color = '#6b7280';
     });
-    const ba = document.getElementById('btn-formato-' + m + '-' + formato);
+    var ba = document.getElementById('btn-formato-' + m + '-' + formato);
     if (ba) {
         ba.style.border = '2px solid ' + color;
         ba.querySelector('i').style.color = color;
         ba.querySelector('span').style.color = color;
     }
     document.getElementById('input-formato-' + m).value = formato;
-    const btn = document.getElementById('btn-confirmar-exportar-' + m);
+    var btn = document.getElementById('btn-confirmar-exportar-' + m);
     if (btn) { btn.disabled = false; btn.style.background = '#16a34a'; btn.style.cursor = 'pointer'; }
 }
 function toggleAdvertenciaSensibles(m) {
-    const cs  = document.getElementById('check-sensibles-' + m);
-    const adv = document.getElementById('advertencia-sensibles-' + m);
-    const si  = document.getElementById('input-sensibles-' + m);
+    var cs  = document.getElementById('check-sensibles-' + m);
+    var adv = document.getElementById('advertencia-sensibles-' + m);
+    var si  = document.getElementById('input-sensibles-' + m);
     if (cs && adv && si) { adv.style.display = cs.checked ? 'block' : 'none'; si.value = cs.checked ? '1' : '0'; }
 }
 function confirmarExportacion(m, todoSensible) {
-    const formato = document.getElementById('input-formato-' + m)?.value;
+    var formato = document.getElementById('input-formato-' + m) ? document.getElementById('input-formato-' + m).value : '';
     if (!formato) { alert('Selecciona un formato de exportación.'); return; }
-    const incluyeSensibles = document.getElementById('input-sensibles-' + m)?.value === '1';
-    let msg = '¿Confirmas la exportación?\n\nFormato: ' + formato.toUpperCase();
+    var incluyeSensibles = document.getElementById('input-sensibles-' + m) ? document.getElementById('input-sensibles-' + m).value === '1' : false;
+    var msg = '¿Confirmas la exportación?\n\nFormato: ' + formato.toUpperCase();
     if (todoSensible || incluyeSensibles) {
         msg += '\n\n⚠ INCLUYE DATOS SENSIBLES\nEsta acción quedará registrada en el log de auditoría.';
     }
-    if (confirm(msg)) {
-        document.getElementById('form-exportar-' + m).submit();
+    // Copiar filtros activos de la URL al formulario para respetar lo que el usuario ve en pantalla
+    var params = new URLSearchParams(window.location.search);
+    var filtrosDiv = document.getElementById('filtros-extra-' + m);
+    if (filtrosDiv) {
+        filtrosDiv.innerHTML = '';
+        params.forEach(function(value, key) {
+            if (key !== 'page' && key !== 'per_page') {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                filtrosDiv.appendChild(input);
+            }
+        });
     }
+    if (confirm(msg)) { document.getElementById('form-exportar-' + m).submit(); }
 }
 </script>
+@endpush
+@endonce

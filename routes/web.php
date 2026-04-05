@@ -317,13 +317,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // ── Módulo: Exportación de datos ──────────────────────
     Route::prefix('exportar')->name('exportar.')->group(function () {
-        Route::post('/pacientes',          [\App\Http\Controllers\ExportacionController::class, 'pacientes'])->name('pacientes');
-        Route::post('/historias-clinicas', [\App\Http\Controllers\ExportacionController::class, 'historiasClinicas'])->name('historias');
-        Route::post('/evoluciones',        [\App\Http\Controllers\ExportacionController::class, 'evoluciones'])->name('evoluciones');
-        Route::post('/citas',              [\App\Http\Controllers\ExportacionController::class, 'citas'])->name('citas');
-        Route::post('/pagos',              [\App\Http\Controllers\ExportacionController::class, 'pagos'])->name('pagos');
-        Route::post('/consentimientos',    [\App\Http\Controllers\ExportacionController::class, 'consentimientos'])->name('consentimientos');
-        Route::post('/inventario',         [\App\Http\Controllers\ExportacionController::class, 'inventario'])->name('inventario');
+        Route::post('/pacientes',            [\App\Http\Controllers\ExportacionController::class, 'pacientes'])->name('pacientes');
+        Route::post('/historias-clinicas',   [\App\Http\Controllers\ExportacionController::class, 'historiasClinicas'])->name('historias');
+        Route::post('/evoluciones',          [\App\Http\Controllers\ExportacionController::class, 'evoluciones'])->name('evoluciones');
+        Route::post('/citas',                [\App\Http\Controllers\ExportacionController::class, 'citas'])->name('citas');
+        Route::post('/pagos',                [\App\Http\Controllers\ExportacionController::class, 'pagos'])->name('pagos');
+        Route::post('/consentimientos',      [\App\Http\Controllers\ExportacionController::class, 'consentimientos'])->name('consentimientos');
+        Route::post('/inventario',           [\App\Http\Controllers\ExportacionController::class, 'inventario'])->name('inventario');
+        Route::post('/reporte-ingresos',     [\App\Http\Controllers\ExportacionController::class, 'reporteIngresos'])->name('reporte-ingresos');
+        Route::post('/reporte-pacientes',    [\App\Http\Controllers\ExportacionController::class, 'reportePacientesAtendidos'])->name('reporte-pacientes');
+        Route::post('/egresos',              [\App\Http\Controllers\ExportacionController::class, 'egresos'])->name('egresos');
+        Route::post('/libro-caja',           [\App\Http\Controllers\ExportacionController::class, 'libroCaja'])->name('libro-caja');
+        Route::post('/estado-resultados',    [\App\Http\Controllers\ExportacionController::class, 'estadoResultados'])->name('estado-resultados');
+        Route::post('/comparativo-12-meses', [\App\Http\Controllers\ExportacionController::class, 'comparativo12Meses'])->name('comparativo');
     });
 
     // ── Módulo: Egresos (solo admin/doctora) ──────────────

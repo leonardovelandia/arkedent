@@ -80,6 +80,46 @@ class ExportacionService
         ]);
     }
 
+    public static function generarPDF(
+        array  $headers,
+        array  $datos,
+        string $nombreArchivo,
+        string $titulo = 'Exportación'
+    ): \Illuminate\Http\Response {
+        $html = '<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: DejaVu Sans, sans-serif; font-size: 9px; color: #1f1f1f; }
+  h2 { font-size: 13px; color: #4c1d95; margin: 0 0 4px 0; }
+  p.sub { font-size: 8px; color: #6b7280; margin: 0 0 10px 0; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: #4c1d95; color: #fff; padding: 5px 6px; text-align: left; font-size: 8px; text-transform: uppercase; }
+  tbody tr:nth-child(even) { background: #f5f3ff; }
+  tbody td { padding: 4px 6px; border-bottom: 1px solid #ede9fe; font-size: 8px; }
+</style>
+</head><body>';
+        $html .= '<h2>' . htmlspecialchars($titulo) . '</h2>';
+        $html .= '<p class="sub">Generado: ' . now()->format('d/m/Y H:i') . ' &nbsp;|&nbsp; Total registros: ' . count($datos) . '</p>';
+        $html .= '<table><thead><tr>';
+        foreach ($headers as $h) {
+            $html .= '<th>' . htmlspecialchars((string)$h) . '</th>';
+        }
+        $html .= '</tr></thead><tbody>';
+        foreach ($datos as $fila) {
+            $html .= '<tr>';
+            foreach (array_values($fila) as $celda) {
+                $html .= '<td>' . htmlspecialchars((string)($celda ?? '')) . '</td>';
+            }
+            $html .= '</tr>';
+        }
+        $html .= '</tbody></table></body></html>';
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadHTML($html)
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->download($nombreArchivo . '.pdf');
+    }
+
     public static function generarCSV(
         array  $headers,
         array  $datos,
