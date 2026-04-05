@@ -270,7 +270,7 @@
     <button type="button" class="btn-outline" onclick="guardarSinFirma()">
         <i class="bi bi-printer"></i> Guardar sin firma — imprimir después
     </button>
-    <a href="{{ route('pacientes.show', $paciente->id) }}" class="btn-gris">
+    <a href="{{ route('pacientes.show', $paciente->uuid) }}" class="btn-gris">
         <i class="bi bi-x"></i> Cancelar
     </a>
 </div>

@@ -2,11 +2,12 @@
 namespace App\Models;
 
 use App\Traits\GeneraNumeroDocumento;
+use App\Traits\TieneUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class FichaPeriodontal extends Model
 {
-    use GeneraNumeroDocumento;
+    use GeneraNumeroDocumento, TieneUuid;
 
     protected $table = 'fichas_periodontales';
     protected static $campoPrefijo = 'numero_ficha';

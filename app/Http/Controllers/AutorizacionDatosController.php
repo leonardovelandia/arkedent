@@ -99,13 +99,13 @@ class AutorizacionDatosController extends Controller
             ? 'Autorización creada y firmada digitalmente.'
             : 'Autorización guardada. Recuerda obtener la firma del paciente.';
 
-        return redirect()->route('autorizacion.show', $autorizacion->id)
+        return redirect()->route('autorizacion.show', $autorizacion->uuid)
             ->with('exito', $msg);
     }
 
     public function show($id)
     {
-        $autorizacion = AutorizacionDatos::with(['paciente', 'registradoPor'])->findOrFail($id);
+        $autorizacion = AutorizacionDatos::with(['paciente', 'registradoPor'])->porUuidOrFail($id);
         $config       = Configuracion::obtener();
 
         return view('autorizacion.show', compact('autorizacion', 'config'));
@@ -118,7 +118,7 @@ class AutorizacionDatosController extends Controller
             'metodo_firma' => 'nullable|in:digital,impresa',
         ]);
 
-        $autorizacion = AutorizacionDatos::findOrFail($id);
+        $autorizacion = AutorizacionDatos::porUuidOrFail($id);
 
         if ($autorizacion->firmado) {
             return redirect()->route('autorizacion.show', $id)
@@ -172,7 +172,7 @@ class AutorizacionDatosController extends Controller
 
     public function pdf($id)
     {
-        $autorizacion = AutorizacionDatos::with(['paciente', 'registradoPor'])->findOrFail($id);
+        $autorizacion = AutorizacionDatos::with(['paciente', 'registradoPor'])->porUuidOrFail($id);
         $config       = Configuracion::obtener();
 
         $pdf = Pdf::loadView('autorizacion.pdf', compact('autorizacion', 'config'))
@@ -189,10 +189,10 @@ class AutorizacionDatosController extends Controller
 
     public function destroy($id)
     {
-        $autorizacion = AutorizacionDatos::findOrFail($id);
+        $autorizacion = AutorizacionDatos::porUuidOrFail($id);
         $autorizacion->update(['activo' => false]);
 
-        return redirect()->route('pacientes.show', $autorizacion->paciente_id)
+        return redirect()->route('pacientes.show', $autorizacion->paciente->uuid)
             ->with('exito', 'Autorización desactivada.');
     }
 }

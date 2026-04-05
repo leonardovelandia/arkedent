@@ -11,7 +11,7 @@ class ControlPeriodontalController extends Controller
 {
     public function create(Request $request, $ficha)
     {
-        $ficha           = FichaPeriodontal::with('paciente', 'controles')->where('activo', true)->findOrFail($ficha);
+        $ficha           = FichaPeriodontal::with('paciente', 'controles')->where('activo', true)->where('uuid', $ficha)->firstOrFail();
         $doctores        = \App\Models\User::orderBy('name')->get();
         $siguienteSesion = $ficha->controles()->count() + 1;
 
@@ -60,20 +60,20 @@ class ControlPeriodontalController extends Controller
 
     public function show($id)
     {
-        $control = ControlPeriodontal::with(['fichaPeriodontal.paciente', 'periodoncista'])->findOrFail($id);
+        $control = ControlPeriodontal::with(['fichaPeriodontal.paciente', 'periodoncista'])->porUuidOrFail($id);
         return view('periodoncia.controles.show', compact('control'));
     }
 
     public function edit($id)
     {
-        $control  = ControlPeriodontal::with('fichaPeriodontal.paciente')->findOrFail($id);
+        $control  = ControlPeriodontal::with('fichaPeriodontal.paciente')->porUuidOrFail($id);
         $doctores = \App\Models\User::orderBy('name')->get();
         return view('periodoncia.controles.edit', compact('control', 'doctores'));
     }
 
     public function update(Request $request, $id)
     {
-        $control = ControlPeriodontal::findOrFail($id);
+        $control = ControlPeriodontal::porUuidOrFail($id);
 
         $request->validate([
             'fecha_control' => 'required|date',
@@ -104,7 +104,7 @@ class ControlPeriodontalController extends Controller
 
     public function destroy($id)
     {
-        $control = ControlPeriodontal::findOrFail($id);
+        $control = ControlPeriodontal::porUuidOrFail($id);
         $fichaId = $control->ficha_periodontal_id;
         $control->delete();
         return redirect()->route('periodoncia.show', $fichaId)
@@ -113,7 +113,7 @@ class ControlPeriodontalController extends Controller
 
     public function pdf($id)
     {
-        $control = ControlPeriodontal::with(['fichaPeriodontal.paciente', 'periodoncista'])->findOrFail($id);
+        $control = ControlPeriodontal::with(['fichaPeriodontal.paciente', 'periodoncista'])->porUuidOrFail($id);
         $config  = Configuracion::obtener();
         $colorPDF = '#1E3A5F';
 

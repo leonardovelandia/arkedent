@@ -115,15 +115,15 @@ class LaboratorioController extends Controller
     public function show($id)
     {
         $orden = OrdenLaboratorio::with(['paciente', 'laboratorio', 'doctor', 'evolucion'])
-            ->where('activo', true)
-            ->findOrFail($id);
+            ->where('activo', true)->where('uuid', $id)
+            ->firstOrFail();
 
         return view('laboratorio.show', compact('orden'));
     }
 
     public function pdf($id)
     {
-        $orden  = OrdenLaboratorio::with(['paciente', 'laboratorio', 'doctor'])->findOrFail($id);
+        $orden  = OrdenLaboratorio::with(['paciente', 'laboratorio', 'doctor'])->where('uuid', $id)->firstOrFail();
         $config = Configuracion::obtener();
 
         $pdf = Pdf::loadView('laboratorio.pdf', compact('orden', 'config'))
@@ -140,7 +140,7 @@ class LaboratorioController extends Controller
 
     public function edit($id)
     {
-        $orden = OrdenLaboratorio::where('activo', true)->findOrFail($id);
+        $orden = OrdenLaboratorio::where('activo', true)->where('uuid', $id)->firstOrFail();
 
         if (in_array($orden->estado, ['instalado', 'cancelado'])) {
             return redirect()->route('laboratorio.show', $orden)
@@ -155,7 +155,7 @@ class LaboratorioController extends Controller
 
     public function update(Request $request, $id)
     {
-        $orden = OrdenLaboratorio::where('activo', true)->findOrFail($id);
+        $orden = OrdenLaboratorio::where('activo', true)->where('uuid', $id)->firstOrFail();
 
         $validated = $request->validate([
             'paciente_id'            => 'required|exists:pacientes,id',
@@ -183,7 +183,7 @@ class LaboratorioController extends Controller
 
     public function enviar(Request $request, $id)
     {
-        $orden = OrdenLaboratorio::where('activo', true)->findOrFail($id);
+        $orden = OrdenLaboratorio::where('activo', true)->where('uuid', $id)->firstOrFail();
 
         $request->validate([
             'fecha_envio'         => 'nullable|date',
@@ -202,7 +202,7 @@ class LaboratorioController extends Controller
 
     public function recibirTrabajo(Request $request, $id)
     {
-        $orden = OrdenLaboratorio::where('activo', true)->findOrFail($id);
+        $orden = OrdenLaboratorio::where('activo', true)->where('uuid', $id)->firstOrFail();
 
         $request->validate([
             'fecha_recepcion'          => 'nullable|date',
@@ -225,7 +225,7 @@ class LaboratorioController extends Controller
 
     public function instalar(Request $request, $id)
     {
-        $orden = OrdenLaboratorio::where('activo', true)->findOrFail($id);
+        $orden = OrdenLaboratorio::where('activo', true)->where('uuid', $id)->firstOrFail();
 
         $request->validate([
             'fecha_instalacion' => 'nullable|date',
@@ -242,7 +242,7 @@ class LaboratorioController extends Controller
 
     public function cancelar(Request $request, $id)
     {
-        $orden = OrdenLaboratorio::where('activo', true)->findOrFail($id);
+        $orden = OrdenLaboratorio::where('activo', true)->where('uuid', $id)->firstOrFail();
 
         $request->validate([
             'motivo_cancelacion' => 'required|string|max:255',
@@ -259,7 +259,7 @@ class LaboratorioController extends Controller
 
     public function destroy($id)
     {
-        $orden = OrdenLaboratorio::findOrFail($id);
+        $orden = OrdenLaboratorio::porUuidOrFail($id);
         $orden->update(['activo' => false]);
 
         return redirect()->route('laboratorio.index')

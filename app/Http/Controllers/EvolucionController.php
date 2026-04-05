@@ -160,14 +160,14 @@ class EvolucionController extends Controller
 
     public function show($id)
     {
-        $evolucion = Evolucion::with(['paciente', 'historiaClinica', 'doctor', 'correcciones.usuario'])->findOrFail($id);
+        $evolucion = Evolucion::with(['paciente', 'historiaClinica', 'doctor', 'correcciones.usuario'])->porUuidOrFail($id);
         $this->authorize('view', $evolucion);
         return view('evoluciones.show', compact('evolucion'));
     }
 
     public function edit($id)
     {
-        $evolucion = Evolucion::with(['paciente', 'historiaClinica'])->findOrFail($id);
+        $evolucion = Evolucion::with(['paciente', 'historiaClinica'])->porUuidOrFail($id);
         $this->authorize('update', $evolucion);
         // Firmada = no editable nunca
         if ($evolucion->firmado) {
@@ -192,7 +192,7 @@ class EvolucionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $evolucion = Evolucion::findOrFail($id);
+        $evolucion = Evolucion::porUuidOrFail($id);
         $this->authorize('update', $evolucion);
         if ($evolucion->firmado || $evolucion->created_at->diffInHours(now()) >= 24) {
             return redirect()
@@ -253,7 +253,7 @@ class EvolucionController extends Controller
 
     public function destroy($id)
     {
-        $evolucion = Evolucion::findOrFail($id);
+        $evolucion = Evolucion::porUuidOrFail($id);
         $evolucion->update(['activo' => false]);
 
         return redirect()->route('evoluciones.index')
@@ -263,7 +263,7 @@ class EvolucionController extends Controller
     // ── Firma: vista ──────────────────────────────────────────
     public function firmarVista($id)
     {
-        $evolucion = Evolucion::with('paciente')->findOrFail($id);
+        $evolucion = Evolucion::with('paciente')->porUuidOrFail($id);
 
         if ($evolucion->firmado) {
             return redirect()->route('evoluciones.show', $id)
@@ -278,7 +278,7 @@ class EvolucionController extends Controller
     {
         $request->validate(['firma_data' => 'required|string']);
 
-        $evolucion = Evolucion::findOrFail($id);
+        $evolucion = Evolucion::porUuidOrFail($id);
 
         if ($evolucion->firmado) {
             return response()->json(['error' => 'Esta evolución ya fue firmada.'], 422);
@@ -324,7 +324,7 @@ class EvolucionController extends Controller
     // ── PDF ───────────────────────────────────────────────────
     public function pdf($id)
     {
-        $evolucion = Evolucion::with(['paciente', 'doctor', 'correcciones.usuario', 'historiaClinica'])->findOrFail($id);
+        $evolucion = Evolucion::with(['paciente', 'doctor', 'correcciones.usuario', 'historiaClinica'])->porUuidOrFail($id);
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('evoluciones.pdf', compact('evolucion'));
         $nombreArchivo = 'evolucion-' . $evolucion->paciente->numero_historia . '-' . $evolucion->fecha->format('Y-m-d') . '.pdf';
 
@@ -340,7 +340,7 @@ class EvolucionController extends Controller
     // ── Vista corrección ──────────────────────────────────────
     public function correccionVista($id)
     {
-        $evolucion = Evolucion::with(['paciente', 'correcciones.usuario'])->findOrFail($id);
+        $evolucion = Evolucion::with(['paciente', 'correcciones.usuario'])->porUuidOrFail($id);
 
         // Si es editable redirigir a edición normal
         if (!$evolucion->firmado && $evolucion->created_at->diffInHours(now()) < 24) {
@@ -420,7 +420,7 @@ class EvolucionController extends Controller
     // ── Guardar corrección ────────────────────────────────────
     public function correccion(Request $request, $id)
     {
-        $evolucion = Evolucion::findOrFail($id);
+        $evolucion = Evolucion::porUuidOrFail($id);
 
         $request->validate([
             'campo_corregido' => 'required|string',

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Traits\GeneraNumeroDocumento;
+use App\Traits\TieneUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class ControlOrtodoncia extends Model
 {
-    use GeneraNumeroDocumento;
+    use GeneraNumeroDocumento, TieneUuid;
 
     protected $table = 'controles_ortodoncia';
 

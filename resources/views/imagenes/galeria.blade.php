@@ -83,7 +83,7 @@
                 <i class="bi bi-cloud-upload"></i> Subir Imágenes
             </a>
             @if($imagenes->where('es_comparativo', true)->count() > 0)
-            <a href="{{ route('imagenes.comparativo', $paciente->id) }}" class="btn-out">
+            <a href="{{ route('imagenes.comparativo', $paciente->uuid) }}" class="btn-out">
                 <i class="bi bi-layout-split"></i> Ver Comparativo
             </a>
             @endif

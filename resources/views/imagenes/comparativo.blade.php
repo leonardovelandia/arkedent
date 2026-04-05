@@ -63,7 +63,7 @@
             <div style="font-size:.85rem;opacity:.8;">{{ $paciente->nombre_completo }}</div>
         </div>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-            <a href="{{ route('imagenes.galeria', $paciente->id) }}" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:.45rem 1rem;font-size:.875rem;font-weight:500;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;">
+            <a href="{{ route('imagenes.galeria', $paciente->uuid) }}" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:.45rem 1rem;font-size:.875rem;font-weight:500;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;">
                 <i class="bi bi-images"></i> Galería
             </a>
         </div>

@@ -88,6 +88,25 @@ class VerificarSeguridad extends Command
             $this->warn('⚠️  Tabla logs_auditoria no existe — ejecutar php artisan migrate');
         }
 
+        // UUID en tablas sensibles
+        $tablasSensibles = [
+            'pacientes', 'evoluciones', 'citas', 'users',
+            'historias_clinicas', 'presupuestos', 'consentimientos',
+            'autorizaciones_datos', 'valoraciones',
+        ];
+        $sinUuid = [];
+        foreach ($tablasSensibles as $tabla) {
+            if (\Illuminate\Support\Facades\Schema::hasTable($tabla) &&
+                !\Illuminate\Support\Facades\Schema::hasColumn($tabla, 'uuid')) {
+                $sinUuid[] = $tabla;
+            }
+        }
+        if (empty($sinUuid)) {
+            $this->info('✅ UUID implementado en tablas sensibles');
+        } else {
+            $this->warn('⚠️  Tablas sin UUID: ' . implode(', ', $sinUuid));
+        }
+
         $this->info('═══════════════════════════════════════');
 
         if ($errores === 0) {

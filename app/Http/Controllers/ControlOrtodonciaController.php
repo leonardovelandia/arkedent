@@ -97,13 +97,13 @@ class ControlOrtodonciaController extends Controller
 
     public function show($id)
     {
-        $control = ControlOrtodoncia::with(['fichaOrtodoncia.paciente', 'ortodoncista', 'cita'])->findOrFail($id);
+        $control = ControlOrtodoncia::with(['fichaOrtodoncia.paciente', 'ortodoncista', 'cita'])->porUuidOrFail($id);
         return view('ortodoncia.controles.show', compact('control'));
     }
 
     public function edit($id)
     {
-        $control       = ControlOrtodoncia::with(['fichaOrtodoncia.paciente'])->findOrFail($id);
+        $control       = ControlOrtodoncia::with(['fichaOrtodoncia.paciente'])->porUuidOrFail($id);
         $ficha         = $control->fichaOrtodoncia;
         $ortodoncistas = User::all();
         $citas = Cita::where('paciente_id', $ficha->paciente_id)
@@ -117,7 +117,7 @@ class ControlOrtodonciaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $control = ControlOrtodoncia::findOrFail($id);
+        $control = ControlOrtodoncia::porUuidOrFail($id);
 
         $validated = $request->validate([
             'user_id'              => 'required|exists:users,id',

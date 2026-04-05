@@ -212,7 +212,7 @@ class CitaController extends Controller
     // ── Detalle ───────────────────────────────────────────────
     public function show(string $id)
     {
-        $cita    = Cita::with(['paciente', 'doctor'])->findOrFail($id);
+        $cita    = Cita::with(['paciente', 'doctor'])->porUuidOrFail($id);
         $colores = Cita::coloresPorEstado();
         $otrasCitas = Cita::where('paciente_id', $cita->paciente_id)
             ->where('id', '!=', $cita->id)
@@ -227,7 +227,7 @@ class CitaController extends Controller
     // ── Formulario editar ─────────────────────────────────────
     public function edit(string $id)
     {
-        $cita      = Cita::with('paciente')->findOrFail($id);
+        $cita      = Cita::with('paciente')->porUuidOrFail($id);
         $pacientes = Paciente::where('activo', true)->orderBy('apellido')->orderBy('nombre')->get();
 
         return view('citas.edit', compact('cita', 'pacientes'));
@@ -236,7 +236,7 @@ class CitaController extends Controller
     // ── Actualizar ────────────────────────────────────────────
     public function update(Request $request, string $id)
     {
-        $cita = Cita::findOrFail($id);
+        $cita = Cita::porUuidOrFail($id);
 
         $validado = $request->validate([
             'paciente_id'  => 'required|exists:pacientes,id',
@@ -275,7 +275,7 @@ class CitaController extends Controller
         $request->validate([
             'estado' => 'required|in:pendiente,confirmada,en_proceso,atendida,cancelada,no_asistio',
         ]);
-        $cita = Cita::findOrFail($id);
+        $cita = Cita::porUuidOrFail($id);
         $cita->update(['estado' => $request->estado]);
         return response()->json(['ok' => true, 'estado' => $cita->estado]);
     }
@@ -283,7 +283,7 @@ class CitaController extends Controller
     // ── Confirmar ─────────────────────────────────────────────
     public function confirmar(string $id)
     {
-        $cita = Cita::findOrFail($id);
+        $cita = Cita::porUuidOrFail($id);
         $cita->update(['estado' => 'confirmada']);
 
         return back()->with('exito', 'Cita confirmada correctamente.');
@@ -296,7 +296,7 @@ class CitaController extends Controller
             'motivo_cancelacion' => 'required|string|max:255',
         ]);
 
-        $cita = Cita::findOrFail($id);
+        $cita = Cita::porUuidOrFail($id);
         $cita->update([
             'estado'              => 'cancelada',
             'motivo_cancelacion'  => $request->input('motivo_cancelacion'),
@@ -308,7 +308,7 @@ class CitaController extends Controller
     // ── Eliminar (soft) ───────────────────────────────────────
     public function destroy(string $id)
     {
-        Cita::findOrFail($id)->update(['activo' => false]);
+        Cita::porUuidOrFail($id)->update(['activo' => false]);
 
         return redirect()->route('citas.index')
                          ->with('exito', 'Cita eliminada.');

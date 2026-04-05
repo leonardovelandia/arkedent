@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\TieneUuid;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
 class Paciente extends Model
 {
+    use TieneUuid;
+
     protected $fillable = [
+        'uuid',
         'numero_historia',
         'nombre',
         'apellido',

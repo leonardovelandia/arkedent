@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\TieneUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class Pago extends Model
 {
+    use TieneUuid;
+
     protected $fillable = [
+        'uuid',
         'numero_recibo', 'paciente_id', 'tratamiento_id', 'presupuesto_id', 'user_id',
         'concepto', 'valor', 'metodo_pago', 'referencia_pago',
         'fecha_pago', 'observaciones', 'anulado', 'motivo_anulacion', 'activo',

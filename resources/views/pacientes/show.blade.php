@@ -851,7 +851,7 @@
                 <i class="bi bi-images me-1"></i> Imágenes Clínicas
             </h6>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-                <a href="{{ route('imagenes.galeria', $paciente->id) }}"
+                <a href="{{ route('imagenes.galeria', $paciente->uuid) }}"
                    class="btn-outline-morado" style="font-size:.8rem;padding:.32rem .75rem;">
                     <i class="bi bi-grid-3x3-gap"></i> Ver galería completa
                 </a>
@@ -886,7 +886,7 @@
         </div>
         @if($paciente->imagenesClinicas()->count() > 6)
         <div style="text-align:center;margin-top:.75rem;">
-            <a href="{{ route('imagenes.galeria', $paciente->id) }}" style="font-size:.82rem;color:var(--color-principal);text-decoration:none;">
+            <a href="{{ route('imagenes.galeria', $paciente->uuid) }}" style="font-size:.82rem;color:var(--color-principal);text-decoration:none;">
                 Ver todas las imágenes →
             </a>
         </div>

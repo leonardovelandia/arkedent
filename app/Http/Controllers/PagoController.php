@@ -132,14 +132,14 @@ class PagoController extends Controller
 
     public function show(string $id)
     {
-        $pago = Pago::with(['paciente', 'tratamiento', 'cajero'])->findOrFail($id);
+        $pago = Pago::with(['paciente', 'tratamiento', 'cajero'])->porUuidOrFail($id);
 
         return view('pagos.show', compact('pago'));
     }
 
     public function recibo(string $id)
     {
-        $pago = Pago::with(['paciente', 'tratamiento', 'cajero'])->findOrFail($id);
+        $pago = Pago::with(['paciente', 'tratamiento', 'cajero'])->porUuidOrFail($id);
         $configuracion = \App\Models\Configuracion::first();
 
         $pdf = Pdf::loadView('pagos.recibo', compact('pago', 'configuracion'))
@@ -160,7 +160,7 @@ class PagoController extends Controller
             'motivo_anulacion' => 'required|string|max:255',
         ]);
 
-        $pago = Pago::findOrFail($id);
+        $pago = Pago::porUuidOrFail($id);
 
         if ($pago->anulado) {
             return back()->with('error', 'Este pago ya está anulado.');

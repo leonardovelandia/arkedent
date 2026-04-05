@@ -144,13 +144,6 @@
 </div>
 @endif
 
-{{-- Firmas --}}
-<table class="firmas">
-    <tr>
-        <td><br><br><div class="linea-firma">Firma del Paciente</div></td>
-        <td><br><br><div class="linea-firma">Firma del Cajero</div></td>
-    </tr>
-</table>
 
 <div class="nota-conserve">Conserve este recibo como soporte de su pago</div>
 <div class="footer">

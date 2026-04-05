@@ -91,7 +91,7 @@ class PacienteController extends Controller
     // ── Ficha completa del paciente ───────────────────────────
     public function show(string $id)
     {
-        $paciente = Paciente::findOrFail($id);
+        $paciente = Paciente::porUuidOrFail($id);
 
         return view('pacientes.show', compact('paciente'));
     }
@@ -99,7 +99,7 @@ class PacienteController extends Controller
     // ── Formulario de edición ─────────────────────────────────
     public function edit(string $id)
     {
-        $paciente = Paciente::findOrFail($id);
+        $paciente = Paciente::porUuidOrFail($id);
 
         return view('pacientes.edit', compact('paciente'));
     }
@@ -107,7 +107,7 @@ class PacienteController extends Controller
     // ── Actualizar paciente ───────────────────────────────────
     public function update(Request $request, string $id)
     {
-        $paciente = Paciente::findOrFail($id);
+        $paciente = Paciente::porUuidOrFail($id);
 
         $validado = $request->validate([
             'nombre'              => 'required|string|max:100',
@@ -150,7 +150,7 @@ class PacienteController extends Controller
     // ── Desactivar paciente ───────────────────────────────────
     public function destroy(string $id)
     {
-        $paciente = Paciente::findOrFail($id);
+        $paciente = Paciente::porUuidOrFail($id);
         $paciente->update(['activo' => false]);
 
         return redirect()->route('pacientes.index')

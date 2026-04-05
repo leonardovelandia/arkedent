@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Traits\GeneraNumeroDocumento;
+use App\Traits\TieneUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class Cita extends Model
 {
-    use GeneraNumeroDocumento;
+    use GeneraNumeroDocumento, TieneUuid;
 
     protected $table = 'citas';
 

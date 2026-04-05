@@ -156,7 +156,7 @@ class ImagenClinicaController extends Controller
 
     public function show($id)
     {
-        $imagen = ImagenClinica::with(['paciente', 'historiaClinica', 'evolucion', 'autor'])->findOrFail($id);
+        $imagen = ImagenClinica::with(['paciente', 'historiaClinica', 'evolucion', 'autor'])->porUuidOrFail($id);
 
         $grupoImagenes = null;
         if ($imagen->es_comparativo && $imagen->grupo_comparativo) {
@@ -172,7 +172,7 @@ class ImagenClinicaController extends Controller
 
     public function edit($id)
     {
-        $imagen = ImagenClinica::with(['paciente'])->findOrFail($id);
+        $imagen = ImagenClinica::with(['paciente'])->porUuidOrFail($id);
 
         $tipos = [
             'fotografia_intraoral'   => 'Fotografía Intraoral',
@@ -192,7 +192,7 @@ class ImagenClinicaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $imagen = ImagenClinica::findOrFail($id);
+        $imagen = ImagenClinica::porUuidOrFail($id);
 
         $request->validate([
             'tipo'              => 'required|string',
@@ -223,7 +223,7 @@ class ImagenClinicaController extends Controller
 
     public function destroy($id)
     {
-        $imagen = ImagenClinica::findOrFail($id);
+        $imagen = ImagenClinica::porUuidOrFail($id);
         $pacienteId = $imagen->paciente_id;
 
         Storage::disk('public')->delete($imagen->archivo_path);

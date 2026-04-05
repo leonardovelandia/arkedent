@@ -143,7 +143,7 @@
                 <i class="bi bi-exclamation-triangle-fill"></i>
                 Esta autorización aún no tiene firma digital. El paciente puede firmar ahora:
             </p>
-            <form method="POST" action="{{ route('autorizacion.firmar', $autorizacion->id) }}" id="form-firmar">
+            <form method="POST" action="{{ route('autorizacion.firmar', $autorizacion->uuid) }}" id="form-firmar">
                 @csrf
                 <input type="hidden" name="firma_data" id="firma-data-firmar">
                 <input type="hidden" name="metodo_firma" value="digital">
@@ -187,7 +187,7 @@
 
 {{-- Botones de acción --}}
 <div style="display:flex;gap:.75rem;justify-content:center;margin-top:1.25rem;max-width:820px;margin-left:auto;margin-right:auto;flex-wrap:wrap;">
-    <a href="{{ route('autorizacion.pdf', $autorizacion->id) }}" target="_blank" class="btn-morado">
+    <a href="{{ route('autorizacion.pdf', $autorizacion->uuid) }}" target="_blank" class="btn-morado">
         <i class="bi bi-file-earmark-pdf"></i> Descargar PDF
     </a>
     <a href="{{ route('pacientes.show', $autorizacion->paciente_id) }}" class="btn-gris">

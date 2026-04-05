@@ -105,13 +105,13 @@ class RecetaMedicaController extends Controller
 
     public function show($id)
     {
-        $receta = RecetaMedica::with(['paciente', 'doctor', 'evolucion'])->findOrFail($id);
+        $receta = RecetaMedica::with(['paciente', 'doctor', 'evolucion'])->porUuidOrFail($id);
         return view('recetas.show', compact('receta'));
     }
 
     public function edit($id)
     {
-        $receta    = RecetaMedica::with(['paciente'])->findOrFail($id);
+        $receta    = RecetaMedica::with(['paciente'])->porUuidOrFail($id);
         $pacientes = Paciente::activos()->orderBy('apellido')->get(['id', 'nombre', 'apellido', 'numero_historia']);
         $doctores  = User::orderBy('name')->get();
 
@@ -126,7 +126,7 @@ class RecetaMedicaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $receta = RecetaMedica::findOrFail($id);
+        $receta = RecetaMedica::porUuidOrFail($id);
 
         $validated = $request->validate([
             'paciente_id'           => 'required|exists:pacientes,id',
@@ -157,7 +157,7 @@ class RecetaMedicaController extends Controller
             'firma_data' => 'required|string',
         ]);
 
-        $receta = RecetaMedica::findOrFail($id);
+        $receta = RecetaMedica::porUuidOrFail($id);
 
         if ($receta->firmado) {
             return redirect()->route('recetas.show', $receta)
@@ -177,7 +177,7 @@ class RecetaMedicaController extends Controller
 
     public function pdf($id)
     {
-        $receta        = RecetaMedica::with(['paciente', 'doctor'])->findOrFail($id);
+        $receta        = RecetaMedica::with(['paciente', 'doctor'])->porUuidOrFail($id);
         $configuracion = Configuracion::first();
 
         $pdf = Pdf::loadView('recetas.pdf', compact('receta', 'configuracion'))
@@ -188,7 +188,7 @@ class RecetaMedicaController extends Controller
 
     public function duplicar($id)
     {
-        $original = RecetaMedica::findOrFail($id);
+        $original = RecetaMedica::porUuidOrFail($id);
 
         $nueva = RecetaMedica::create([
             'paciente_id'           => $original->paciente_id,
@@ -206,7 +206,7 @@ class RecetaMedicaController extends Controller
 
     public function destroy($id)
     {
-        $receta = RecetaMedica::findOrFail($id);
+        $receta = RecetaMedica::porUuidOrFail($id);
         $receta->update(['activo' => false]);
 
         return redirect()->route('recetas.index')

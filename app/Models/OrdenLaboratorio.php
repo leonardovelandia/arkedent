@@ -3,17 +3,19 @@
 namespace App\Models;
 
 use App\Traits\GeneraNumeroDocumento;
+use App\Traits\TieneUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class OrdenLaboratorio extends Model
 {
-    use GeneraNumeroDocumento;
+    use GeneraNumeroDocumento, TieneUuid;
 
     protected $table = 'ordenes_laboratorio';
 
     protected static string $campoPrefijo = 'numero_orden';
 
     protected $fillable = [
+        'uuid',
         'numero_orden', 'paciente_id', 'laboratorio_id', 'user_id',
         'evolucion_id', 'cita_id', 'tipo_trabajo', 'descripcion',
         'dientes', 'color_diente', 'material',

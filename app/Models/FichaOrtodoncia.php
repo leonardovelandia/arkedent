@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Traits\GeneraNumeroDocumento;
+use App\Traits\TieneUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class FichaOrtodoncia extends Model
 {
-    use GeneraNumeroDocumento;
+    use GeneraNumeroDocumento, TieneUuid;
 
     protected $table = 'fichas_ortodonticas';
 

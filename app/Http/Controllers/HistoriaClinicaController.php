@@ -103,7 +103,7 @@ class HistoriaClinicaController extends Controller
     // ── Detalle de historia ───────────────────────────────────
     public function show(string $id)
     {
-        $historia = HistoriaClinica::with('paciente', 'correcciones.usuario')->findOrFail($id);
+        $historia = HistoriaClinica::with('paciente', 'correcciones.usuario')->porUuidOrFail($id);
 
         return view('historias.show', compact('historia'));
     }
@@ -111,7 +111,7 @@ class HistoriaClinicaController extends Controller
     // ── Formulario de edición ─────────────────────────────────
     public function edit(string $id)
     {
-        $historia = HistoriaClinica::with('paciente')->findOrFail($id);
+        $historia = HistoriaClinica::with('paciente')->porUuidOrFail($id);
 
         // Si está firmada no se puede editar — redirigir a corrección
         if ($historia->firmado) {
@@ -126,7 +126,7 @@ class HistoriaClinicaController extends Controller
     // ── Actualizar historia ───────────────────────────────────
     public function update(Request $request, string $id)
     {
-        $historia = HistoriaClinica::findOrFail($id);
+        $historia = HistoriaClinica::porUuidOrFail($id);
 
         if ($historia->firmado) {
             return redirect()
@@ -173,7 +173,7 @@ class HistoriaClinicaController extends Controller
     // ── Firma: vista ──────────────────────────────────────────
     public function firmarVista($id)
     {
-        $historia = HistoriaClinica::with('paciente')->findOrFail($id);
+        $historia = HistoriaClinica::with('paciente')->porUuidOrFail($id);
 
         if ($historia->firmado) {
             return redirect()->route('historias.show', $id)
@@ -187,7 +187,7 @@ class HistoriaClinicaController extends Controller
     public function firmar(Request $request, $id)
     {
         $request->validate(['firma_data' => 'required|string']);
-        $historia = HistoriaClinica::with('paciente')->findOrFail($id);
+        $historia = HistoriaClinica::with('paciente')->porUuidOrFail($id);
 
         if ($historia->firmado) {
             return response()->json(['error' => 'Esta historia clínica ya fue firmada.'], 422);
@@ -232,7 +232,7 @@ class HistoriaClinicaController extends Controller
     // ── PDF ───────────────────────────────────────────────────
     public function pdf($id)
     {
-        $historia = HistoriaClinica::with('paciente', 'correcciones.usuario')->findOrFail($id);
+        $historia = HistoriaClinica::with('paciente', 'correcciones.usuario')->porUuidOrFail($id);
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('historias.pdf', compact('historia'));
         $nombreArchivo = 'historia-clinica-' . $historia->paciente->numero_historia . '.pdf';
 
@@ -248,7 +248,7 @@ class HistoriaClinicaController extends Controller
     // ── Vista corrección ──────────────────────────────────────
     public function correccionVista($id)
     {
-        $historia = HistoriaClinica::with('paciente', 'correcciones.usuario')->findOrFail($id);
+        $historia = HistoriaClinica::with('paciente', 'correcciones.usuario')->porUuidOrFail($id);
 
         if (!$historia->firmado) {
             return redirect()
@@ -332,7 +332,7 @@ class HistoriaClinicaController extends Controller
     // ── Guardar corrección ────────────────────────────────────
     public function correccion(Request $request, $id)
     {
-        $historia = HistoriaClinica::findOrFail($id);
+        $historia = HistoriaClinica::porUuidOrFail($id);
 
         if (!$historia->firmado) {
             return redirect()->route('historias.edit', $historia);

@@ -119,13 +119,13 @@ class ValoracionController extends Controller
 
     public function show($id)
     {
-        $valoracion = Valoracion::with(['paciente', 'historiaClinica', 'cita', 'doctor', 'presupuesto'])->findOrFail($id);
+        $valoracion = Valoracion::with(['paciente', 'historiaClinica', 'cita', 'doctor', 'presupuesto'])->porUuidOrFail($id);
         return view('valoraciones.show', compact('valoracion'));
     }
 
     public function edit($id)
     {
-        $valoracion = Valoracion::with(['paciente', 'historiaClinica', 'cita'])->findOrFail($id);
+        $valoracion = Valoracion::with(['paciente', 'historiaClinica', 'cita'])->porUuidOrFail($id);
 
         if ($valoracion->estado !== 'en_proceso') {
             return redirect()
@@ -140,7 +140,7 @@ class ValoracionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $valoracion = Valoracion::findOrFail($id);
+        $valoracion = Valoracion::porUuidOrFail($id);
 
         $request->validate([
             'paciente_id'     => 'required|exists:pacientes,id',

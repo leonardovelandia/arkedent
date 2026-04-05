@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use App\Traits\GeneraNumeroDocumento;
+use App\Traits\TieneUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Presupuesto extends Model
 {
-    use GeneraNumeroDocumento;
+    use GeneraNumeroDocumento, TieneUuid;
 
     protected static $campoPrefijo = 'numero_presupuesto';
 
     protected $fillable = [
+        'uuid',
         'numero_presupuesto',
         'paciente_id',
         'historia_clinica_id',

@@ -151,7 +151,7 @@ class PresupuestoController extends Controller
     public function show(string $id)
     {
         $presupuesto = Presupuesto::with(['paciente', 'doctor', 'items', 'tratamiento', 'historiaClinica'])
-            ->findOrFail($id);
+            ->porUuidOrFail($id);
 
         $config = \App\Models\Configuracion::first();
 
@@ -162,7 +162,7 @@ class PresupuestoController extends Controller
 
     public function edit(string $id)
     {
-        $presupuesto = Presupuesto::with(['paciente', 'items'])->findOrFail($id);
+        $presupuesto = Presupuesto::with(['paciente', 'items'])->porUuidOrFail($id);
 
         if ($presupuesto->estado !== 'borrador') {
             return redirect()->route('presupuestos.show', $presupuesto)
@@ -179,7 +179,7 @@ class PresupuestoController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $presupuesto = Presupuesto::findOrFail($id);
+        $presupuesto = Presupuesto::porUuidOrFail($id);
 
         if ($presupuesto->estado !== 'borrador') {
             return redirect()->route('presupuestos.show', $presupuesto)
@@ -360,7 +360,7 @@ class PresupuestoController extends Controller
 
     public function destroy(string $id)
     {
-        $presupuesto = Presupuesto::findOrFail($id);
+        $presupuesto = Presupuesto::porUuidOrFail($id);
 
         if ($presupuesto->estado !== 'borrador') {
             return back()->with('error', 'Solo se pueden eliminar presupuestos en borrador.');

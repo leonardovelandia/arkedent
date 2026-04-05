@@ -90,7 +90,7 @@ class ConsentimientoController extends Controller
     // ── Detalle ───────────────────────────────────────────────
     public function show(string $id)
     {
-        $consentimiento = Consentimiento::with(['paciente', 'doctor', 'plantilla'])->findOrFail($id);
+        $consentimiento = Consentimiento::with(['paciente', 'doctor', 'plantilla'])->porUuidOrFail($id);
 
         return view('consentimientos.show', compact('consentimiento'));
     }
@@ -98,7 +98,7 @@ class ConsentimientoController extends Controller
     // ── Editar ────────────────────────────────────────────────
     public function edit(string $id)
     {
-        $consentimiento = Consentimiento::with('paciente')->findOrFail($id);
+        $consentimiento = Consentimiento::with('paciente')->porUuidOrFail($id);
 
         if ($consentimiento->firmado) {
             return redirect()->route('consentimientos.show', $consentimiento)
@@ -114,7 +114,7 @@ class ConsentimientoController extends Controller
     // ── Actualizar ────────────────────────────────────────────
     public function update(Request $request, string $id)
     {
-        $consentimiento = Consentimiento::findOrFail($id);
+        $consentimiento = Consentimiento::porUuidOrFail($id);
 
         if ($consentimiento->firmado) {
             return redirect()->route('consentimientos.show', $consentimiento)
@@ -141,7 +141,7 @@ class ConsentimientoController extends Controller
             'firma_data' => 'required|string',
         ]);
 
-        $consentimiento = Consentimiento::findOrFail($id);
+        $consentimiento = Consentimiento::porUuidOrFail($id);
 
         if ($consentimiento->firmado) {
             return response()->json(['error' => 'Ya está firmado.'], 422);
@@ -187,7 +187,7 @@ class ConsentimientoController extends Controller
     // ── PDF ───────────────────────────────────────────────────
     public function pdf(string $id)
     {
-        $consentimiento = Consentimiento::with(['paciente', 'doctor'])->findOrFail($id);
+        $consentimiento = Consentimiento::with(['paciente', 'doctor'])->porUuidOrFail($id);
 
         $pdf = Pdf::loadView('consentimientos.pdf', compact('consentimiento'))
                   ->setPaper('a4', 'portrait');
@@ -204,7 +204,7 @@ class ConsentimientoController extends Controller
     // ── Eliminar (soft) ───────────────────────────────────────
     public function destroy(string $id)
     {
-        $consentimiento = Consentimiento::findOrFail($id);
+        $consentimiento = Consentimiento::porUuidOrFail($id);
 
         if ($consentimiento->firmado) {
             return redirect()->route('consentimientos.index')

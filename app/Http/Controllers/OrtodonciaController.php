@@ -132,7 +132,7 @@ class OrtodonciaController extends Controller
             'historiaClinica',
             'controles.ortodoncista',
             'retencion',
-        ])->findOrFail($id);
+        ])->porUuidOrFail($id);
 
         $controles = $ficha->controles()->with('ortodoncista')->orderBy('numero_sesion', 'desc')->get();
 
@@ -141,7 +141,7 @@ class OrtodonciaController extends Controller
 
     public function edit($id)
     {
-        $ficha       = FichaOrtodoncia::findOrFail($id);
+        $ficha       = FichaOrtodoncia::porUuidOrFail($id);
         $pacientes   = Paciente::activos()->orderBy('apellido')->get();
         $historias   = HistoriaClinica::where('paciente_id', $ficha->paciente_id)->get();
         $ortodoncistas = User::all();
@@ -151,7 +151,7 @@ class OrtodonciaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $ficha = FichaOrtodoncia::findOrFail($id);
+        $ficha = FichaOrtodoncia::porUuidOrFail($id);
 
         $validated = $request->validate([
             'user_id'              => 'required|exists:users,id',
@@ -209,7 +209,7 @@ class OrtodonciaController extends Controller
 
     public function cambiarEstado(Request $request, $id)
     {
-        $ficha = FichaOrtodoncia::findOrFail($id);
+        $ficha = FichaOrtodoncia::porUuidOrFail($id);
 
         $request->validate([
             'estado' => 'required|in:diagnostico,activo,retencion,finalizado,cancelado',
@@ -228,7 +228,7 @@ class OrtodonciaController extends Controller
 
     public function destroy($id)
     {
-        $ficha = FichaOrtodoncia::findOrFail($id);
+        $ficha = FichaOrtodoncia::porUuidOrFail($id);
         $ficha->update(['activo' => false, 'estado' => 'cancelado']);
 
         return redirect()->route('ortodoncia.index')
